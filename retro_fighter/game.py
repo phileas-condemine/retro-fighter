@@ -49,7 +49,13 @@ class Game:
             pass
         pygame.init()
         pygame.display.set_caption(TITLE)
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+        # SCALED: without it, SDL creates the window/canvas at the literal
+        # logical size (1024x576) with no upscaling, which looks tiny on a
+        # normal desktop/browser window — SCALED stretches it to fill the
+        # actual window while keeping game code working in 1024x576
+        # coordinates (mouse/render surface untouched). RESIZABLE lets that
+        # actual window/canvas track the browser tab's size on the web build.
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SCALED | pygame.RESIZABLE)
         self.clock = pygame.time.Clock()
         self.renderer = Renderer(self.screen)
 
