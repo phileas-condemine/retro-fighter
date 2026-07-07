@@ -87,27 +87,38 @@ class Game:
         self.menu_index = 2
 
     def run(self) -> None:
-        running = True
-        while running:
-            dt_ms = self.clock.tick(FPS)
-            events = pygame.event.get()
-            for event in events:
-                if event.type == pygame.QUIT:
-                    running = False
-
-            if self.in_menu:
-                running = self.handle_menu(events, running)
-                self.renderer.draw_menu(self.menu_index)
-                pygame.display.flip()
-                continue
-
-            running = self.handle_global_events(events, running)
-            if not self.paused and not self.round_over:
-                self.update(events, dt_ms)
-            self.renderer.draw(self)
-            pygame.display.flip()
-
+        """Desktop entrypoint: blocking loop around tick()."""
+        while self.tick():
+            pass
         pygame.quit()
+
+    def tick(self) -> bool:
+        """Runs a single frame. Returns False once the game should quit.
+
+        Split out from run() so a web build (Pygbag) can drive the same
+        per-frame logic from its own async loop (`while game.tick(): await
+        asyncio.sleep(0)`) without a second, diverging copy of this code —
+        see main.py.
+        """
+        dt_ms = self.clock.tick(FPS)
+        events = pygame.event.get()
+        running = True
+        for event in events:
+            if event.type == pygame.QUIT:
+                running = False
+
+        if self.in_menu:
+            running = self.handle_menu(events, running)
+            self.renderer.draw_menu(self.menu_index)
+            pygame.display.flip()
+            return running
+
+        running = self.handle_global_events(events, running)
+        if not self.paused and not self.round_over:
+            self.update(events, dt_ms)
+        self.renderer.draw(self)
+        pygame.display.flip()
+        return running
 
     def handle_menu(self, events: list[pygame.event.Event], running: bool) -> bool:
         for event in events:

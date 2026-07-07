@@ -4,6 +4,12 @@ Prototype jouable d'un jeu de combat 2D rétro inspiré des bases de Street Figh
 
 Les personnages sont rendus à partir de sprites (voir [Personnages](#personnages)) ; le décor, les barres de vie, les hitboxes et les effets visuels restent dessinés en formes simples avec Pygame.
 
+## Jouer dans le navigateur
+
+**[phileas-condemine.github.io/retro-fighter](https://phileas-condemine.github.io/retro-fighter/)**
+
+Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/Pygame-ce compilé en WebAssembly) et déployé automatiquement sur GitHub Pages à chaque push sur `master` (voir `.github/workflows/deploy-pygbag-pages.yml`). Le premier chargement peut prendre quelques dizaines de secondes (téléchargement du runtime Python WebAssembly) ; les chargements suivants sont mis en cache par le navigateur.
+
 ## Aperçu
 
 ![Capture d'écran](docs/media/screenshot.png)
@@ -72,6 +78,18 @@ pip install -r requirements.txt
 ```bash
 python run_game.py
 ```
+
+### Build web locale (Pygbag)
+
+`main.py` est le point d'entrée requis par [Pygbag](https://github.com/pygame-web/pygbag) pour le build WebAssembly (boucle async, voir `Game.tick()` dans `retro_fighter/game.py` — la même méthode alimente `run_game.py` en desktop et `main.py` en web, donc aucune logique dupliquée). Pour tester en local avant de pousser :
+
+```bash
+python -m pip install pygbag
+python -m pygbag .          # serveur local sur http://localhost:8000
+python -m pygbag --build .  # build statique dans build/web/, sans lancer de serveur
+```
+
+`pygbag.ini` exclut du build web les dossiers/fichiers qui ne sont pas nécessaires à l'exécution (`.venv/`, `docs/`, `scripts/`, `inspiration_graphique/`, docs de packs, fichiers projet). `build/` n'est pas versionné : il est régénéré par `.github/workflows/deploy-pygbag-pages.yml` à chaque push sur `master`.
 
 ## Contrôles
 
