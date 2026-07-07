@@ -147,18 +147,18 @@ config = {
     xtermjs : "{{cookiecutter.xtermjs}}" ,
     _sdl2 : "canvas",
     user_canvas : 0,
-    user_canvas_managed : 0,
-    // Default pygbag templates set this to 2, reserving half the window for
-    // an xterm.js debug console — meant to be corrected back to 1 by the
-    // `platform.window.config.gui_divider = 1` line further up this file,
-    // but that line only runs *after* main.py's shell.source() resolves,
-    // which never happens for a persistent game loop like ours (main.py
-    // runs forever until the player quits). Left at 2, window_canvas_adjust()
-    // (pythons.js) sizes the canvas to half the available window/tab space
-    // instead of filling it. Setting it to 1 here (the value actually in
-    // effect for the game's entire runtime) makes the canvas use the full
-    // available space while window_canvas_adjust() still preserves the
-    // game's own aspect ratio.
+    // pythons.js's own window_canvas_adjust() computes its aspect ratio from
+    // the *live* canvas.width/canvas.height attributes, but its first call
+    // happens before our Python/SDL has set the canvas to its real 1024x576
+    // (they're still an early placeholder at that point), and nothing calls
+    // it again afterwards unless the OS browser window itself is resized —
+    // so the game gets stuck at whatever wrong size that first, premature
+    // calculation produced. user_canvas_managed: 1 disables pygbag's resize
+    // handling entirely; rf_fit_canvas() below (our own, using a hardcoded
+    // 1024x576 aspect ratio instead of reading the canvas element) replaces
+    // it, called on load, on window resize, and a few times shortly after
+    // load as a safety net for slow canvas/SDL init.
+    user_canvas_managed : 1,
     gui_divider : 1,
     ume_block : {{cookiecutter.ume_block}},
     can_close : {{cookiecutter.can_close}},
@@ -171,6 +171,46 @@ config = {
     fb_width : "{{cookiecutter.width}}",
     fb_height : "{{cookiecutter.height}}"
 }
+
+// Fills the browser window/tab with the game canvas, letterboxed to keep its
+// native 1024x576 (16:9) aspect ratio. Deliberately hardcodes the ratio
+// instead of reading canvas.width/canvas.height like pythons.js's own
+// window_canvas_adjust() does, since that element's attributes are still an
+// early placeholder the first time any resize logic runs (before our
+// Python/SDL has finished starting up), which is what left the game stuck
+// at the wrong size even after fixing gui_divider.
+function rf_fit_canvas() {
+    const canvas = document.getElementById("canvas");
+    if (!canvas) return;
+    const ar = Number(config.fb_width) / Number(config.fb_height);
+    const maxW = window.innerWidth;
+    const maxH = window.innerHeight;
+    let w = maxW;
+    let h = Math.trunc(w / ar);
+    if (h > maxH) {
+        h = maxH;
+        w = Math.trunc(h * ar);
+    }
+    canvas.style.position = "absolute";
+    canvas.style.left = "0";
+    canvas.style.right = "0";
+    canvas.style.top = "0";
+    canvas.style.bottom = "0";
+    canvas.style.margin = "auto";
+    canvas.style.width = w + "px";
+    canvas.style.height = h + "px";
+}
+window.addEventListener('resize', rf_fit_canvas);
+window.addEventListener('load', rf_fit_canvas);
+// Safety net: SDL/canvas setup can finish slightly after page load, so retry
+// a few times rather than relying on a single well-timed call.
+for (const delay of [0, 300, 1000, 3000]) {
+    setTimeout(rf_fit_canvas, delay);
+}
+// Belt and suspenders: if anything else (SDL's own emscripten glue, a future
+// pygbag update) writes to canvas.style after we do, keep re-asserting ours
+// periodically rather than tracking down every possible source of a stomp.
+setInterval(rf_fit_canvas, 2000);
 
 function show_infobox() {
     infobox.style.display = "block";
