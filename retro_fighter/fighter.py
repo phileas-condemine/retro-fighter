@@ -36,6 +36,10 @@ class ActiveAttack:
     started_crouching: bool = False
     frame: int = 0
     already_hit: bool = False
+    # Set once the combat log has recorded an outcome for this attack (hit,
+    # blocked, dodged, whiffed, or interrupted) so Game doesn't log the same
+    # attempt twice across the frames it stays active/recovering.
+    logged: bool = False
 
     @property
     def is_active(self) -> bool:

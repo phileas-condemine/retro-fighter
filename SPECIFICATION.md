@@ -204,7 +204,8 @@ Responsabilités :
 - application des collisions et dégâts (mêlée et projectiles) ;
 - spawn/déplacement/collision des projectiles ;
 - tirage aléatoire de l'arène de fond à chaque nouveau round ;
-- condition de fin de round.
+- condition de fin de round ;
+- alimentation du journal de combat chronologique (déplacements, sauts, accroupissements, attaques avec issue, dégâts, esquives, résultat) à chaque évènement pertinent, écrit sur disque à la fin de chaque combat.
 
 ### `fighter.py`
 
@@ -285,6 +286,14 @@ Responsabilités :
 - chargement du manifest des arènes (`assets/backgrounds/arena_manifest.json`) ;
 - mise en cache et redimensionnement des images d'arène (Pygame) ;
 - tolérance aux manifests/fichiers manquants (retombe sur `None`/`False`, jamais d'exception).
+
+### `combat_log.py`
+
+Responsabilités :
+
+- collecte des évènements du combat en cours (`CombatLogger.log()`), avec temps écoulé, personnage, action, distance à l'adversaire, succès/échec, dégâts ;
+- écriture d'un fichier par combat sous `logs/` à la fin du round (KO, temps écoulé, ou reset manuel), nommé avec l'horodatage de son début ;
+- tolérant : un combat qui n'a jamais démarré, ou une erreur d'écriture (système de fichiers en lecture seule, par exemple sous le build web), ne lève jamais d'exception — le jeu continue silencieusement sans journal dans ce cas.
 
 ## 7. Principes de conception
 

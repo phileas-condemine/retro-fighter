@@ -9,6 +9,7 @@ import pygame
 
 from .ai import AIController
 from .audio import SoundBank
+from .combat_log import CombatLogger
 from .config import (
     AI_MODE_LABELS,
     AI_MODES,
@@ -19,6 +20,7 @@ from .config import (
     Controls,
     FPS,
     GROUND_Y,
+    HITSTUN_FRAMES,
     LEFT_BOUND,
     PROJECTILE_AVOID_Y_DELTA,
     RIGHT_BOUND,
@@ -94,6 +96,9 @@ class Game:
         self.player = Fighter("PLAYER", x=260, color=COLOR_BLUE, fighter_id="rose_kunoichi", is_human=True)
         self.enemy = Fighter("CPU", x=764, color=COLOR_RED, fighter_id="shinobi", is_human=False)
         self.projectiles: list[ActiveProjectile] = []
+        self.combat_log = CombatLogger()
+        self._player_prev_state = self.player.state
+        self._enemy_prev_state = self.enemy.state
         self.frame = 0
         self.round_start_frame = 0
         self.round_time_remaining = float(ROUND_TIME_SECONDS)
@@ -206,6 +211,10 @@ class Game:
             self.reset_round()
 
     def reset_round(self) -> None:
+        # If a fight was in progress (e.g. R pressed mid-round), flush its log
+        # before starting a fresh one instead of silently losing it.
+        self._finalize_log("Round interrompu (reset manuel)")
+
         self.player.name = "CPU 1" if self.demo_mode else "PLAYER"
         self.enemy.name = "CPU 2" if self.demo_mode else "CPU"
         self.player.is_human = not self.demo_mode
@@ -223,6 +232,27 @@ class Game:
             self.renderer.set_stage_index(random.randrange(stage_count))
         self.messages = [f"Nouveau round - IA {self.ai_mode} - {self.renderer.stage_name()}"]
 
+        self.combat_log.start(
+            ai_mode=self.ai_mode,
+            stage_name=self.renderer.stage_name(),
+            demo_mode=self.demo_mode,
+            player_name=self.player.name,
+            enemy_name=self.enemy.name,
+            player_fighter_id=self.player.fighter_id,
+            enemy_fighter_id=self.enemy.fighter_id,
+            round_start_frame=self.frame,
+        )
+        self._player_prev_state = self.player.state
+        self._enemy_prev_state = self.enemy.state
+
+    def _finalize_log(self, result_text: str) -> None:
+        if not self.combat_log.meta:
+            return
+        duration_s = (self.frame - self.combat_log.round_start_frame) / FPS
+        self.combat_log.write(result_text=result_text, duration_s=duration_s)
+        self.combat_log.meta = {}
+        self.combat_log.entries = []
+
     def update(self, events: list[pygame.event.Event], dt_ms: int) -> None:
         del dt_ms  # The simulation is deterministic at FPS frames per second.
         self.frame += 1
@@ -235,15 +265,73 @@ class Game:
             player_command = self.human_controller.read(events, keys)
         ai_command = self.ai_controller.read(self.frame, self.enemy, self.player)
 
+        # Captured before update() so apply_hits()/the log can tell whether an
+        # attack that was active this frame finished without ever being
+        # logged (whiffed out of range, or interrupted by taking a hit).
+        player_attack_before = self.player.attack
+        enemy_attack_before = self.enemy.attack
+
         self.player.update(player_command, self.enemy)
         self.enemy.update(ai_command, self.player)
         self.play_action_sounds(self.player)
         self.play_action_sounds(self.enemy)
+        self._player_prev_state = self.log_action_events(self.player, self.enemy, self._player_prev_state)
+        self._enemy_prev_state = self.log_action_events(self.enemy, self.player, self._enemy_prev_state)
         self.spawn_projectiles()
         self.update_projectiles()
         self.resolve_body_collision()
         self.apply_hits()
+        self._finalize_unresolved_attack(self.player, self.enemy, player_attack_before)
+        self._finalize_unresolved_attack(self.enemy, self.player, enemy_attack_before)
         self.check_round_over()
+
+    def log_action_events(self, fighter: Fighter, opponent: Fighter, prev_state: FighterState) -> FighterState:
+        """Logs movement/crouch/jump/land transitions, reusing the same
+        one-frame flags play_action_sounds() uses for the equivalent sounds.
+        Returns the fighter's current state, to be passed back in as
+        prev_state next frame."""
+        state = fighter.state
+        distance = abs(fighter.x - opponent.x)
+
+        if fighter.jump_started_this_frame:
+            action = "double_saut" if state == FighterState.DOUBLE_JUMP else "saut"
+            self.combat_log.log(self.frame, fighter.name, action, distance)
+        if fighter.landed_this_frame:
+            self.combat_log.log(self.frame, fighter.name, "atterrissage", distance)
+
+        if state != prev_state:
+            walk_states = (FighterState.WALK, FighterState.CROUCH_WALK)
+            crouch_states = (FighterState.CROUCH, FighterState.CROUCH_WALK)
+            was_walking = prev_state in walk_states
+            is_walking = state in walk_states
+            if is_walking and not was_walking:
+                direction = "droite" if fighter.vel_x > 0 else "gauche" if fighter.vel_x < 0 else "?"
+                self.combat_log.log(self.frame, fighter.name, "deplacement", distance, detail=f"direction={direction}")
+            elif was_walking and not is_walking:
+                self.combat_log.log(self.frame, fighter.name, "arret", distance)
+
+            was_crouching = prev_state in crouch_states
+            is_crouching = state in crouch_states
+            if is_crouching and not was_crouching:
+                self.combat_log.log(self.frame, fighter.name, "accroupi", distance)
+            elif was_crouching and not is_crouching:
+                self.combat_log.log(self.frame, fighter.name, "releve", distance)
+
+        return state
+
+    def _finalize_unresolved_attack(self, fighter: Fighter, opponent: Fighter, attack_ref) -> None:
+        """Logs a melee attack that ended this frame without apply_hits()
+        ever recording an outcome for it: either it never reached anyone
+        (whiff, out of range) or the attacker got hit out of it first."""
+        if attack_ref is None or fighter.attack is attack_ref or attack_ref.logged:
+            return
+        distance = abs(fighter.x - opponent.x)
+        action = f"{attack_ref.definition.kind}_{attack_ref.effective_level}"
+        if fighter.state == FighterState.HITSTUN:
+            detail = f"{action} interrompue (touche subie)"
+        else:
+            detail = f"{action} manquee (hors de portee)"
+        self.combat_log.log(self.frame, fighter.name, "attaque", distance, success=False, detail=detail)
 
     def play_sound(self, fighter_id: str, event: str, volume: float = 0.75) -> None:
         if self.sounds:
@@ -276,6 +364,7 @@ class Game:
         for fighter in (self.player, self.enemy):
             if not fighter.projectile_spawn_pending or not fighter.ranged_attack:
                 continue
+            opponent = self.enemy if fighter is self.player else self.player
             definition = fighter.ranged_attack.definition
             self.projectiles.append(ActiveProjectile(
                 definition=definition,
@@ -286,6 +375,8 @@ class Game:
             ))
             throw_event = PROJECTILE_COMMON_SOUNDS[definition.projectile_id]["throw"]
             self.play_common(throw_event, volume=0.5)
+            distance = abs(fighter.x - opponent.x)
+            self.combat_log.log(self.frame, fighter.name, "tir_distance", distance, detail=definition.display_name)
 
     def update_projectiles(self) -> None:
         survivors: list[ActiveProjectile] = []
@@ -294,21 +385,51 @@ class Game:
             projectile.x += projectile.facing * projectile.definition.speed_px_per_second / FPS
 
             if projectile.x < LEFT_BOUND - 80 or projectile.x > RIGHT_BOUND + 80:
+                if not projectile.logged:
+                    distance = abs(projectile.owner.x - (self.enemy if projectile.owner is self.player else self.player).x)
+                    self.combat_log.log(self.frame, projectile.owner.name, "tir_distance", distance,
+                                         success=False, detail=f"{projectile.definition.display_name} manque (hors ecran)")
                 continue  # flew off-stage
 
             target = self.enemy if projectile.owner is self.player else self.player
             hitbox = pygame.Rect(0, 0, projectile.definition.hitbox_w, projectile.definition.hitbox_h)
             hitbox.center = (round(projectile.x), round(projectile.y))
+            distance = abs(projectile.owner.x - target.x)
 
             if not hitbox.colliderect(target.hurtbox):
+                if not projectile.logged:
+                    horizontal_overlap = hitbox.right > target.hurtbox.left and hitbox.left < target.hurtbox.right
+                    if horizontal_overlap:
+                        projectile.logged = True
+                        self.combat_log.log(self.frame, projectile.owner.name, "tir_distance", distance, success=False,
+                                             detail=f"{projectile.definition.display_name} esquive (accroupi)")
+                        self.combat_log.log(self.frame, target.name, "esquive", distance,
+                                             detail=f"{projectile.definition.display_name} (accroupi)")
                 survivors.append(projectile)
                 continue
 
             if target.state == FighterState.DOUBLE_JUMP and target.y <= GROUND_Y - PROJECTILE_AVOID_Y_DELTA:
+                if not projectile.logged:
+                    projectile.logged = True
+                    self.combat_log.log(self.frame, projectile.owner.name, "tir_distance", distance, success=False,
+                                         detail=f"{projectile.definition.display_name} esquive (salto)")
+                    self.combat_log.log(self.frame, target.name, "esquive", distance,
+                                         detail=f"{projectile.definition.display_name} (salto)")
                 survivors.append(projectile)  # salto high enough: dodged
                 continue
 
             result = target.receive_projectile_hit(projectile.owner, projectile.definition.damage)
+            projectile.logged = True
+            if result.landed:
+                self.combat_log.log(self.frame, projectile.owner.name, "tir_distance", distance,
+                                     success=not result.blocked, damage=0 if result.blocked else result.damage,
+                                     detail=projectile.definition.display_name)
+            if result.blocked:
+                self.combat_log.log(self.frame, target.name, "blocage", distance, success=True,
+                                     detail=projectile.definition.display_name)
+            elif result.landed:
+                self.combat_log.log(self.frame, target.name, "degats_recus", distance, damage=result.damage,
+                                     detail=f"{projectile.definition.display_name} hitstun={HITSTUN_FRAMES / FPS:.2f}s")
             if result.message:
                 self.add_message(result.message)
             if result.landed:
@@ -356,8 +477,23 @@ class Game:
             if not attacker.attack or attacker.attack.already_hit:
                 continue
             hitbox = attacker.get_attack_hitbox()
-            if hitbox and hitbox.colliderect(defender.hurtbox):
+            if not hitbox:
+                continue
+            if hitbox.colliderect(defender.hurtbox):
                 candidates.append((attacker, defender, attacker.attack.definition, attacker.attack.effective_level))
+            elif not attacker.attack.logged:
+                # In range (horizontal overlap) but the defender's hurtbox
+                # geometry (crouch/airborne) moved out of the attack's height
+                # band — a genuine dodge, distinct from simply being too far
+                # away (which never produces a hitbox in range at all).
+                horizontal_overlap = hitbox.right > defender.hurtbox.left and hitbox.left < defender.hurtbox.right
+                if horizontal_overlap:
+                    attacker.attack.logged = True
+                    distance = abs(attacker.x - defender.x)
+                    action = f"{attacker.attack.definition.kind}_{attacker.attack.effective_level}"
+                    self.combat_log.log(self.frame, attacker.name, "attaque", distance, success=False,
+                                         detail=f"{action} esquivee (accroupi/saut)")
+                    self.combat_log.log(self.frame, defender.name, "esquive", distance, detail=action)
 
         if not candidates:
             return
@@ -367,7 +503,18 @@ class Game:
         for attacker, defender, definition, hit_level in candidates:
             if attacker.attack:
                 attacker.attack.already_hit = True
+                attacker.attack.logged = True
+            distance = abs(attacker.x - defender.x)
+            action = f"{definition.kind}_{hit_level}"
             result = defender.receive_attack(attacker, definition, hit_level)
+            if result.landed:
+                self.combat_log.log(self.frame, attacker.name, "attaque", distance,
+                                     success=not result.blocked, damage=0 if result.blocked else result.damage, detail=action)
+            if result.blocked:
+                self.combat_log.log(self.frame, defender.name, "blocage", distance, success=True, detail=action)
+            elif result.landed:
+                self.combat_log.log(self.frame, defender.name, "degats_recus", distance, damage=result.damage,
+                                     detail=f"{action} hitstun={HITSTUN_FRAMES / FPS:.2f}s")
             if result.message:
                 self.add_message(result.message)
             if result.landed:
@@ -383,16 +530,27 @@ class Game:
             return
         if self.player.is_ko or self.enemy.is_ko:
             self.round_over = True
+            if self.player.is_ko and self.enemy.is_ko:
+                result_text = "Egalite (double KO)"
+            elif self.enemy.is_ko:
+                result_text = f"{self.player.name} gagne (KO)"
+            else:
+                result_text = f"{self.enemy.name} gagne (KO)"
+            self._finalize_log(result_text)
             return
         if self.round_time_remaining <= 0:
             self.round_time_remaining = 0
             self.round_over = True
             if self.player.health > self.enemy.health:
                 self.enemy.health = 0
+                result_text = f"{self.player.name} gagne (temps ecoule)"
             elif self.enemy.health > self.player.health:
                 self.player.health = 0
+                result_text = f"{self.enemy.name} gagne (temps ecoule)"
             else:
                 self.add_message("Temps écoulé : égalité")
+                result_text = "Egalite (temps ecoule)"
+            self._finalize_log(result_text)
 
     def add_message(self, message: str) -> None:
         self.messages.append(message)

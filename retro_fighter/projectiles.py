@@ -78,3 +78,7 @@ class ActiveProjectile:
     facing: int
     owner: "Fighter"
     elapsed: int = 0
+    # Set once the combat log has recorded an outcome (dodge, hit, block) so
+    # a projectile that dodges early and keeps flying off-screen doesn't get
+    # logged a second time as a miss.
+    logged: bool = False

@@ -43,6 +43,7 @@ Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/P
 - Menu de sélection du niveau d'IA.
 - 5 arènes en fond, tirée au hasard à chaque nouveau round (voir [Arènes](#arènes)).
 - Mode démo IA vs IA (`Tab`), même niveau de difficulté des deux côtés (voir [Modes IA](#modes-ia)).
+- Journal de combat détaillé, un fichier horodaté par combat (voir [Journaux de combat](#journaux-de-combat)).
 
 ## Installation
 
@@ -242,7 +243,32 @@ Pendant le menu ou en plein match :
 
 Touche `Tab` (menu ou en match) : bascule entre Joueur vs IA et Démo — les deux combattants sont alors contrôlés par IA, au même niveau de difficulté sélectionné (1-4). Utile pour regarder le jeu tourner tout seul ou observer le comportement d'un niveau d'IA sans jouer.
 
-En mode démo, `PLAYER`/`CPU` deviennent `CPU 1`/`CPU 2` dans les barres de vie, le journal de combat et le message de victoire. Chaque camp utilise sa propre instance d'IA (`Game.ai_controller` / `Game.player_ai_controller`) : même s'ils partagent le même niveau de difficulté, leurs cooldowns et décisions sont indépendants, donc les deux combattants ne jouent pas en miroir.
+En mode démo, `PLAYER`/`CPU` deviennent `CPU 1`/`CPU 2` dans les barres de vie, le journal affiché à l'écran et le message de victoire. Chaque camp utilise sa propre instance d'IA (`Game.ai_controller` / `Game.player_ai_controller`) : même s'ils partagent le même niveau de difficulté, leurs cooldowns et décisions sont indépendants, donc les deux combattants ne jouent pas en miroir.
+
+## Journaux de combat
+
+À ne pas confondre avec le journal affiché à l'écran (5 derniers messages) : chaque combat (match lancé depuis le menu, ou round relancé avec `R`) écrit un **fichier** détaillé dans `logs/` à la fin du combat (KO, temps écoulé, ou reset manuel), nommé avec l'horodatage de son début (`logs/combat_AAAAMMJJ_HHMMSS_mmm.log`). Généré par `retro_fighter/combat_log.py` (`CombatLogger`), câblé dans `retro_fighter/game.py`.
+
+Chaque ligne est un évènement chronologique avec : temps écoulé depuis le début du round, personnage, action, distance à l'adversaire à cet instant, indicateur de succès/échec, dégâts. Évènements couverts :
+
+- déplacements (début/fin, avec direction) et arrêts ;
+- sauts, doubles sauts (salto), atterrissages ;
+- accroupissements (début/fin) ;
+- attaques (poing/pied, hauteur) : touché, bloqué, **esquivé par accroupissement ou saut** (distinct d'un coup simplement hors de portée, qui n'est pas loggé comme esquive), ou interrompu parce que l'attaquant a lui-même été touché entre-temps ;
+- attaques à distance : tir, puis issue (touché/bloqué/esquivé/raté hors écran) ;
+- dégâts reçus, avec la durée d'incapacité (hitstun) qui en résulte ;
+- résultat final du combat.
+
+Exemple d'extrait :
+
+```text
+[t=   0.90s] CPU 1    attaque        distance=  81.6px succes=OK     degats=  6  (punch_low)
+[t=   0.90s] CPU 2    degats_recus   distance=  81.6px succes=-      degats=  6  (punch_low hitstun=0.50s)
+[t=   4.27s] CPU 2    tir_distance   distance= 100.2px succes=ECHEC  degats=  0  (Shuriken esquive (accroupi))
+[t=   4.27s] CPU 1    esquive        distance= 100.2px succes=-      degats=  0  (Shuriken (accroupi))
+```
+
+`logs/` n'est pas versionné (voir `.gitignore`) : ce sont des données de partie locales, pas du code.
 
 ## Structure du projet
 
