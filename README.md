@@ -42,6 +42,7 @@ Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/P
 - Affichage optionnel des hitboxes/hurtboxes.
 - Menu de sélection du niveau d'IA.
 - 5 arènes en fond, tirée au hasard à chaque nouveau round (voir [Arènes](#arènes)).
+- Mode démo IA vs IA (`Tab`), même niveau de difficulté des deux côtés (voir [Modes IA](#modes-ia)).
 
 ## Installation
 
@@ -148,6 +149,7 @@ Disposition pensée pour AZERTY et QWERTY : poing/pied/blocage/distance occupent
 | Pause | P | P |
 | Reset round | R | R |
 | Afficher/cacher hitboxes | H | H |
+| Mode démo (IA vs IA) | Tab | Tab |
 | Quitter | Échap | Échap |
 
 ### Hauteur des attaques et blocs
@@ -235,6 +237,12 @@ Pendant le menu ou en plein match :
 | 2 | Facile | lent, erreurs fréquentes, mauvais blocages, attaque à distance rare |
 | 3 | Moyen | gère la distance, bloque parfois correctement, utilise l'attaque à distance à bonne portée |
 | 4 | Difficile | punit les whiffs, varie les hauteurs, bloque souvent juste, s'accroupit contre les projectiles |
+
+### Mode démo (IA vs IA)
+
+Touche `Tab` (menu ou en match) : bascule entre Joueur vs IA et Démo — les deux combattants sont alors contrôlés par IA, au même niveau de difficulté sélectionné (1-4). Utile pour regarder le jeu tourner tout seul ou observer le comportement d'un niveau d'IA sans jouer.
+
+En mode démo, `PLAYER`/`CPU` deviennent `CPU 1`/`CPU 2` dans les barres de vie, le journal de combat et le message de victoire. Chaque camp utilise sa propre instance d'IA (`Game.ai_controller` / `Game.player_ai_controller`) : même s'ils partagent le même niveau de difficulté, leurs cooldowns et décisions sont indépendants, donc les deux combattants ne jouent pas en miroir.
 
 ## Structure du projet
 

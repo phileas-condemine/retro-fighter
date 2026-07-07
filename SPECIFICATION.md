@@ -186,6 +186,12 @@ L'adversaire utilise une IA déterministe/règles avec aléas contrôlés.
 - Bloque souvent correctement.
 - S'accroupit en réaction à une attaque à distance adverse en vol.
 
+### 5.5 Mode démo (IA vs IA)
+
+Touche `Tab` (menu ou en match) : bascule `Game.demo_mode`. Quand actif, le combattant `PLAYER` est piloté par une seconde instance d'`AIController` (`Game.player_ai_controller`) au lieu du clavier, réglée sur le même niveau de difficulté que l'adversaire (`Game.ai_mode`). Les deux instances d'IA sont indépendantes (chacune garde son propre cooldown/état de décision) : à difficulté égale, les deux combattants ne se comportent donc pas de façon parfaitement symétrique.
+
+En mode démo, les noms affichés (`Fighter.name`) passent de `PLAYER`/`CPU` à `CPU 1`/`CPU 2` (mis à jour dans `Game.reset_round()`), ce qui se répercute automatiquement dans les barres de vie, le journal de combat et le message de victoire.
+
 ## 6. Architecture logicielle
 
 ### `game.py`
@@ -194,7 +200,7 @@ Responsabilités :
 
 - boucle principale ;
 - gestion menu/pause/reset ;
-- orchestration joueur + IA ;
+- orchestration joueur + IA, avec bascule optionnelle en mode démo (IA vs IA) ;
 - application des collisions et dégâts (mêlée et projectiles) ;
 - spawn/déplacement/collision des projectiles ;
 - tirage aléatoire de l'arène de fond à chaque nouveau round ;

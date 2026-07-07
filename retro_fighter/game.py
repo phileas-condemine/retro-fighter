@@ -78,6 +78,13 @@ class Game:
         )
         self.human_controller = HumanController(controls)
         self.ai_controller = AIController("medium")
+        # Demo mode ("Tab") swaps the human controller for a second AI
+        # instance controlling the player fighter, at the same difficulty as
+        # the opponent. A separate AIController instance is required (not a
+        # shared one) since it tracks per-fighter cooldown/decision state
+        # internally rather than taking it from the Fighter it controls.
+        self.player_ai_controller = AIController("medium")
+        self.demo_mode = False
 
         self.player = Fighter("PLAYER", x=260, color=COLOR_BLUE, fighter_id="rose_kunoichi", is_human=True)
         self.enemy = Fighter("CPU", x=764, color=COLOR_RED, fighter_id="shinobi", is_human=False)
@@ -116,7 +123,7 @@ class Game:
 
         if self.in_menu:
             running = self.handle_menu(events, running)
-            self.renderer.draw_menu(self.menu_index)
+            self.renderer.draw_menu(self.menu_index, self.demo_mode)
             pygame.display.flip()
             return running
 
@@ -147,6 +154,8 @@ class Game:
                 self.start_match("medium")
             elif event.key in (pygame.K_4, pygame.K_KP4):
                 self.start_match("hard")
+            elif event.key == pygame.K_TAB:
+                self.toggle_demo_mode()
         return running
 
     def handle_global_events(self, events: list[pygame.event.Event], running: bool) -> bool:
@@ -172,17 +181,29 @@ class Game:
             elif event.key == pygame.K_m:
                 current = AI_MODES.index(self.ai_mode)
                 self.start_match(AI_MODES[(current + 1) % len(AI_MODES)])
+            elif event.key == pygame.K_TAB:
+                self.toggle_demo_mode()
         return running
 
     def start_match(self, ai_mode: str) -> None:
         self.ai_mode = ai_mode
         self.ai_controller.set_mode(ai_mode)
+        self.player_ai_controller.set_mode(ai_mode)
         self.in_menu = False
         self.paused = False
         self.reset_round()
         self.messages.append(AI_MODE_LABELS[ai_mode])
 
+    def toggle_demo_mode(self) -> None:
+        self.demo_mode = not self.demo_mode
+        self.player_ai_controller.set_mode(self.ai_mode)
+        if not self.in_menu:
+            self.reset_round()
+
     def reset_round(self) -> None:
+        self.player.name = "CPU 1" if self.demo_mode else "PLAYER"
+        self.enemy.name = "CPU 2" if self.demo_mode else "CPU"
+        self.player.is_human = not self.demo_mode
         self.player.reset(260)
         self.enemy.reset(764)
         self.player.update_facing(self.enemy)
@@ -202,8 +223,11 @@ class Game:
         self.frame += 1
         self.round_time_remaining = ROUND_TIME_SECONDS - (self.frame - self.round_start_frame) / FPS
 
-        keys = pygame.key.get_pressed()
-        player_command = self.human_controller.read(events, keys)
+        if self.demo_mode:
+            player_command = self.player_ai_controller.read(self.frame, self.player, self.enemy)
+        else:
+            keys = pygame.key.get_pressed()
+            player_command = self.human_controller.read(events, keys)
         ai_command = self.ai_controller.read(self.frame, self.enemy, self.player)
 
         self.player.update(player_command, self.enemy)

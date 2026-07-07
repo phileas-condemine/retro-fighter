@@ -77,13 +77,17 @@ class Renderer:
             winner = game.player.name if game.enemy.is_ko else game.enemy.name if game.player.is_ko else "Égalité"
             self.draw_center_banner(f"{winner} gagne", "R pour recommencer | 1-4 pour changer l'IA")
 
-    def draw_menu(self, selected_index: int) -> None:
+    def draw_menu(self, selected_index: int, demo_mode: bool = False) -> None:
         self.draw_background()
         title = self.title_font.render("RETRO FIGHTER", True, COLOR_TEXT)
         self.screen.blit(title, title.get_rect(center=(WINDOW_WIDTH // 2, 96)))
 
         subtitle = self.font.render("Prototype Python/Pygame - combat 2D à trois hauteurs", True, COLOR_MUTED)
         self.screen.blit(subtitle, subtitle.get_rect(center=(WINDOW_WIDTH // 2, 148)))
+
+        mode_label = "Démo : IA vs IA" if demo_mode else "Joueur vs IA"
+        demo_surf = self.font.render(f"Mode : {mode_label}  (Tab pour changer)", True, COLOR_YELLOW if demo_mode else COLOR_MUTED)
+        self.screen.blit(demo_surf, demo_surf.get_rect(center=(WINDOW_WIDTH // 2, 178)))
 
         modes = [
             ("1", "Sparring", "l'adversaire reste immobile"),
@@ -105,7 +109,7 @@ class Renderer:
         controls = [
             "Contrôles : Gauche/Droite déplacement | Haut/Bas hauteur | Q/A poing | S pied | D blocage | Espace saut",
             "Bas seul au sol : accroupi | F : attaque à distance | Espace en l'air : salto (double saut)",
-            "En match : 1-4 changer IA | R reset | H hitboxes | P pause | Échap quitter",
+            "En match : 1-4 changer IA | Tab mode démo | R reset | H hitboxes | P pause | Échap quitter",
             "Appuie sur Entrée ou sur 1-4 pour lancer.",
         ]
         for i, line in enumerate(controls):
@@ -199,11 +203,15 @@ class Renderer:
         pygame.draw.rect(self.screen, COLOR_BLACK, (WINDOW_WIDTH // 2 - 46, 20, 92, 58), border_radius=8)
         self.screen.blit(timer_surf, timer_surf.get_rect(center=(WINDOW_WIDTH // 2, 50)))
 
-        mode_text = f"IA : {game.ai_mode.upper()} | {self.stage_name()}"
+        demo_suffix = " | DÉMO (IA vs IA)" if game.demo_mode else ""
+        mode_text = f"IA : {game.ai_mode.upper()}{demo_suffix} | {self.stage_name()}"
         mode_surf = self.font.render(mode_text, True, COLOR_YELLOW)
         self.screen.blit(mode_surf, mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90)))
 
-        controls = "Q/A poing | S pied | D blocage | Bas accroupi | F distance | Espace saut/salto | H hitboxes"
+        if game.demo_mode:
+            controls = "Mode démo : IA vs IA | Tab repasser en Joueur vs IA | R reset | P pause | H hitboxes"
+        else:
+            controls = "Q/A poing | S pied | D blocage | Bas accroupi | F distance | Espace saut/salto | H hitboxes"
         control_surf = self.small_font.render(controls, True, COLOR_MUTED)
         self.screen.blit(control_surf, control_surf.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 24)))
 
