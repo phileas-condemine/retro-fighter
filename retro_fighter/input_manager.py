@@ -52,7 +52,7 @@ class HumanController:
         for event in events:
             if event.type != pygame.KEYDOWN or getattr(event, "repeat", False):
                 continue
-            if event.key == self.controls.punch:
+            if event.key in self.controls.punch:
                 attack = "punch"
             elif event.key == self.controls.kick:
                 attack = "kick"

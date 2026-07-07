@@ -36,15 +36,15 @@ La version actuelle vise à valider les mécaniques fondamentales : déplacement
 
 ## 3. Contrôles
 
-Le joueur humain utilise :
+Le joueur humain utilise (touches données en AZERTY ; `Q` devient `A` en QWERTY, le reste est identique sur les deux layouts puisque S/D/F occupent la même position physique) :
 
 - Flèche gauche/droite : déplacement.
 - Flèche haut/bas : modificateur de hauteur.
-- `J` : coup de poing.
-- `K` : coup de pied.
-- `L` : blocage.
+- `Q` (`A` en QWERTY) : coup de poing.
+- `S` : coup de pied.
+- `D` : blocage.
 - `Espace` : saut (en l'air : double saut/salto).
-- `U` : attaque à distance.
+- `F` : attaque à distance.
 
 La hauteur vaut :
 
@@ -115,13 +115,13 @@ Si deux attaques touchent exactement sur la même frame, les deux coups sont app
 
 ### 4.5 Blocage
 
-Le blocage est maintenu avec `L`.
+Le blocage est maintenu avec `D`.
 
 La hauteur du blocage est déterminée par haut/bas/neutre :
 
-- `↑ + L` : blocage haut ;
-- `L` seul : blocage milieu ;
-- `↓ + L` : blocage bas.
+- `↑ + D` : blocage haut ;
+- `D` seul : blocage milieu ;
+- `↓ + D` : blocage bas.
 
 Un blocage correct annule entièrement les dégâts.
 
@@ -141,7 +141,7 @@ Pendant un `double_jump`, le déplacement latéral utilise `DOUBLE_JUMP_AIR_CONT
 
 ### 4.8 Attaque à distance
 
-Touche `U`. Chaque personnage lance son propre projectile (`retro_fighter/projectiles.py`) : shuriken pour `shinobi`, boule d'énergie pour `rose_kunoichi`. L'action se déroule en deux temps visuels (`ranged_charge` puis `ranged_throw`), le projectile étant lancé à une frame précise du lancer, à hauteur d'épaules.
+Touche `F`. Chaque personnage lance son propre projectile (`retro_fighter/projectiles.py`) : shuriken pour `shinobi`, boule d'énergie pour `rose_kunoichi`. L'action se déroule en deux temps visuels (`ranged_charge` puis `ranged_throw`), le projectile étant lancé à une frame précise du lancer, à hauteur d'épaules.
 
 Résolution des collisions projectile/adversaire :
 

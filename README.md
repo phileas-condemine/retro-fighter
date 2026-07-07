@@ -93,34 +93,38 @@ python -m pygbag --build .  # build statique dans build/web/, sans lancer de ser
 
 ## Contrôles
 
-| Action | Touche |
-|---|---|
-| Déplacement gauche/droite | Flèches gauche/droite |
-| Viser haut | Flèche haut maintenue |
-| Viser bas | Flèche bas maintenue |
-| Viser milieu | aucune flèche haut/bas |
-| Coup de poing | J |
-| Coup de pied | K |
-| Blocage maintenu | L |
-| Saut / double saut (salto) | Espace |
-| Accroupissement | ↓ (seul, au sol) |
-| Attaque à distance | U |
-| Pause | P |
-| Reset round | R |
-| Afficher/cacher hitboxes | H |
-| Quitter | Échap |
+Disposition pensée pour AZERTY et QWERTY : poing/pied/blocage/distance occupent les mêmes touches physiques sur les deux claviers (rangée du milieu, juste après la touche de déplacement gauche) — seule la première touche change de lettre selon le layout (Q en AZERTY, A en QWERTY), S/D/F sont identiques sur les deux.
+
+| Action | Touche (AZERTY) | Touche (QWERTY) |
+|---|---|---|
+| Déplacement gauche/droite | Flèches gauche/droite | Flèches gauche/droite |
+| Viser haut | Flèche haut maintenue | Flèche haut maintenue |
+| Viser bas | Flèche bas maintenue | Flèche bas maintenue |
+| Viser milieu | aucune flèche haut/bas | aucune flèche haut/bas |
+| Coup de poing | Q | A |
+| Coup de pied | S | S |
+| Blocage maintenu | D | D |
+| Saut / double saut (salto) | Espace | Espace |
+| Accroupissement | ↓ (seul, au sol) | ↓ (seul, au sol) |
+| Attaque à distance | F | F |
+| Pause | P | P |
+| Reset round | R | R |
+| Afficher/cacher hitboxes | H | H |
+| Quitter | Échap | Échap |
 
 ### Hauteur des attaques et blocs
 
-- `J` seul : coup de poing milieu.
-- `↑ + J` : coup de poing haut.
-- `↓ + J` : coup de poing bas.
-- `K` seul : coup de pied milieu.
-- `↑ + K` : coup de pied haut.
-- `↓ + K` : coup de pied bas.
-- `L` seul : blocage milieu.
-- `↑ + L` : blocage haut.
-- `↓ + L` : blocage bas.
+(Touches données en AZERTY ; en QWERTY, remplacer `Q` par `A`.)
+
+- `Q` seul : coup de poing milieu.
+- `↑ + Q` : coup de poing haut.
+- `↓ + Q` : coup de poing bas.
+- `S` seul : coup de pied milieu.
+- `↑ + S` : coup de pied haut.
+- `↓ + S` : coup de pied bas.
+- `D` seul : blocage milieu.
+- `↑ + D` : blocage haut.
+- `↓ + D` : blocage bas.
 - `↓` seul (sans attaque ni blocage) : accroupissement. `↓ + ←/→` : déplacement accroupi (plus lent).
 
 En l'air, une fois le premier saut lancé, `Espace` déclenche un second saut avec une animation de salto, tant qu'il n'a pas déjà été utilisé depuis l'atterrissage.
@@ -149,7 +153,7 @@ Chaque personnage a son propre projectile, défini dans `retro_fighter/projectil
 | `shinobi` | Shuriken | 8 | 560 px/s |
 | `rose_kunoichi` | Boule d'énergie | 10 | 455 px/s |
 
-Touche `U` : charge (`ranged_charge`) puis lance (`ranged_throw`) à hauteur d'épaules. Règles de collision :
+Touche `F` : charge (`ranged_charge`) puis lance (`ranged_throw`) à hauteur d'épaules. Règles de collision :
 
 - accroupissement : esquive (la hurtbox réduite passe sous le projectile, aucune règle spéciale nécessaire) ;
 - salto (double saut) suffisamment haut (`PROJECTILE_AVOID_Y_DELTA` dans `config.py`) : esquive ;

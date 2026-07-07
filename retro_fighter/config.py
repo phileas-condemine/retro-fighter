@@ -74,13 +74,18 @@ COLOR_HURTBOX = (80, 160, 255)
 
 @dataclass(frozen=True)
 class Controls:
-    """Keyboard layout for the human player."""
+    """Keyboard layout for the human player.
+
+    `punch` accepts multiple keycodes so both AZERTY (Q) and QWERTY (A) map
+    to the same physical key next to S/D/F — those three are already on the
+    same physical keys on both layouts, only the leftmost one (Q vs A) differs.
+    """
 
     left: int
     right: int
     up: int
     down: int
-    punch: int
+    punch: tuple[int, ...]
     kick: int
     block: int
     jump: int

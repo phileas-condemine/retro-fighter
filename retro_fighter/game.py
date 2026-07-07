@@ -63,11 +63,11 @@ class Game:
             right=pygame.K_RIGHT,
             up=pygame.K_UP,
             down=pygame.K_DOWN,
-            punch=pygame.K_j,
-            kick=pygame.K_k,
-            block=pygame.K_l,
+            punch=(pygame.K_q, pygame.K_a),  # Q on AZERTY, A on QWERTY: same physical key
+            kick=pygame.K_s,
+            block=pygame.K_d,
             jump=pygame.K_SPACE,
-            ranged=pygame.K_u,
+            ranged=pygame.K_f,
         )
         self.human_controller = HumanController(controls)
         self.ai_controller = AIController("medium")
