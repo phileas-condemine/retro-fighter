@@ -59,6 +59,14 @@ class Renderer:
     def stage_name(self) -> str:
         return self.stage_backgrounds.get_name(self.stage_index)
 
+    def draw_backdrop(self, rect: pygame.Rect, alpha: int = 185, color: tuple[int, int, int] = COLOR_BG, radius: int = 10) -> None:
+        """Semi-transparent panel behind text, so it stays readable over the
+        photographic arena backgrounds (plain colors/gradients underneath the
+        old procedural backdrop never needed this)."""
+        panel = pygame.Surface(rect.size, pygame.SRCALPHA)
+        pygame.draw.rect(panel, (*color, alpha), panel.get_rect(), border_radius=radius)
+        self.screen.blit(panel, rect.topleft)
+
     def draw(self, game: "Game") -> None:  # type: ignore[name-defined]
         self.draw_background()
         self.draw_fighter(game.player)
@@ -80,14 +88,20 @@ class Renderer:
     def draw_menu(self, selected_index: int, demo_mode: bool = False) -> None:
         self.draw_background()
         title = self.title_font.render("RETRO FIGHTER", True, COLOR_TEXT)
-        self.screen.blit(title, title.get_rect(center=(WINDOW_WIDTH // 2, 96)))
+        title_rect = title.get_rect(center=(WINDOW_WIDTH // 2, 96))
 
         subtitle = self.font.render("Prototype Python/Pygame - combat 2D à trois hauteurs", True, COLOR_MUTED)
-        self.screen.blit(subtitle, subtitle.get_rect(center=(WINDOW_WIDTH // 2, 148)))
+        subtitle_rect = subtitle.get_rect(center=(WINDOW_WIDTH // 2, 148))
 
         mode_label = "Démo : IA vs IA" if demo_mode else "Joueur vs IA"
         demo_surf = self.font.render(f"Mode : {mode_label}  (Tab pour changer)", True, COLOR_YELLOW if demo_mode else COLOR_MUTED)
-        self.screen.blit(demo_surf, demo_surf.get_rect(center=(WINDOW_WIDTH // 2, 178)))
+        demo_rect = demo_surf.get_rect(center=(WINDOW_WIDTH // 2, 178))
+
+        header_backdrop = title_rect.union(subtitle_rect).union(demo_rect).inflate(56, 28)
+        self.draw_backdrop(header_backdrop)
+        self.screen.blit(title, title_rect)
+        self.screen.blit(subtitle, subtitle_rect)
+        self.screen.blit(demo_surf, demo_rect)
 
         modes = [
             ("1", "Sparring", "l'adversaire reste immobile"),
@@ -112,9 +126,14 @@ class Renderer:
             "En match : 1-4 changer IA | Tab mode démo | R reset | H hitboxes | P pause | Échap quitter",
             "Appuie sur Entrée ou sur 1-4 pour lancer.",
         ]
-        for i, line in enumerate(controls):
-            surf = self.small_font.render(line, True, COLOR_MUTED)
-            self.screen.blit(surf, surf.get_rect(center=(WINDOW_WIDTH // 2, 465 + i * 24)))
+        control_surfaces = [self.small_font.render(line, True, COLOR_MUTED) for line in controls]
+        control_rects = [
+            surf.get_rect(center=(WINDOW_WIDTH // 2, 465 + i * 24)) for i, surf in enumerate(control_surfaces)
+        ]
+        footer_backdrop = control_rects[0].unionall(control_rects[1:]).inflate(40, 20)
+        self.draw_backdrop(footer_backdrop)
+        for surf, rect in zip(control_surfaces, control_rects):
+            self.screen.blit(surf, rect)
 
     def draw_background(self) -> None:
         if self.stage_backgrounds.draw(self.screen, self.stage_index):
@@ -206,21 +225,29 @@ class Renderer:
         demo_suffix = " | DÉMO (IA vs IA)" if game.demo_mode else ""
         mode_text = f"IA : {game.ai_mode.upper()}{demo_suffix} | {self.stage_name()}"
         mode_surf = self.font.render(mode_text, True, COLOR_YELLOW)
-        self.screen.blit(mode_surf, mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90)))
+        mode_rect = mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90))
+        self.draw_backdrop(mode_rect.inflate(28, 14))
+        self.screen.blit(mode_surf, mode_rect)
 
         if game.demo_mode:
             controls = "Mode démo : IA vs IA | Tab repasser en Joueur vs IA | R reset | P pause | H hitboxes"
         else:
             controls = "Q/A poing | S pied | D blocage | Bas accroupi | F distance | Espace saut/salto | H hitboxes"
         control_surf = self.small_font.render(controls, True, COLOR_MUTED)
-        self.screen.blit(control_surf, control_surf.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 24)))
+        control_rect = control_surf.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 24))
+        self.draw_backdrop(control_rect.inflate(28, 14))
+        self.screen.blit(control_surf, control_rect)
 
         # Event log
-        y = 112
-        for msg in game.messages[-5:]:
-            surf = self.small_font.render(msg, True, COLOR_TEXT)
-            self.screen.blit(surf, (42, y))
-            y += 20
+        messages = game.messages[-5:]
+        if messages:
+            line_surfaces = [self.small_font.render(msg, True, COLOR_TEXT) for msg in messages]
+            log_rect = pygame.Rect(42, 112, max(s.get_width() for s in line_surfaces), len(line_surfaces) * 20 - 4)
+            self.draw_backdrop(log_rect.inflate(24, 16))
+            y = 112
+            for surf in line_surfaces:
+                self.screen.blit(surf, (42, y))
+                y += 20
 
     def draw_health_bar(self, fighter: Fighter, x: int, y: int, align: str) -> None:
         width = 392
