@@ -31,8 +31,10 @@ game = Game()
 game.start_match("sparring")  # enemy AI stays idle; we script both fighters explicitly
 
 frames = []          # PIL Images, sampled every SAMPLE_EVERY sim frames
-FRAME_SCALE = (512, 288)   # downscaled for a reasonably small GIF
-SAMPLE_EVERY = 3            # keep 20 fps of a 60 fps sim
+FRAME_SCALE = (368, 207)   # downscaled for a reasonably small GIF (arena backgrounds compress
+SAMPLE_EVERY = 4            # much worse than the old flat-color backdrop, keep this modest)
+GIF_COLORS = 160           # shared adaptive palette; photographic arenas need fewer, richer
+                           # colors more than a big flat palette to keep the file size sane
 
 
 def step(player_cmd: "Command", enemy_cmd: "Command" = None) -> None:
@@ -147,11 +149,16 @@ crossed = (game.player.x > game.enemy.x) if approach == 1 else (game.player.x < 
 print("Final: player.x=%.1f enemy.x=%.1f (crossed=%s)" % (game.player.x, game.enemy.x, crossed))
 
 # ---------------------------------------------------------------------------
+# A shared, size-capped palette (built from one representative frame and
+# reused for all of them) compresses far better across a whole animation of
+# photographic arena backgrounds than PIL's per-call default.
 gif_path = OUT_DIR / "gameplay_demo.gif"
-frames[0].save(
+palette_source = frames[len(frames) // 2].quantize(colors=GIF_COLORS, method=Image.MEDIANCUT)
+quantized = [f.quantize(palette=palette_source, dither=Image.FLOYDSTEINBERG) for f in frames]
+quantized[0].save(
     gif_path,
     save_all=True,
-    append_images=frames[1:],
+    append_images=quantized[1:],
     duration=int(1000 / (FPS / SAMPLE_EVERY)),
     loop=0,
     optimize=True,

@@ -28,6 +28,7 @@ from .config import (
 from .fighter import Fighter
 from .projectiles import ActiveProjectile
 from .sprites import FighterSpriteSet, ProjectileSprite
+from .stages import StageBackgrounds
 from .states import FighterState
 
 
@@ -46,9 +47,17 @@ class Renderer:
             "shuriken": ProjectileSprite("shuriken"),
             "rose_energy_ball": ProjectileSprite("rose_energy_ball"),
         }
+        self.stage_backgrounds = StageBackgrounds()
+        self.stage_index = 0
         # Tracks (animation_key, elapsed_frames) per fighter, keyed by identity,
         # so a new animation always restarts at frame 0.
         self._anim_progress: dict[int, tuple[str, int]] = {}
+
+    def set_stage_index(self, stage_index: int) -> None:
+        self.stage_index = self.stage_backgrounds.normalize_index(stage_index)
+
+    def stage_name(self) -> str:
+        return self.stage_backgrounds.get_name(self.stage_index)
 
     def draw(self, game: "Game") -> None:  # type: ignore[name-defined]
         self.draw_background()
@@ -104,6 +113,11 @@ class Renderer:
             self.screen.blit(surf, surf.get_rect(center=(WINDOW_WIDTH // 2, 465 + i * 24)))
 
     def draw_background(self) -> None:
+        if self.stage_backgrounds.draw(self.screen, self.stage_index):
+            return
+
+        # Fallback: original procedural backdrop, used if the arena manifest
+        # or an arena image is missing (see retro_fighter/stages.py).
         self.screen.fill(COLOR_BG)
         # Retro parallax-like decorative panels.
         for i in range(0, WINDOW_WIDTH, 96):
@@ -185,7 +199,7 @@ class Renderer:
         pygame.draw.rect(self.screen, COLOR_BLACK, (WINDOW_WIDTH // 2 - 46, 20, 92, 58), border_radius=8)
         self.screen.blit(timer_surf, timer_surf.get_rect(center=(WINDOW_WIDTH // 2, 50)))
 
-        mode_text = f"IA : {game.ai_mode.upper()}"
+        mode_text = f"IA : {game.ai_mode.upper()} | {self.stage_name()}"
         mode_surf = self.font.render(mode_text, True, COLOR_YELLOW)
         self.screen.blit(mode_surf, mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90)))
 

@@ -1,6 +1,7 @@
 """Main game loop and match rules."""
 from __future__ import annotations
 
+import random
 from typing import Optional
 
 import pygame
@@ -184,7 +185,11 @@ class Game:
         self.round_start_frame = self.frame
         self.round_time_remaining = float(ROUND_TIME_SECONDS)
         self.round_over = False
-        self.messages = [f"Nouveau round - IA {self.ai_mode}"]
+        # A fresh arena each time a fight starts (new match or R to reset).
+        stage_count = len(self.renderer.stage_backgrounds)
+        if stage_count > 0:
+            self.renderer.set_stage_index(random.randrange(stage_count))
+        self.messages = [f"Nouveau round - IA {self.ai_mode} - {self.renderer.stage_name()}"]
 
     def update(self, events: list[pygame.event.Event], dt_ms: int) -> None:
         del dt_ms  # The simulation is deterministic at FPS frames per second.

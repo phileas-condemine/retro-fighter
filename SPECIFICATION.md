@@ -197,6 +197,7 @@ Responsabilités :
 - orchestration joueur + IA ;
 - application des collisions et dégâts (mêlée et projectiles) ;
 - spawn/déplacement/collision des projectiles ;
+- tirage aléatoire de l'arène de fond à chaque nouveau round ;
 - condition de fin de round.
 
 ### `fighter.py`
@@ -265,11 +266,19 @@ Responsabilités :
 
 Responsabilités :
 
-- dessin du décor ;
+- dessin du décor (arène tirée au hasard via `stages.py`, avec repli sur l'ancien décor procédural si l'arène est indisponible) ;
 - dessin des combattants ;
 - UI ;
 - hitboxes de debug ;
 - menu et overlays.
+
+### `stages.py`
+
+Responsabilités :
+
+- chargement du manifest des arènes (`assets/backgrounds/arena_manifest.json`) ;
+- mise en cache et redimensionnement des images d'arène (Pygame) ;
+- tolérance aux manifests/fichiers manquants (retombe sur `None`/`False`, jamais d'exception).
 
 ## 7. Principes de conception
 

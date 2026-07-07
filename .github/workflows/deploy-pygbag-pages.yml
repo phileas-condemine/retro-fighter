@@ -36,7 +36,7 @@ jobs:
 
       - name: Build web version
         run: |
-          python -m pygbag --build --title "Retro Fighter" .
+          python -m pygbag --build --title "Retro Fighter" --template web_template/default.tmpl .
 
       - name: Disable Jekyll
         run: |

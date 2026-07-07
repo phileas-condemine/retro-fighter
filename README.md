@@ -41,6 +41,7 @@ Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/P
 - Overlay de pause.
 - Affichage optionnel des hitboxes/hurtboxes.
 - Menu de sélection du niveau d'IA.
+- 5 arènes en fond, tirée au hasard à chaque nouveau round (voir [Arènes](#arènes)).
 
 ## Installation
 
@@ -85,11 +86,13 @@ python run_game.py
 
 ```bash
 python -m pip install pygbag
-python -m pygbag .          # serveur local sur http://localhost:8000
-python -m pygbag --build .  # build statique dans build/web/, sans lancer de serveur
+python -m pygbag --template web_template/default.tmpl .          # serveur local sur http://localhost:8000
+python -m pygbag --build --template web_template/default.tmpl .  # build statique dans build/web/, sans lancer de serveur
 ```
 
-`pygbag.ini` exclut du build web les dossiers/fichiers qui ne sont pas nécessaires à l'exécution (`.venv/`, `docs/`, `scripts/`, `inspiration_graphique/`, docs de packs, fichiers projet). `build/` n'est pas versionné : il est régénéré par `.github/workflows/deploy-pygbag-pages.yml` à chaque push sur `master`.
+`--template web_template/default.tmpl` est nécessaire : le template par défaut de Pygbag étire le canvas à `width:100%; height:100%` sans préserver le ratio, ce qui déforme le jeu (personnages écrasés) dès que la fenêtre du navigateur n'est pas exactement en 16:9. `web_template/default.tmpl` est une copie du template par défaut avec `object-fit: contain` ajouté sur le canvas (letterboxing au lieu d'un étirement) — voir les commentaires dans le fichier. Le workflow GitHub Actions utilise le même flag.
+
+`pygbag.ini` exclut du build web les dossiers/fichiers qui ne sont pas nécessaires à l'exécution (`.venv/`, `docs/`, `scripts/`, `web_template/`, `inspiration_graphique/`, docs de packs, versions haute résolution des arènes, fichiers projet — **penser à y ajouter tout nouveau zip de pack déposé à la racine**, sous peine de le voir inclus dans le build web). `build/` n'est pas versionné : il est régénéré par `.github/workflows/deploy-pygbag-pages.yml` à chaque push sur `master`.
 
 ## Contrôles
 
@@ -178,6 +181,14 @@ Tous les sons viennent de sources réelles tierces (voir `assets/audio/LICENSE_A
 - **sons communs**, sous `assets/audio/fighters/common/` (Kenney Sound Pack, CC0) : impacts (`punch_hit`, `kick_hit`, `block_impact`), déplacements (`jump_whoosh`, `double_jump_whoosh`, `landing`, `attack_whoosh`) et sons de projectile (`shuriken_draw/throw/hit`, `rose_energy_charge/throw/hit`), joués en superposition de la voix pour un retour cohérent même en cas de silence de voix.
 
 Plusieurs variations par événement sont jouées aléatoirement pour éviter la répétition. Le mapping est décrit dans `assets/audio/pygame_audio_mapping.json` (clés `common` / `fighters`) et chargé par `retro_fighter/audio.py`. L'id audio `shinobi_male` du pack ne correspond pas exactement à l'id sprite `shinobi` du personnage : la correspondance est faite dans `AUDIO_CHARACTER_ALIASES` (`retro_fighter/audio.py`).
+
+## Arènes
+
+5 arènes en image de fond (1024×576), sous `assets/backgrounds/arenas/` : Temple des neiges, Château hanté, Porte infernale, Jardin du bambou, Ruines lunaires. Chargées par `retro_fighter/stages.py` (`StageBackgrounds`) à partir de `assets/backgrounds/arena_manifest.json`.
+
+Une arène est tirée au hasard à chaque nouveau round (`Game.reset_round()`, à chaque lancement de match et à chaque `R`) et affichée dans le HUD à côté du niveau d'IA. Si le manifest ou une image venait à manquer, le jeu retombe automatiquement sur l'ancien décor procédural (`Renderer.draw_background()`) — aucune des deux versions ne fait planter l'autre.
+
+`assets/backgrounds/originals/` (1672×941, sources haute résolution pour retouche future) et `assets/backgrounds/previews/` (planche de contact) ne sont pas nécessaires à l'exécution et sont exclus du build web par `pygbag.ini`.
 
 ## Modes IA
 

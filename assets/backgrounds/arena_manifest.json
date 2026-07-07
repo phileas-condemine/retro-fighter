@@ -1,0 +1,87 @@
+{
+  "pack_id": "retro_fighter_arena_extension_pack_v1",
+  "version": "1.0.0",
+  "target_repo": "https://github.com/phileas-condemine/retro-fighter",
+  "target_window_size": {
+    "width": 1024,
+    "height": 576
+  },
+  "recommended_ground_y": 472,
+  "notes": [
+    "Images generated in this ChatGPT conversation for a local Retro Fighter prototype.",
+    "Each arena PNG is pre-resized to 1024x576 to match the current WINDOW_WIDTH/WINDOW_HEIGHT.",
+    "Original 1672x941 images are included for future cropping/upscaling/reprocessing."
+  ],
+  "arenas": [
+    {
+      "id": "snow_mountain_temple",
+      "name": "Temple des neiges",
+      "theme": "Montagne enneigée / temple glacé",
+      "file": "assets/backgrounds/arenas/snow_mountain_temple.png",
+      "original": "assets/backgrounds/originals/snow_mountain_temple_original_1672x941.png",
+      "palette": [
+        "cold",
+        "blue",
+        "snow",
+        "red banners"
+      ],
+      "suggested_music": "cold_wind_temple_loop"
+    },
+    {
+      "id": "haunted_castle_courtyard",
+      "name": "Château hanté",
+      "theme": "Château gothique / pleine lune / brouillard",
+      "file": "assets/backgrounds/arenas/haunted_castle_courtyard.png",
+      "original": "assets/backgrounds/originals/haunted_castle_courtyard_original_1672x941.png",
+      "palette": [
+        "moonlight",
+        "dark blue",
+        "fog",
+        "warm lanterns"
+      ],
+      "suggested_music": "gothic_castle_loop"
+    },
+    {
+      "id": "infernal_volcano_gate",
+      "name": "Porte infernale",
+      "theme": "Enfer / lave / flammes / temple démoniaque",
+      "file": "assets/backgrounds/arenas/infernal_volcano_gate.png",
+      "original": "assets/backgrounds/originals/infernal_volcano_gate_original_1672x941.png",
+      "palette": [
+        "red",
+        "orange",
+        "lava",
+        "black stone"
+      ],
+      "suggested_music": "infernal_lava_loop"
+    },
+    {
+      "id": "bamboo_temple_garden",
+      "name": "Jardin du bambou",
+      "theme": "Forêt de bambous / temple japonais / pont / lanternes",
+      "file": "assets/backgrounds/arenas/bamboo_temple_garden.png",
+      "original": "assets/backgrounds/originals/bamboo_temple_garden_original_1672x941.png",
+      "palette": [
+        "green",
+        "mist",
+        "moonlight",
+        "lanterns"
+      ],
+      "suggested_music": "bamboo_night_loop"
+    },
+    {
+      "id": "moonlit_desert_ruins",
+      "name": "Ruines lunaires",
+      "theme": "Ruines désertiques / nuit / pleine lune / torches",
+      "file": "assets/backgrounds/arenas/moonlit_desert_ruins.png",
+      "original": "assets/backgrounds/originals/moonlit_desert_ruins_original_1672x941.png",
+      "palette": [
+        "sand",
+        "moonlight",
+        "torches",
+        "ancient ruins"
+      ],
+      "suggested_music": "desert_moon_loop"
+    }
+  ]
+}
