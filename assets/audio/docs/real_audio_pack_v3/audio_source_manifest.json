@@ -1,0 +1,668 @@
+{
+  "version": "3.0",
+  "purpose": "Real third-party audio sourcing manifest for Retro Fighter; no procedural fake voices.",
+  "direct_download_tasks": [
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactPunch_medium_000.ogg",
+      "source_file": "Impact Sounds/impactPunch_medium_000.ogg",
+      "target": "assets/audio/fighters/common/punch_hit/punch_hit_01.ogg",
+      "event": "punch_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactPunch_medium_001.ogg",
+      "source_file": "Impact Sounds/impactPunch_medium_001.ogg",
+      "target": "assets/audio/fighters/common/punch_hit/punch_hit_02.ogg",
+      "event": "punch_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactPunch_medium_002.ogg",
+      "source_file": "Impact Sounds/impactPunch_medium_002.ogg",
+      "target": "assets/audio/fighters/common/punch_hit/punch_hit_03.ogg",
+      "event": "punch_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactPunch_heavy_000.ogg",
+      "source_file": "Impact Sounds/impactPunch_heavy_000.ogg",
+      "target": "assets/audio/fighters/common/punch_hit/punch_hit_04.ogg",
+      "event": "punch_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactPunch_heavy_001.ogg",
+      "source_file": "Impact Sounds/impactPunch_heavy_001.ogg",
+      "target": "assets/audio/fighters/common/kick_hit/kick_hit_01.ogg",
+      "event": "kick_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactPunch_heavy_002.ogg",
+      "source_file": "Impact Sounds/impactPunch_heavy_002.ogg",
+      "target": "assets/audio/fighters/common/kick_hit/kick_hit_02.ogg",
+      "event": "kick_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactSoft_heavy_000.ogg",
+      "source_file": "Impact Sounds/impactSoft_heavy_000.ogg",
+      "target": "assets/audio/fighters/common/kick_hit/kick_hit_03.ogg",
+      "event": "kick_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactSoft_heavy_001.ogg",
+      "source_file": "Impact Sounds/impactSoft_heavy_001.ogg",
+      "target": "assets/audio/fighters/common/kick_hit/kick_hit_04.ogg",
+      "event": "kick_hit",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactMetal_medium_000.ogg",
+      "source_file": "Impact Sounds/impactMetal_medium_000.ogg",
+      "target": "assets/audio/fighters/common/block_impact/block_impact_01.ogg",
+      "event": "block_impact",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactMetal_medium_001.ogg",
+      "source_file": "Impact Sounds/impactMetal_medium_001.ogg",
+      "target": "assets/audio/fighters/common/block_impact/block_impact_02.ogg",
+      "event": "block_impact",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactWood_heavy_000.ogg",
+      "source_file": "Impact Sounds/impactWood_heavy_000.ogg",
+      "target": "assets/audio/fighters/common/block_impact/block_impact_03.ogg",
+      "event": "block_impact",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactWood_heavy_001.ogg",
+      "source_file": "Impact Sounds/impactWood_heavy_001.ogg",
+      "target": "assets/audio/fighters/common/block_impact/block_impact_04.ogg",
+      "event": "block_impact",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/footstep_concrete_000.ogg",
+      "source_file": "Impact Sounds/footstep_concrete_000.ogg",
+      "target": "assets/audio/fighters/common/landing/landing_01.ogg",
+      "event": "landing",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/footstep_concrete_001.ogg",
+      "source_file": "Impact Sounds/footstep_concrete_001.ogg",
+      "target": "assets/audio/fighters/common/landing/landing_02.ogg",
+      "event": "landing",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/footstep_concrete_002.ogg",
+      "source_file": "Impact Sounds/footstep_concrete_002.ogg",
+      "target": "assets/audio/fighters/common/landing/landing_03.ogg",
+      "event": "landing",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Retro%20Sounds%202/fall1.ogg",
+      "source_file": "Retro Sounds 2/fall1.ogg",
+      "target": "assets/audio/fighters/common/landing/landing_04.ogg",
+      "event": "landing",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Retro%20Sounds%202/fall2.ogg",
+      "source_file": "Retro Sounds 2/fall2.ogg",
+      "target": "assets/audio/fighters/common/landing/landing_05.ogg",
+      "event": "landing",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Retro%20Sounds%201/jump1.ogg",
+      "source_file": "Retro Sounds 1/jump1.ogg",
+      "target": "assets/audio/fighters/common/jump_whoosh/jump_whoosh_01.ogg",
+      "event": "jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Retro%20Sounds%201/jump2.ogg",
+      "source_file": "Retro Sounds 1/jump2.ogg",
+      "target": "assets/audio/fighters/common/jump_whoosh/jump_whoosh_02.ogg",
+      "event": "jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/cloth1.ogg",
+      "source_file": "RPG Audio/cloth1.ogg",
+      "target": "assets/audio/fighters/common/jump_whoosh/jump_whoosh_03.ogg",
+      "event": "jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/cloth2.ogg",
+      "source_file": "RPG Audio/cloth2.ogg",
+      "target": "assets/audio/fighters/common/jump_whoosh/jump_whoosh_04.ogg",
+      "event": "jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/phaseJump1.ogg",
+      "source_file": "Digital Audio/phaseJump1.ogg",
+      "target": "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_01.ogg",
+      "event": "double_jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/phaseJump2.ogg",
+      "source_file": "Digital Audio/phaseJump2.ogg",
+      "target": "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_02.ogg",
+      "event": "double_jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/phaseJump3.ogg",
+      "source_file": "Digital Audio/phaseJump3.ogg",
+      "target": "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_03.ogg",
+      "event": "double_jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/cloth3.ogg",
+      "source_file": "RPG Audio/cloth3.ogg",
+      "target": "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_04.ogg",
+      "event": "double_jump_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/knifeSlice.ogg",
+      "source_file": "RPG Audio/knifeSlice.ogg",
+      "target": "assets/audio/fighters/common/attack_whoosh/attack_whoosh_01.ogg",
+      "event": "attack_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/knifeSlice2.ogg",
+      "source_file": "RPG Audio/knifeSlice2.ogg",
+      "target": "assets/audio/fighters/common/attack_whoosh/attack_whoosh_02.ogg",
+      "event": "attack_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/cloth3.ogg",
+      "source_file": "RPG Audio/cloth3.ogg",
+      "target": "assets/audio/fighters/common/attack_whoosh/attack_whoosh_03.ogg",
+      "event": "attack_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/cloth4.ogg",
+      "source_file": "RPG Audio/cloth4.ogg",
+      "target": "assets/audio/fighters/common/attack_whoosh/attack_whoosh_04.ogg",
+      "event": "attack_whoosh",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/drawKnife1.ogg",
+      "source_file": "RPG Audio/drawKnife1.ogg",
+      "target": "assets/audio/fighters/common/shuriken/shuriken_01.ogg",
+      "event": "shuriken",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/drawKnife2.ogg",
+      "source_file": "RPG Audio/drawKnife2.ogg",
+      "target": "assets/audio/fighters/common/shuriken/shuriken_02.ogg",
+      "event": "shuriken",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/knifeSlice.ogg",
+      "source_file": "RPG Audio/knifeSlice.ogg",
+      "target": "assets/audio/fighters/common/shuriken/shuriken_03.ogg",
+      "event": "shuriken",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/RPG%20Audio/knifeSlice2.ogg",
+      "source_file": "RPG Audio/knifeSlice2.ogg",
+      "target": "assets/audio/fighters/common/shuriken/shuriken_04.ogg",
+      "event": "shuriken",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactMetal_light_000.ogg",
+      "source_file": "Impact Sounds/impactMetal_light_000.ogg",
+      "target": "assets/audio/fighters/common/shuriken/shuriken_05.ogg",
+      "event": "shuriken",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Impact%20Sounds/impactMetal_light_001.ogg",
+      "source_file": "Impact Sounds/impactMetal_light_001.ogg",
+      "target": "assets/audio/fighters/common/shuriken/shuriken_06.ogg",
+      "event": "shuriken",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/powerUp1.ogg",
+      "source_file": "Digital Audio/powerUp1.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_01.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/powerUp3.ogg",
+      "source_file": "Digital Audio/powerUp3.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_02.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/phaserUp1.ogg",
+      "source_file": "Digital Audio/phaserUp1.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_03.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/phaserUp2.ogg",
+      "source_file": "Digital Audio/phaserUp2.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_04.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/laser3.ogg",
+      "source_file": "Digital Audio/laser3.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_05.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/laser5.ogg",
+      "source_file": "Digital Audio/laser5.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_06.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/zap1.ogg",
+      "source_file": "Digital Audio/zap1.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_07.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "Kenney Sound Pack",
+      "license": "CC0",
+      "source_url": "https://gamesounds.xyz/Kenney%27s%20Sound%20Pack/Digital%20Audio/zap2.ogg",
+      "source_file": "Digital Audio/zap2.ogg",
+      "target": "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_08.ogg",
+      "event": "rose_energy_ball",
+      "notes": "Direct mirrored file from gamesounds.xyz; original source is Kenney Sound Pack."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/01._effort_grunt_male.wav",
+      "source_file": "01._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/punch/punch_01.wav",
+      "event": "shinobi_male.punch",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/02._effort_grunt_male.wav",
+      "source_file": "02._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/punch/punch_02.wav",
+      "event": "shinobi_male.punch",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/03._effort_grunt_male.wav",
+      "source_file": "03._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/punch/punch_03.wav",
+      "event": "shinobi_male.punch",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/04._effort_grunt_male.wav",
+      "source_file": "04._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/kick/kick_01.wav",
+      "event": "shinobi_male.kick",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/05._effort_grunt_male.wav",
+      "source_file": "05._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/kick/kick_02.wav",
+      "event": "shinobi_male.kick",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/06._effort_grunt_male.wav",
+      "source_file": "06._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/kick/kick_03.wav",
+      "event": "shinobi_male.kick",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/07._effort_grunt_male.wav",
+      "source_file": "07._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/jump/jump_01.wav",
+      "event": "shinobi_male.jump",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/08._effort_grunt_male.wav",
+      "source_file": "08._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/jump/jump_02.wav",
+      "event": "shinobi_male.jump",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/09._effort_grunt_male.wav",
+      "source_file": "09._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/double_jump/double_jump_01.wav",
+      "event": "shinobi_male.double_jump",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/10._effort_grunt_male.wav",
+      "source_file": "10._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/double_jump/double_jump_02.wav",
+      "event": "shinobi_male.double_jump",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/11._effort_grunt_male.wav",
+      "source_file": "11._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/landing/landing_01.wav",
+      "event": "shinobi_male.landing",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/12._effort_grunt_male.wav",
+      "source_file": "12._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/landing/landing_02.wav",
+      "event": "shinobi_male.landing",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/13._effort_grunt_male.wav",
+      "source_file": "13._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/block/block_01.wav",
+      "event": "shinobi_male.block",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/14._effort_grunt_male.wav",
+      "source_file": "14._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/block/block_02.wav",
+      "event": "shinobi_male.block",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/15._effort_grunt_male.wav",
+      "source_file": "15._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/hurt/hurt_01.wav",
+      "event": "shinobi_male.hurt",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/16._effort_grunt_male.wav",
+      "source_file": "16._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/hurt/hurt_02.wav",
+      "event": "shinobi_male.hurt",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/03._effort_grunt_male.wav",
+      "source_file": "03._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/projectile_throw/projectile_throw_01.wav",
+      "event": "shinobi_male.projectile_throw",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    },
+    {
+      "type": "direct",
+      "source_family": "VoiceBosch Effort Sounds Male",
+      "license": "CC-BY-SA 4.0",
+      "source_url": "https://opengameart.org/sites/default/files/06._effort_grunt_male.wav",
+      "source_file": "06._effort_grunt_male.wav",
+      "target": "assets/audio/fighters/shinobi_male/voice_only/projectile_throw/projectile_throw_02.wav",
+      "event": "shinobi_male.projectile_throw",
+      "notes": "Real male exertion/grunt voice. Attribution and CC-BY-SA obligations apply if redistributed."
+    }
+  ],
+  "archive_sources": [
+    {
+      "id": "female_rpg_voice_starter_pack",
+      "title": "Female RPG Voice Starter Pack",
+      "author": "cicifyre",
+      "license": "CC0",
+      "page": "https://opengameart.org/content/female-rpg-voice-starter-pack",
+      "download_url": "https://opengameart.org/sites/default/files/RPG%20Voice%20Starter%20Pack.zip",
+      "recommended_for": "rose_kunoichi voice_only: attack/punch/kick, damaged/hurt, jump/double_jump, fire/wind/projectile_throw.",
+      "auto_mapping_strategy": "Extract archive, find audio filenames containing attack, damaged/damage, jump, fire/burn/wind/cyclone. Copy matches into rose_kunoichi voice folders."
+    },
+    {
+      "id": "male_strain_hurt_pain_jump_cc0",
+      "title": "15 vocal male strain/hurt/pain/jump sounds",
+      "author": "qubodup",
+      "license": "CC0 since 2024-08-30 per OGA page",
+      "page": "https://opengameart.org/content/15-vocal-male-strainhurtpainjump-sounds",
+      "download_url": "https://opengameart.org/sites/default/files/slightscreams.7z",
+      "recommended_for": "shinobi_male fallback voice_only: jump, hurt, landing, block; less specialized than VoiceBosch but CC0.",
+      "auto_mapping_strategy": "Requires py7zr; extract and audition files manually or with fuzzy matching."
+    },
+    {
+      "id": "female_grunts_for_games_optional",
+      "title": "Female Grunts For Games",
+      "author": "SkyRaeVoicing",
+      "license": "CC-BY 3.0",
+      "page": "https://freesound.org/people/SkyRaeVoicing/sounds/368843/",
+      "download_url": null,
+      "recommended_for": "Optional: split into multiple short fighting grunts for rose_kunoichi punch/kick/hurt/projectile_throw. Freesound login required.",
+      "auto_mapping_strategy": "Manual download from Freesound, then cut into individual clips with Audacity or the optional split script."
+    },
+    {
+      "id": "girl_taking_damage_optional",
+      "title": "Girl Taking Damage",
+      "author": "mvVoiceActing",
+      "license": "CC0",
+      "page": "https://freesound.org/people/mvVoiceActing/sounds/218190/",
+      "download_url": null,
+      "recommended_for": "Optional: richer rose_kunoichi hurt variations. Freesound login required.",
+      "auto_mapping_strategy": "Manual download from Freesound, then cut into short hurt clips."
+    },
+    {
+      "id": "rpg_cute_girl_battle_sounds_optional",
+      "title": "rpg - cute girl battle sounds.wav",
+      "author": "mvVoiceActing",
+      "license": "CC0",
+      "page": "https://freesound.org/people/mvVoiceActing/sounds/347338/",
+      "download_url": null,
+      "recommended_for": "Optional: more anime/RPG rose_kunoichi attack voices; may be stylistically too cute.",
+      "auto_mapping_strategy": "Manual download from Freesound, then cut into attack/jump/hurt clips."
+    }
+  ]
+}

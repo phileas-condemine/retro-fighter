@@ -1,0 +1,14 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+.idea/
+.vscode/
+
+# Reference/mood-board images, not used by the game code.
+inspiration_graphique/
+
+# Source packs already extracted/integrated into assets/ — kept locally for
+# re-processing if needed, not tracked once their content has been merged in.
+*_pack.zip
+*_pack_v*.zip

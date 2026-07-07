@@ -1,0 +1,50 @@
+{
+  "pack_id": "retro_fighter_extension_crouch_projectile_salto_pack_v2",
+  "version": "0.2.0",
+  "created_for": "Retro Fighter Pygame prototype",
+  "base_frame_size": {
+    "w": 256,
+    "h": 256
+  },
+  "base_anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "contents": {
+    "fighter_extensions": {
+      "shinobi": "assets/fighters/shinobi/extension_manifest.json",
+      "rose_kunoichi": "assets/fighters/rose_kunoichi/extension_manifest.json"
+    },
+    "projectiles": {
+      "shuriken": "assets/projectiles/shuriken/projectile_manifest.json",
+      "rose_energy_ball": "assets/projectiles/rose_energy_ball/projectile_manifest.json"
+    }
+  },
+  "new_features": {
+    "crouch": {
+      "hurtbox_height_multiplier": 0.5,
+      "crouch_walk_speed_multiplier": 0.42,
+      "purpose": "Let the fighter pass under shoulder-level projectiles.",
+      "pose_method": "deep articulated crouch, no image compression"
+    },
+    "ranged_attack": {
+      "projectile_height": "shoulder",
+      "can_be_avoided_by": [
+        "crouch",
+        "double_jump_salto"
+      ],
+      "characters": {
+        "shinobi": "shuriken",
+        "rose_kunoichi": "rose_energy_ball"
+      }
+    },
+    "double_jump_salto": {
+      "purpose": "Visualize the second jump as a salto/backflip that rises above shoulder-level projectile line and can cross over opponent.",
+      "pose_method": "tucked body rotation, no image rescale"
+    }
+  },
+  "revision_notes": {
+    "reason": "Crouch and salto frames were visually too compressed in v1.",
+    "fix": "Crouch and salto rebuilt from articulated poses, preserving body-part proportions and bending joints instead of scaling sprites."
+  }
+}

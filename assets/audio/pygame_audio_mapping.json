@@ -1,0 +1,148 @@
+{
+  "common": {
+    "punch_hit": [
+      "assets/audio/fighters/common/punch_hit/punch_hit_01.ogg",
+      "assets/audio/fighters/common/punch_hit/punch_hit_02.ogg",
+      "assets/audio/fighters/common/punch_hit/punch_hit_03.ogg",
+      "assets/audio/fighters/common/punch_hit/punch_hit_04.ogg"
+    ],
+    "kick_hit": [
+      "assets/audio/fighters/common/kick_hit/kick_hit_01.ogg",
+      "assets/audio/fighters/common/kick_hit/kick_hit_02.ogg",
+      "assets/audio/fighters/common/kick_hit/kick_hit_03.ogg",
+      "assets/audio/fighters/common/kick_hit/kick_hit_04.ogg"
+    ],
+    "block_impact": [
+      "assets/audio/fighters/common/block_impact/block_impact_01.ogg",
+      "assets/audio/fighters/common/block_impact/block_impact_02.ogg",
+      "assets/audio/fighters/common/block_impact/block_impact_03.ogg",
+      "assets/audio/fighters/common/block_impact/block_impact_04.ogg"
+    ],
+    "jump_whoosh": [
+      "assets/audio/fighters/common/jump_whoosh/jump_whoosh_01.ogg",
+      "assets/audio/fighters/common/jump_whoosh/jump_whoosh_02.ogg",
+      "assets/audio/fighters/common/jump_whoosh/jump_whoosh_03.ogg",
+      "assets/audio/fighters/common/jump_whoosh/jump_whoosh_04.ogg"
+    ],
+    "double_jump_whoosh": [
+      "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_01.ogg",
+      "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_02.ogg",
+      "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_03.ogg",
+      "assets/audio/fighters/common/double_jump_whoosh/double_jump_whoosh_04.ogg"
+    ],
+    "landing": [
+      "assets/audio/fighters/common/landing/landing_01.ogg",
+      "assets/audio/fighters/common/landing/landing_02.ogg",
+      "assets/audio/fighters/common/landing/landing_03.ogg",
+      "assets/audio/fighters/common/landing/landing_04.ogg",
+      "assets/audio/fighters/common/landing/landing_05.ogg"
+    ],
+    "attack_whoosh": [
+      "assets/audio/fighters/common/attack_whoosh/attack_whoosh_01.ogg",
+      "assets/audio/fighters/common/attack_whoosh/attack_whoosh_02.ogg",
+      "assets/audio/fighters/common/attack_whoosh/attack_whoosh_03.ogg",
+      "assets/audio/fighters/common/attack_whoosh/attack_whoosh_04.ogg"
+    ],
+    "shuriken_draw": [
+      "assets/audio/fighters/common/shuriken/shuriken_01.ogg",
+      "assets/audio/fighters/common/shuriken/shuriken_02.ogg"
+    ],
+    "shuriken_throw": [
+      "assets/audio/fighters/common/shuriken/shuriken_03.ogg",
+      "assets/audio/fighters/common/shuriken/shuriken_04.ogg"
+    ],
+    "shuriken_hit": [
+      "assets/audio/fighters/common/shuriken/shuriken_05.ogg",
+      "assets/audio/fighters/common/shuriken/shuriken_06.ogg"
+    ],
+    "rose_energy_charge": [
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_01.ogg",
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_02.ogg",
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_03.ogg",
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_04.ogg"
+    ],
+    "rose_energy_throw": [
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_05.ogg",
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_06.ogg"
+    ],
+    "rose_energy_hit": [
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_07.ogg",
+      "assets/audio/fighters/common/rose_energy_ball/rose_energy_ball_08.ogg"
+    ]
+  },
+  "fighters": {
+    "shinobi_male": {
+      "punch": [
+        "assets/audio/fighters/shinobi_male/voice_only/punch/punch_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/punch/punch_02.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/punch/punch_03.wav"
+      ],
+      "kick": [
+        "assets/audio/fighters/shinobi_male/voice_only/kick/kick_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/kick/kick_02.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/kick/kick_03.wav"
+      ],
+      "jump": [
+        "assets/audio/fighters/shinobi_male/voice_only/jump/jump_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/jump/jump_02.wav"
+      ],
+      "double_jump": [
+        "assets/audio/fighters/shinobi_male/voice_only/double_jump/double_jump_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/double_jump/double_jump_02.wav"
+      ],
+      "landing": [
+        "assets/audio/fighters/shinobi_male/voice_only/landing/landing_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/landing/landing_02.wav"
+      ],
+      "block": [
+        "assets/audio/fighters/shinobi_male/voice_only/block/block_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/block/block_02.wav"
+      ],
+      "hurt": [
+        "assets/audio/fighters/shinobi_male/voice_only/hurt/hurt_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/hurt/hurt_02.wav"
+      ],
+      "projectile_throw": [
+        "assets/audio/fighters/shinobi_male/voice_only/projectile_throw/projectile_throw_01.wav",
+        "assets/audio/fighters/shinobi_male/voice_only/projectile_throw/projectile_throw_02.wav"
+      ]
+    },
+    "rose_kunoichi": {
+      "punch": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/punch/punch_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/punch/punch_02.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/punch/punch_03.wav"
+      ],
+      "kick": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/kick/kick_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/kick/kick_02.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/kick/kick_03.wav"
+      ],
+      "jump": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/jump/jump_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/jump/jump_02.wav"
+      ],
+      "double_jump": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/double_jump/double_jump_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/double_jump/double_jump_02.wav"
+      ],
+      "landing": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/landing/landing_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/landing/landing_02.wav"
+      ],
+      "block": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/block/block_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/block/block_02.wav"
+      ],
+      "hurt": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/hurt/hurt_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/hurt/hurt_02.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/hurt/hurt_03.wav"
+      ],
+      "projectile_throw": [
+        "assets/audio/fighters/rose_kunoichi/voice_only/projectile_throw/projectile_throw_01.wav",
+        "assets/audio/fighters/rose_kunoichi/voice_only/projectile_throw/projectile_throw_02.wav"
+      ]
+    }
+  }
+}

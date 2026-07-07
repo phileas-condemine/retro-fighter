@@ -1,0 +1,168 @@
+{
+  "fighter_id": "rose_kunoichi",
+  "display_name": "Rose Kunoichi",
+  "extension_id": "crouch_projectile_salto_v2_pose_corrected",
+  "version": "0.2.0",
+  "frame_width": 256,
+  "frame_height": 256,
+  "anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "facing": "right",
+  "format": "extension transparent PNG frames plus horizontal spritesheets",
+  "requires_base_pack": "rose_kunoichi_60_frames_pack",
+  "animations_to_add": {
+    "crouch_idle": {
+      "frames": [
+        "extension_frames/crouch_idle_000.png",
+        "extension_frames/crouch_idle_001.png",
+        "extension_frames/crouch_idle_002.png",
+        "extension_frames/crouch_idle_003.png"
+      ],
+      "sheet": "extension_sheets/crouch_idle.png",
+      "frame_count": 4,
+      "fps": 7,
+      "loop": true,
+      "gameplay_state_hint": "crouch_idle",
+      "state": "CROUCH",
+      "hurtbox_override": {
+        "height_multiplier": 0.5,
+        "width_multiplier": 1.08,
+        "vertical_anchor": "feet"
+      },
+      "movement": {
+        "horizontal_speed_multiplier": 0.0
+      },
+      "pose_method": "articulated_deep_crouch_no_scaling"
+    },
+    "crouch_walk": {
+      "frames": [
+        "extension_frames/crouch_walk_000.png",
+        "extension_frames/crouch_walk_001.png",
+        "extension_frames/crouch_walk_002.png",
+        "extension_frames/crouch_walk_003.png",
+        "extension_frames/crouch_walk_004.png",
+        "extension_frames/crouch_walk_005.png"
+      ],
+      "sheet": "extension_sheets/crouch_walk.png",
+      "frame_count": 6,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "crouch_walk",
+      "state": "CROUCH_WALK",
+      "hurtbox_override": {
+        "height_multiplier": 0.5,
+        "width_multiplier": 1.12,
+        "vertical_anchor": "feet"
+      },
+      "movement": {
+        "horizontal_speed_multiplier": 0.42
+      },
+      "pose_method": "articulated_duck_walk_no_scaling"
+    },
+    "ranged_charge": {
+      "frames": [
+        "extension_frames/ranged_charge_000.png",
+        "extension_frames/ranged_charge_001.png",
+        "extension_frames/ranged_charge_002.png",
+        "extension_frames/ranged_charge_003.png"
+      ],
+      "sheet": "extension_sheets/ranged_charge.png",
+      "frame_count": 4,
+      "fps": 10,
+      "loop": false,
+      "gameplay_state_hint": "ranged_charge",
+      "state": "RANGED_STARTUP",
+      "projectile_id": "rose_energy_ball",
+      "cancelable": false,
+      "projectile_spawn_frame": null,
+      "combat_timing": {
+        "startup_frames": 4,
+        "active_frames": [],
+        "recovery_frames": 0
+      },
+      "shoulder_level_note": "charge effect centered around y≈110 in 256px source frame, i.e. upper body / shoulder line."
+    },
+    "ranged_throw": {
+      "frames": [
+        "extension_frames/ranged_throw_000.png",
+        "extension_frames/ranged_throw_001.png",
+        "extension_frames/ranged_throw_002.png",
+        "extension_frames/ranged_throw_003.png",
+        "extension_frames/ranged_throw_004.png",
+        "extension_frames/ranged_throw_005.png"
+      ],
+      "sheet": "extension_sheets/ranged_throw.png",
+      "frame_count": 6,
+      "fps": 14,
+      "loop": false,
+      "gameplay_state_hint": "ranged_throw",
+      "state": "RANGED_ACTIVE_RECOVERY",
+      "projectile_id": "rose_energy_ball",
+      "projectile_spawn_frame": 3,
+      "spawn_offset_from_fighter_anchor_when_facing_right": {
+        "x": 88,
+        "y": -104
+      },
+      "combat_timing": {
+        "startup_frames": 2,
+        "active_frames": [
+          3
+        ],
+        "recovery_frames": 3
+      },
+      "hit_height": "shoulder"
+    },
+    "double_jump_salto": {
+      "frames": [
+        "extension_frames/double_jump_salto_000.png",
+        "extension_frames/double_jump_salto_001.png",
+        "extension_frames/double_jump_salto_002.png",
+        "extension_frames/double_jump_salto_003.png",
+        "extension_frames/double_jump_salto_004.png",
+        "extension_frames/double_jump_salto_005.png"
+      ],
+      "sheet": "extension_sheets/double_jump_salto.png",
+      "frame_count": 6,
+      "fps": 16,
+      "loop": false,
+      "gameplay_state_hint": "double_jump_salto",
+      "state": "DOUBLE_JUMP",
+      "movement": {
+        "vertical_boost_px_per_second_hint": -520,
+        "can_cross_over_opponent": true
+      },
+      "avoidance": {
+        "can_avoid_projectile_hit_height": "shoulder",
+        "requires_hurtbox_above_projectile_line": true
+      },
+      "notes": "Use only for the second jump. The first jump can keep the existing jump animation.",
+      "pose_method": "tucked_joint_pose_rotated_without_scaling"
+    }
+  },
+  "projectile": {
+    "id": "rose_energy_ball",
+    "display_name": "Rose Energy Ball",
+    "manifest_path": "../../projectiles/rose_energy_ball/projectile_manifest.json"
+  },
+  "integration_summary": {
+    "new_states": [
+      "CROUCH",
+      "CROUCH_WALK",
+      "RANGED_STARTUP",
+      "RANGED_ACTIVE_RECOVERY",
+      "DOUBLE_JUMP"
+    ],
+    "new_inputs": {
+      "crouch": "hold DOWN while grounded",
+      "crouch_walk": "hold DOWN + LEFT/RIGHT while grounded",
+      "ranged_attack": "recommended: special key, e.g. U or I, or Q on AZERTY",
+      "double_jump_salto": "press JUMP again while airborne if double jump available"
+    }
+  },
+  "pose_correction_notes": {
+    "crouch": "Rebuilt from articulated skeleton poses: knees and hips bent, head lowered, feet kept on ground. No vertical sprite compression.",
+    "double_jump_salto": "Rebuilt from a tucked skeleton pose rotated without rescaling. The body is compact because joints are folded, not because the image was shrunk."
+  }
+}

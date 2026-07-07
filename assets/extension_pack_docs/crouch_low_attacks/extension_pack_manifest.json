@@ -1,0 +1,22 @@
+{
+  "pack_id": "retro_fighter_extension_crouch_low_attacks_pack",
+  "version": "0.1.0",
+  "description": "Supplemental assets for crouching low punch and crouching low kick. These replace the visual reuse of standing low attacks when the player is already crouching.",
+  "frame_width": 256,
+  "frame_height": 256,
+  "anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "facing": "right",
+  "compatible_with": [
+    "shinobi_60_frames_pack",
+    "rose_kunoichi_60_frames_pack",
+    "retro_fighter_extension_crouch_projectile_salto_pack_v2"
+  ],
+  "features": {
+    "crouch_punch_low": "low punch launched from crouch, not from standing posture",
+    "crouch_kick_low": "low sweep kick launched from crouch, not from standing posture"
+  },
+  "integration_rule": "if fighter.is_crouching and attack.kind in {'punch','kick'} and attack.height == 'low': use crouch_<kind>_low animation"
+}

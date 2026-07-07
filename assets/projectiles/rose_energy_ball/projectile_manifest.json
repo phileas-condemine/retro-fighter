@@ -1,0 +1,55 @@
+{
+  "projectile_id": "rose_energy_ball",
+  "version": "0.1.0",
+  "frame_width": 112,
+  "frame_height": 112,
+  "fps": 16,
+  "loop": true,
+  "frames": [
+    "frames/rose_energy_ball_000.png",
+    "frames/rose_energy_ball_001.png",
+    "frames/rose_energy_ball_002.png",
+    "frames/rose_energy_ball_003.png",
+    "frames/rose_energy_ball_004.png",
+    "frames/rose_energy_ball_005.png",
+    "frames/rose_energy_ball_006.png",
+    "frames/rose_energy_ball_007.png"
+  ],
+  "sheet": "sheets/rose_energy_ball.png",
+  "movement": {
+    "speed_px_per_second": 455,
+    "direction": "fighter_facing",
+    "gravity": 0,
+    "destroy_on_hit": true,
+    "destroy_on_block": true
+  },
+  "combat": {
+    "damage": 10,
+    "hit_height": "shoulder",
+    "can_be_avoided_by": [
+      "crouch",
+      "double_jump_salto",
+      "vertical_jump_if_high_enough"
+    ],
+    "blockable_by": [
+      "block_high",
+      "block_mid"
+    ],
+    "misses_against": [
+      "crouch_hurtbox"
+    ],
+    "suggested_hitbox": {
+      "w": 42,
+      "h": 36,
+      "anchor": "center"
+    }
+  },
+  "spawn": {
+    "offset_from_fighter_anchor_when_facing_right": {
+      "x": 88,
+      "y": -104
+    },
+    "visual_spawn_frame_in_ranged_throw": 3
+  },
+  "style_note": "pink/cyan glowing ball with comet tail"
+}

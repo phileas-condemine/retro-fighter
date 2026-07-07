@@ -1,0 +1,93 @@
+{
+  "fighter_id": "shinobi",
+  "display_name": "Crimson Shinobi",
+  "extension_id": "crouch_low_attacks",
+  "version": "0.1.0",
+  "frame_width": 256,
+  "frame_height": 256,
+  "anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "facing": "right",
+  "format": "individual transparent PNG frames plus horizontal spritesheets",
+  "animations_to_add": {
+    "crouch_punch_low": {
+      "frames": [
+        "extension_frames/crouch_punch_low_000.png",
+        "extension_frames/crouch_punch_low_001.png",
+        "extension_frames/crouch_punch_low_002.png",
+        "extension_frames/crouch_punch_low_003.png",
+        "extension_frames/crouch_punch_low_004.png"
+      ],
+      "sheet": "extension_sheets/crouch_punch_low.png",
+      "frame_count": 5,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "crouch_punch_low",
+      "source_pose": "crouch",
+      "pose_method": "articulated_crouch_attack_no_scaling",
+      "startup_frames": 2,
+      "active_frames": [
+        2,
+        3
+      ],
+      "recovery_frames": 1,
+      "attack_kind": "punch",
+      "attack_height": "low",
+      "requires_crouch_state": true,
+      "suggested_hitbox": {
+        "x_offset": 34,
+        "y_offset": -55,
+        "width": 52,
+        "height": 24,
+        "height_band": "low"
+      },
+      "hurtbox_override": {
+        "height_multiplier": 0.5,
+        "width_multiplier": 1.08,
+        "vertical_anchor": "feet"
+      }
+    },
+    "crouch_kick_low": {
+      "frames": [
+        "extension_frames/crouch_kick_low_000.png",
+        "extension_frames/crouch_kick_low_001.png",
+        "extension_frames/crouch_kick_low_002.png",
+        "extension_frames/crouch_kick_low_003.png",
+        "extension_frames/crouch_kick_low_004.png",
+        "extension_frames/crouch_kick_low_005.png",
+        "extension_frames/crouch_kick_low_006.png"
+      ],
+      "sheet": "extension_sheets/crouch_kick_low.png",
+      "frame_count": 7,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "crouch_kick_low",
+      "source_pose": "crouch",
+      "pose_method": "articulated_crouch_attack_no_scaling",
+      "startup_frames": 3,
+      "active_frames": [
+        3,
+        4
+      ],
+      "recovery_frames": 2,
+      "attack_kind": "kick",
+      "attack_height": "low",
+      "requires_crouch_state": true,
+      "suggested_hitbox": {
+        "x_offset": 50,
+        "y_offset": -20,
+        "width": 70,
+        "height": 20,
+        "height_band": "low"
+      },
+      "hurtbox_override": {
+        "height_multiplier": 0.5,
+        "width_multiplier": 1.18,
+        "vertical_anchor": "feet"
+      },
+      "notes": "Sweep-style low kick; keep a slightly wider hurtbox because the extended leg should be hittable."
+    }
+  }
+}

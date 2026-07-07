@@ -1,0 +1,243 @@
+{
+  "fighter_id": "rose_kunoichi",
+  "display_name": "Rose Kunoichi",
+  "version": "0.1.0",
+  "frame_width": 256,
+  "frame_height": 256,
+  "anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "facing": "right",
+  "format": "individual transparent PNG frames plus horizontal spritesheets",
+  "style_note": "Original athletic pink-haired kunoichi, swimsuit-inspired combat outfit, large boots / strong footing. Not a direct copy of any existing character.",
+  "animations": {
+    "idle": {
+      "frames": [
+        "frames/idle_000.png",
+        "frames/idle_001.png",
+        "frames/idle_002.png",
+        "frames/idle_003.png"
+      ],
+      "sheet": "sheets/idle.png",
+      "frame_count": 4,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "idle"
+    },
+    "walk": {
+      "frames": [
+        "frames/walk_000.png",
+        "frames/walk_001.png",
+        "frames/walk_002.png",
+        "frames/walk_003.png",
+        "frames/walk_004.png",
+        "frames/walk_005.png"
+      ],
+      "sheet": "sheets/walk.png",
+      "frame_count": 6,
+      "fps": 10,
+      "loop": true,
+      "gameplay_state_hint": "walk"
+    },
+    "jump": {
+      "frames": [
+        "frames/jump_000.png",
+        "frames/jump_001.png",
+        "frames/jump_002.png",
+        "frames/jump_003.png"
+      ],
+      "sheet": "sheets/jump.png",
+      "frame_count": 4,
+      "fps": 10,
+      "loop": false,
+      "gameplay_state_hint": "jump",
+      "airborne_frames": [
+        1,
+        2
+      ]
+    },
+    "punch_high": {
+      "frames": [
+        "frames/punch_high_000.png",
+        "frames/punch_high_001.png",
+        "frames/punch_high_002.png",
+        "frames/punch_high_003.png",
+        "frames/punch_high_004.png"
+      ],
+      "sheet": "sheets/punch_high.png",
+      "frame_count": 5,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "punch_high",
+      "startup_frames": 2,
+      "active_frames": [
+        2,
+        3
+      ],
+      "recovery_frames": 1
+    },
+    "punch_mid": {
+      "frames": [
+        "frames/punch_mid_000.png",
+        "frames/punch_mid_001.png",
+        "frames/punch_mid_002.png",
+        "frames/punch_mid_003.png",
+        "frames/punch_mid_004.png"
+      ],
+      "sheet": "sheets/punch_mid.png",
+      "frame_count": 5,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "punch_mid",
+      "startup_frames": 2,
+      "active_frames": [
+        2,
+        3
+      ],
+      "recovery_frames": 1
+    },
+    "punch_low": {
+      "frames": [
+        "frames/punch_low_000.png",
+        "frames/punch_low_001.png",
+        "frames/punch_low_002.png",
+        "frames/punch_low_003.png",
+        "frames/punch_low_004.png"
+      ],
+      "sheet": "sheets/punch_low.png",
+      "frame_count": 5,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "punch_low",
+      "startup_frames": 2,
+      "active_frames": [
+        2,
+        3
+      ],
+      "recovery_frames": 1
+    },
+    "kick_high": {
+      "frames": [
+        "frames/kick_high_000.png",
+        "frames/kick_high_001.png",
+        "frames/kick_high_002.png",
+        "frames/kick_high_003.png",
+        "frames/kick_high_004.png",
+        "frames/kick_high_005.png",
+        "frames/kick_high_006.png"
+      ],
+      "sheet": "sheets/kick_high.png",
+      "frame_count": 7,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "kick_high",
+      "startup_frames": 3,
+      "active_frames": [
+        3,
+        4
+      ],
+      "recovery_frames": 2
+    },
+    "kick_mid": {
+      "frames": [
+        "frames/kick_mid_000.png",
+        "frames/kick_mid_001.png",
+        "frames/kick_mid_002.png",
+        "frames/kick_mid_003.png",
+        "frames/kick_mid_004.png",
+        "frames/kick_mid_005.png",
+        "frames/kick_mid_006.png"
+      ],
+      "sheet": "sheets/kick_mid.png",
+      "frame_count": 7,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "kick_mid",
+      "startup_frames": 3,
+      "active_frames": [
+        3,
+        4
+      ],
+      "recovery_frames": 2
+    },
+    "kick_low": {
+      "frames": [
+        "frames/kick_low_000.png",
+        "frames/kick_low_001.png",
+        "frames/kick_low_002.png",
+        "frames/kick_low_003.png",
+        "frames/kick_low_004.png",
+        "frames/kick_low_005.png",
+        "frames/kick_low_006.png"
+      ],
+      "sheet": "sheets/kick_low.png",
+      "frame_count": 7,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "kick_low",
+      "startup_frames": 3,
+      "active_frames": [
+        3,
+        4
+      ],
+      "recovery_frames": 2
+    },
+    "block_high": {
+      "frames": [
+        "frames/block_high_000.png"
+      ],
+      "sheet": "sheets/block_high.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "block_high"
+    },
+    "block_mid": {
+      "frames": [
+        "frames/block_mid_000.png"
+      ],
+      "sheet": "sheets/block_mid.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "block_mid"
+    },
+    "block_low": {
+      "frames": [
+        "frames/block_low_000.png"
+      ],
+      "sheet": "sheets/block_low.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "block_low"
+    },
+    "hitstun": {
+      "frames": [
+        "frames/hitstun_000.png",
+        "frames/hitstun_001.png"
+      ],
+      "sheet": "sheets/hitstun.png",
+      "frame_count": 2,
+      "fps": 8,
+      "loop": false,
+      "gameplay_state_hint": "hitstun"
+    },
+    "ko": {
+      "frames": [
+        "frames/ko_000.png",
+        "frames/ko_001.png",
+        "frames/ko_002.png",
+        "frames/ko_003.png",
+        "frames/ko_004.png"
+      ],
+      "sheet": "sheets/ko.png",
+      "frame_count": 5,
+      "fps": 8,
+      "loop": false,
+      "gameplay_state_hint": "ko",
+      "terminal_frame": 4
+    }
+  }
+}
