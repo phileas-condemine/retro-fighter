@@ -148,7 +148,18 @@ config = {
     _sdl2 : "canvas",
     user_canvas : 0,
     user_canvas_managed : 0,
-    gui_divider : 2,
+    // Default pygbag templates set this to 2, reserving half the window for
+    // an xterm.js debug console — meant to be corrected back to 1 by the
+    // `platform.window.config.gui_divider = 1` line further up this file,
+    // but that line only runs *after* main.py's shell.source() resolves,
+    // which never happens for a persistent game loop like ours (main.py
+    // runs forever until the player quits). Left at 2, window_canvas_adjust()
+    // (pythons.js) sizes the canvas to half the available window/tab space
+    // instead of filling it. Setting it to 1 here (the value actually in
+    // effect for the game's entire runtime) makes the canvas use the full
+    // available space while window_canvas_adjust() still preserves the
+    // game's own aspect ratio.
+    gui_divider : 1,
     ume_block : {{cookiecutter.ume_block}},
     can_close : {{cookiecutter.can_close}},
     archive : "{{cookiecutter.archive}}",
