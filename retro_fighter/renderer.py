@@ -94,8 +94,8 @@ class Renderer:
             self.screen.blit(desc_surf, (rect.x + 154, rect.y + 14))
 
         controls = [
-            "Contrôles : ←/→ déplacement | ↑/↓ hauteur | J poing | K pied | L blocage | Espace saut",
-            "↓ seul au sol : accroupi | U : attaque à distance | Espace en l'air : salto (double saut)",
+            "Contrôles : Gauche/Droite déplacement | Haut/Bas hauteur | J poing | K pied | L blocage | Espace saut",
+            "Bas seul au sol : accroupi | U : attaque à distance | Espace en l'air : salto (double saut)",
             "En match : 1-4 changer IA | R reset | H hitboxes | P pause | Échap quitter",
             "Appuie sur Entrée ou sur 1-4 pour lancer.",
         ]
@@ -189,7 +189,7 @@ class Renderer:
         mode_surf = self.font.render(mode_text, True, COLOR_YELLOW)
         self.screen.blit(mode_surf, mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90)))
 
-        controls = "J poing | K pied | L blocage | ↓ accroupi | U distance | Espace saut/salto | H hitboxes"
+        controls = "J poing | K pied | L blocage | Bas accroupi | U distance | Espace saut/salto | H hitboxes"
         control_surf = self.small_font.render(controls, True, COLOR_MUTED)
         self.screen.blit(control_surf, control_surf.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 24)))
 

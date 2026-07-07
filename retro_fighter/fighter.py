@@ -409,7 +409,7 @@ class Fighter:
             self.vel_y = min(self.vel_y, -2.2)
         message = (
             f"{attacker.name}: {attack.label} {HEIGHT_LABELS[hit_level]} "
-            f"→ {damage} dégâts"
+            f"-> {damage} dégâts"
         )
         if self.health <= 0:
             self.health = 0
@@ -433,7 +433,7 @@ class Fighter:
         self.state = FighterState.HITSTUN
         self.state_timer = HITSTUN_FRAMES
         self.vel_x = attacker.facing * 14.0
-        message = f"{attacker.name}: projectile → {dealt} dégâts"
+        message = f"{attacker.name}: projectile -> {dealt} dégâts"
         if self.health <= 0:
             self.health = 0
             self.state = FighterState.KO

@@ -4,6 +4,14 @@ Prototype jouable d'un jeu de combat 2D rétro inspiré des bases de Street Figh
 
 Les personnages sont rendus à partir de sprites (voir [Personnages](#personnages)) ; le décor, les barres de vie, les hitboxes et les effets visuels restent dessinés en formes simples avec Pygame.
 
+## Aperçu
+
+![Capture d'écran](docs/media/screenshot.png)
+
+![Démo de combat](docs/media/gameplay_demo.gif)
+
+*Démo générée par un script rejouant la partie via le vrai moteur du jeu (`retro_fighter.game.Game`), montrant poing, pied, blocage, accroupissement, attaque à distance et un salto (double saut) passant par-dessus l'adversaire.*
+
 ## Fonctionnalités déjà implémentées
 
 - Combat 2D à gauche/droite avec deux personnages.
@@ -227,6 +235,15 @@ Le hitstun (durée pendant laquelle un personnage touché ne peut plus agir) n'e
 À 60 FPS, 6 frames représentent environ 0,1 seconde.
 
 Les attaques à distance sont dans `retro_fighter/projectiles.py` (`ProjectileDefinition` : dégâts, vitesse, taille de hitbox, timing de charge/lancer). L'accroupissement (`CROUCH_HEIGHT_MULTIPLIER`, `CROUCH_WALK_SPEED_MULTIPLIER`), le seuil d'esquive en salto (`PROJECTILE_AVOID_Y_DELTA`) et la vitesse de déplacement latéral pendant le salto (`DOUBLE_JUMP_AIR_CONTROL_SPEED`) sont dans `retro_fighter/config.py`.
+
+## Régénérer la capture/démo
+
+`docs/media/screenshot.png` et `docs/media/gameplay_demo.gif` sont générés par `scripts/record_demo.py`, qui rejoue une partie scénarisée à travers le vrai moteur du jeu (mêmes fonctions que `Game.update()`) en pilotant les deux combattants par des `Command` programmatiques plutôt qu'au clavier. Nécessite Pillow (outil ponctuel, pas une dépendance du jeu) :
+
+```bash
+python -m pip install pillow
+python scripts/record_demo.py
+```
 
 ## Notes de développement
 
