@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import random
+import sys
 from typing import Optional
 
 import pygame
@@ -49,13 +50,17 @@ class Game:
             pass
         pygame.init()
         pygame.display.set_caption(TITLE)
-        # SCALED: without it, SDL creates the window/canvas at the literal
-        # logical size (1024x576) with no upscaling, which looks tiny on a
-        # normal desktop/browser window — SCALED stretches it to fill the
-        # actual window while keeping game code working in 1024x576
-        # coordinates (mouse/render surface untouched). RESIZABLE lets that
-        # actual window/canvas track the browser tab's size on the web build.
-        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SCALED | pygame.RESIZABLE)
+        # SCALED: without it, SDL creates the window at the literal logical
+        # size (1024x576) with no upscaling, which looks tiny on a normal
+        # desktop monitor — SCALED stretches it to fill the window while
+        # keeping game code working in 1024x576 coordinates. Desktop-only:
+        # under Pygbag (sys.platform == "emscripten"), web_template/default.tmpl's
+        # own JS (rf_fit_canvas) already scales/letterboxes the canvas to fill
+        # the browser tab. SCALED there does its own internal SDL-level
+        # letterboxing on top of that, producing a second, smaller nested
+        # letterbox instead of one clean fit.
+        flags = 0 if sys.platform == "emscripten" else pygame.SCALED | pygame.RESIZABLE
+        self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), flags)
         self.clock = pygame.time.Clock()
         self.renderer = Renderer(self.screen)
 
