@@ -47,19 +47,33 @@ Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/P
 
 Prérequis : Python 3.10 ou plus récent.
 
-Dans un terminal :
+Récupère le dépôt :
 
 ```bash
-cd retro_fighter_project
+git clone https://github.com/phileas-condemine/retro-fighter.git
+cd retro-fighter
+```
+
+### Option A — venv + pip (la plus simple)
+
+Crée un environnement virtuel :
+
+```bash
 python -m venv .venv
 ```
 
-Puis active l'environnement virtuel.
+Puis active-le.
 
 Sur Windows PowerShell :
 
 ```powershell
 .venv\Scripts\Activate.ps1
+```
+
+Sur Windows avec Git Bash :
+
+```bash
+source .venv/Scripts/activate
 ```
 
 Sur macOS/Linux :
@@ -74,11 +88,31 @@ Installe les dépendances :
 pip install -r requirements.txt
 ```
 
+### Option B — Poetry
+
+Le projet fournit aussi un `pyproject.toml`/`poetry.lock` (mode `package-mode = false` : ce n'est pas un package installable, juste une gestion de dépendances/venv) :
+
+```bash
+pip install poetry   # si Poetry n'est pas déjà installé
+poetry install
+```
+
+Sous Windows, si l'exécutable `poetry` est bloqué par une politique de sécurité (Application Control Policy), passe par le module :
+
+```powershell
+py -m pip install poetry
+py -m poetry install
+```
+
+Toutes les commandes ci-dessous (`python run_game.py`, etc.) s'utilisent alors préfixées par `poetry run`, par exemple `poetry run python run_game.py`, ou depuis un shell activé avec `poetry shell` (`poetry env activate` puis la commande affichée, sur les versions récentes de Poetry).
+
 ## Lancer le jeu
 
 ```bash
 python run_game.py
 ```
+
+Une fenêtre de 1024×576 s'ouvre sur le menu de sélection d'IA (voir [Modes IA](#modes-ia)) : appuie sur `1`-`4` ou navigue avec les flèches puis `Entrée` pour lancer un match. Voir [Contrôles](#contrôles) pour jouer. Pas besoin d'installer quoi que ce soit pour essayer rapidement : la version web ([Jouer dans le navigateur](#jouer-dans-le-navigateur)) tourne dans n'importe quel navigateur récent.
 
 ### Build web locale (Pygbag)
 
