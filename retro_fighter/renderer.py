@@ -7,6 +7,7 @@ from .config import (
     BODY_WIDTH,
     COLOR_BG,
     COLOR_BLACK,
+    COLOR_BLUE,
     COLOR_FLOOR,
     COLOR_FLOOR_LINE,
     COLOR_GREEN,
@@ -22,6 +23,7 @@ from .config import (
     FPS,
     GROUND_Y,
     MAX_HEALTH,
+    MAX_STAMINA,
     WINDOW_HEIGHT,
     WINDOW_WIDTH,
 )
@@ -39,10 +41,22 @@ class Renderer:
         self.big_font = pygame.font.Font(None, 52)
         self.title_font = pygame.font.Font(None, 72)
         self.small_font = pygame.font.Font(None, 19)
+        # Two full sprite sets are preloaded so toggling HD mode (see
+        # set_hd_mode) is instant, with no load stutter mid-match. The "hd"
+        # packs are an early VLM-generated proof of concept with fewer
+        # animations than "ld" (see FighterSpriteSet's docstring); missing
+        # keys fall back to idle automatically.
         self.sprite_sets = {
-            "rose_kunoichi": FighterSpriteSet("rose_kunoichi"),
-            "shinobi": FighterSpriteSet("shinobi"),
+            "ld": {
+                "rose_kunoichi": FighterSpriteSet("rose_kunoichi", "ld"),
+                "shinobi": FighterSpriteSet("shinobi", "ld"),
+            },
+            "hd": {
+                "rose_kunoichi": FighterSpriteSet("rose_kunoichi", "hd"),
+                "shinobi": FighterSpriteSet("shinobi", "hd"),
+            },
         }
+        self.hd_mode = False
         self.projectile_sprites = {
             "shuriken": ProjectileSprite("shuriken"),
             "rose_energy_ball": ProjectileSprite("rose_energy_ball"),
@@ -58,6 +72,9 @@ class Renderer:
 
     def stage_name(self) -> str:
         return self.stage_backgrounds.get_name(self.stage_index)
+
+    def set_hd_mode(self, hd_mode: bool) -> None:
+        self.hd_mode = hd_mode
 
     def draw_backdrop(self, rect: pygame.Rect, alpha: int = 185, color: tuple[int, int, int] = COLOR_BG, radius: int = 10) -> None:
         """Semi-transparent panel behind text, so it stays readable over the
@@ -85,7 +102,7 @@ class Renderer:
             winner = game.player.name if game.enemy.is_ko else game.enemy.name if game.player.is_ko else "Égalité"
             self.draw_center_banner(f"{winner} gagne", "R pour recommencer | 1-4 pour changer l'IA")
 
-    def draw_menu(self, selected_index: int, demo_mode: bool = False) -> None:
+    def draw_menu(self, selected_index: int, demo_mode: bool = False, hd_mode: bool = False) -> None:
         self.draw_background()
         title = self.title_font.render("RETRO FIGHTER", True, COLOR_TEXT)
         title_rect = title.get_rect(center=(WINDOW_WIDTH // 2, 96))
@@ -94,7 +111,11 @@ class Renderer:
         subtitle_rect = subtitle.get_rect(center=(WINDOW_WIDTH // 2, 148))
 
         mode_label = "Démo : IA vs IA" if demo_mode else "Joueur vs IA"
-        demo_surf = self.font.render(f"Mode : {mode_label}  (Tab pour changer)", True, COLOR_YELLOW if demo_mode else COLOR_MUTED)
+        graphics_label = "HD (bêta)" if hd_mode else "LD"
+        demo_surf = self.font.render(
+            f"Mode : {mode_label} (Tab)   |   Graphismes : {graphics_label} (G)",
+            True, COLOR_YELLOW if (demo_mode or hd_mode) else COLOR_MUTED,
+        )
         demo_rect = demo_surf.get_rect(center=(WINDOW_WIDTH // 2, 178))
 
         header_backdrop = title_rect.union(subtitle_rect).union(demo_rect).inflate(56, 28)
@@ -121,9 +142,9 @@ class Renderer:
             self.screen.blit(desc_surf, (rect.x + 154, rect.y + 14))
 
         controls = [
-            "Contrôles : Gauche/Droite déplacement | Haut/Bas hauteur | Q/A poing | S pied | D blocage | Espace saut",
+            "Contrôles : Gauche/Droite déplacement (double-tap = dash) | Haut/Bas hauteur | Q/A poing | S pied | D blocage | Espace saut",
             "Bas seul au sol : accroupi | F : attaque à distance | Espace en l'air : salto (double saut)",
-            "En match : 1-4 changer IA | Tab mode démo | R reset | H hitboxes | P pause | Échap quitter",
+            "En match : 1-4 changer IA | Tab mode démo | G graphismes HD/LD | R reset | H hitboxes | P pause | Échap quitter",
             "Appuie sur Entrée ou sur 1-4 pour lancer.",
         ]
         control_surfaces = [self.small_font.render(line, True, COLOR_MUTED) for line in controls]
@@ -165,6 +186,10 @@ class Renderer:
             return "ranged_charge" if fighter.ranged_attack.is_charging else "ranged_throw"
         if fighter.state in (FighterState.BLOCK, FighterState.BLOCKSTUN):
             return f"block_{fighter.block_level}"
+        if fighter.state == FighterState.DASH:
+            # No dedicated dash sprite; the walk cycle read at normal speed
+            # over a fast-moving body already reads as a dash/slide.
+            return "walk"
         # CROUCH/CROUCH_WALK/DOUBLE_JUMP/idle/walk/jump/hitstun/ko all resolve
         # directly since their enum value already matches the animation key.
         return fighter.state.value
@@ -181,7 +206,7 @@ class Renderer:
         elapsed = 0 if tracked_key != anim_key else elapsed + 1
         self._anim_progress[id(fighter)] = (anim_key, elapsed)
 
-        sprite_set = self.sprite_sets[fighter.fighter_id]
+        sprite_set = self.sprite_sets["hd" if self.hd_mode else "ld"][fighter.fighter_id]
         frame = sprite_set.get_frame(anim_key, elapsed, FPS, flip=fighter.facing == -1)
         frame_rect = frame.get_rect()
         frame_rect.x = round(fighter.x - sprite_set.anchor[0])
@@ -223,7 +248,8 @@ class Renderer:
         self.screen.blit(timer_surf, timer_surf.get_rect(center=(WINDOW_WIDTH // 2, 50)))
 
         demo_suffix = " | DÉMO (IA vs IA)" if game.demo_mode else ""
-        mode_text = f"IA : {game.ai_mode.upper()}{demo_suffix} | {self.stage_name()}"
+        hd_suffix = " | HD" if game.hd_mode else ""
+        mode_text = f"IA : {game.ai_mode.upper()}{demo_suffix}{hd_suffix} | {self.stage_name()}"
         mode_surf = self.font.render(mode_text, True, COLOR_YELLOW)
         mode_rect = mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90))
         self.draw_backdrop(mode_rect.inflate(28, 14))
@@ -238,13 +264,15 @@ class Renderer:
         self.draw_backdrop(control_rect.inflate(28, 14))
         self.screen.blit(control_surf, control_rect)
 
-        # Event log
+        # Event log (pushed down from its old y=112 to clear the stamina bar
+        # added under each health bar).
         messages = game.messages[-5:]
         if messages:
+            log_top = 128
             line_surfaces = [self.small_font.render(msg, True, COLOR_TEXT) for msg in messages]
-            log_rect = pygame.Rect(42, 112, max(s.get_width() for s in line_surfaces), len(line_surfaces) * 20 - 4)
+            log_rect = pygame.Rect(42, log_top, max(s.get_width() for s in line_surfaces), len(line_surfaces) * 20 - 4)
             self.draw_backdrop(log_rect.inflate(24, 16))
-            y = 112
+            y = log_top
             for surf in line_surfaces:
                 self.screen.blit(surf, (42, y))
                 y += 20
@@ -263,11 +291,30 @@ class Renderer:
             fill = pygame.Rect(x, y, fill_w, height)
         color = COLOR_GREEN if ratio > 0.45 else COLOR_YELLOW if ratio > 0.20 else COLOR_RED
         pygame.draw.rect(self.screen, color, fill, border_radius=4)
-        name = self.font.render(f"{fighter.name}  {fighter.health}/{MAX_HEALTH}", True, COLOR_WHITE)
+
+        # Stamina bar: thinner, directly under health. Spent by attacking
+        # and by absorbing a blocked hit; low stamina doesn't show here as a
+        # separate warning color, its effect (slower recovery) is on the
+        # fighter that owns it, not something the opponent needs flagged.
+        stamina_y = y + height + 6
+        stamina_height = 10
+        stamina_ratio = max(0.0, fighter.stamina / MAX_STAMINA)
+        stamina_outer = pygame.Rect(x, stamina_y, width, stamina_height)
+        pygame.draw.rect(self.screen, COLOR_BLACK, stamina_outer.inflate(6, 6), border_radius=4)
+        pygame.draw.rect(self.screen, (36, 44, 62), stamina_outer, border_radius=3)
+        stamina_fill_w = int(width * stamina_ratio)
         if align == "right":
-            self.screen.blit(name, name.get_rect(topright=(x + width, y + height + 8)))
+            stamina_fill = pygame.Rect(x + width - stamina_fill_w, stamina_y, stamina_fill_w, stamina_height)
         else:
-            self.screen.blit(name, (x, y + height + 8))
+            stamina_fill = pygame.Rect(x, stamina_y, stamina_fill_w, stamina_height)
+        pygame.draw.rect(self.screen, COLOR_BLUE, stamina_fill, border_radius=3)
+
+        name = self.font.render(f"{fighter.name}  {fighter.health}/{MAX_HEALTH}", True, COLOR_WHITE)
+        name_y = stamina_y + stamina_height + 8
+        if align == "right":
+            self.screen.blit(name, name.get_rect(topright=(x + width, name_y)))
+        else:
+            self.screen.blit(name, (x, name_y))
 
     def draw_center_banner(self, title: str, subtitle: str) -> None:
         overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)

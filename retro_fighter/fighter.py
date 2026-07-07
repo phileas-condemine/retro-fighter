@@ -13,15 +13,25 @@ from .config import (
     BODY_WIDTH,
     CROUCH_HEIGHT_MULTIPLIER,
     CROUCH_WALK_SPEED_MULTIPLIER,
+    DASH_COOLDOWN_FRAMES,
+    DASH_DURATION_FRAMES,
+    DASH_SPEED,
     DOUBLE_JUMP_AIR_CONTROL_SPEED,
     DOUBLE_JUMP_POSE_FRAMES,
+    FATIGUE_MAX_RECOVERY_PENALTY,
     GRAVITY,
     GROUND_Y,
     HITSTUN_FRAMES,
     JUMP_SPEED,
     LEFT_BOUND,
     MAX_HEALTH,
+    MAX_STAMINA,
     RIGHT_BOUND,
+    STAMINA_COST_BLOCK,
+    STAMINA_COST_KICK,
+    STAMINA_COST_PUNCH,
+    STAMINA_COST_RANGED,
+    STAMINA_REGEN_PER_FRAME,
     WALK_SPEED,
 )
 from .input_manager import Command
@@ -40,6 +50,10 @@ class ActiveAttack:
     # blocked, dodged, whiffed, or interrupted) so Game doesn't log the same
     # attempt twice across the frames it stays active/recovering.
     logged: bool = False
+    # Fatigue penalty (see Fighter.start_attack), frozen at the moment the
+    # attack starts: extra recovery frames tacked onto the definition's own,
+    # proportional to how tired the attacker already was.
+    extra_recovery_frames: int = 0
 
     @property
     def is_active(self) -> bool:
@@ -47,7 +61,7 @@ class ActiveAttack:
 
     @property
     def is_finished(self) -> bool:
-        return self.frame >= self.definition.total_frames
+        return self.frame >= self.definition.total_frames + self.extra_recovery_frames
 
 
 @dataclass
@@ -95,6 +109,7 @@ class Fighter:
         self.vel_x = 0.0
         self.vel_y = 0.0
         self.health = MAX_HEALTH
+        self.stamina = MAX_STAMINA
         self.state = FighterState.IDLE
         self.state_timer = 0
         self.attack: Optional[ActiveAttack] = None
@@ -105,12 +120,16 @@ class Fighter:
         self.rounds_won = 0
         self.jumps_used = 0
         self.double_jump_frame = 0
+        self.dash_timer = 0
+        self.dash_cooldown = 0
+        self.dash_direction = 0
         # One-frame flags the game reads to trigger sound effects / spawn projectiles.
         self.attack_started_this_frame = False
         self.jump_started_this_frame = False
         self.ranged_attack_started_this_frame = False
         self.landed_this_frame = False
         self.projectile_spawn_pending = False
+        self.dash_started_this_frame = False
 
     @property
     def on_ground(self) -> bool:
@@ -129,7 +148,17 @@ class Fighter:
     def hurtbox(self) -> pygame.Rect:
         rect = self.rect.copy()
         rect.inflate_ip(-12, -8)
-        if self.state in (FighterState.CROUCH, FighterState.CROUCH_WALK):
+        # A crouch-initiated punch/kick (started_crouching, see start_attack)
+        # keeps the crouched pose throughout the attack (Renderer.animation_key
+        # plays crouch_punch_low/crouch_kick_low) — the hurtbox must stay
+        # crouched along with it, otherwise the body silently "stands back up"
+        # hitbox-wise for the attack's duration and dodges (crouch under a
+        # high melee attack or a shoulder-height projectile) fail even though
+        # the character never visibly left the crouched stance.
+        is_crouched = self.state in (FighterState.CROUCH, FighterState.CROUCH_WALK) or (
+            self.state == FighterState.ATTACK and self.attack is not None and self.attack.started_crouching
+        )
+        if is_crouched:
             # Feet stay put; only the top comes down. This is also what lets a
             # crouch duck under high melee attacks and shoulder-height
             # projectiles without any extra collision rule.
@@ -148,6 +177,7 @@ class Fighter:
         self.vel_x = 0.0
         self.vel_y = 0.0
         self.health = MAX_HEALTH
+        self.stamina = MAX_STAMINA
         self.state = FighterState.IDLE
         self.state_timer = 0
         self.attack = None
@@ -157,6 +187,9 @@ class Fighter:
         self.combo_counter = 0
         self.jumps_used = 0
         self.double_jump_frame = 0
+        self.dash_timer = 0
+        self.dash_cooldown = 0
+        self.dash_direction = 0
 
     def update_facing(self, opponent: "Fighter") -> None:
         if opponent.x >= self.x:
@@ -184,11 +217,25 @@ class Fighter:
         # Airborne attacks always aim for the head, no matter the vertical input.
         effective_level = level if self.on_ground else "high"
         started_crouching = self.state in (FighterState.CROUCH, FighterState.CROUCH_WALK)
-        self.attack = ActiveAttack(definition=definition, effective_level=effective_level, started_crouching=started_crouching)
+        # Fatigue: how tired the attacker already is (before this attack's own
+        # cost below) proportionally lengthens its recovery tail. At full
+        # stamina this is 0; at 0 stamina, recovery_frames is doubled
+        # (FATIGUE_MAX_RECOVERY_PENALTY=1.0) — an exhausted attacker slows
+        # down and gives whoever they're pressuring, even cornered, a real
+        # window to escape or counter.
+        stamina_fraction = self.stamina / MAX_STAMINA
+        extra_recovery = round(definition.recovery_frames * FATIGUE_MAX_RECOVERY_PENALTY * (1.0 - stamina_fraction))
+        self.attack = ActiveAttack(
+            definition=definition,
+            effective_level=effective_level,
+            started_crouching=started_crouching,
+            extra_recovery_frames=extra_recovery,
+        )
         self.state = FighterState.ATTACK
         self.state_timer = 0
         self.last_attack_label = definition.label
         self.attack_started_this_frame = True
+        self.stamina = max(0.0, self.stamina - (STAMINA_COST_KICK if kind == "kick" else STAMINA_COST_PUNCH))
         # Small forward commitment: it makes kicks feel weightier.
         if kind == "kick" and self.on_ground:
             self.x += 2.0 * self.facing
@@ -203,6 +250,7 @@ class Fighter:
         self.state = FighterState.RANGED_ATTACK
         self.state_timer = 0
         self.ranged_attack_started_this_frame = True
+        self.stamina = max(0.0, self.stamina - STAMINA_COST_RANGED)
 
     def start_jump(self) -> None:
         grounded_jump_states = {
@@ -229,6 +277,26 @@ class Fighter:
             self.jumps_used = 2
             self.jump_started_this_frame = True
 
+    def start_dash(self, direction: int) -> None:
+        if self.dash_cooldown > 0 or not self.on_ground:
+            return
+        if self.state not in (FighterState.IDLE, FighterState.WALK):
+            return
+        self.state = FighterState.DASH
+        self.state_timer = 0
+        self.dash_timer = DASH_DURATION_FRAMES
+        self.dash_direction = direction
+        self.vel_x = float(direction) * DASH_SPEED
+        self.dash_started_this_frame = True
+
+    def update_dash(self, command: Command) -> None:
+        self.dash_timer -= 1
+        self.vel_x = float(self.dash_direction) * DASH_SPEED
+        if self.dash_timer <= 0:
+            self.dash_cooldown = DASH_COOLDOWN_FRAMES
+            self.state = FighterState.WALK if command.move_axis != 0 else FighterState.IDLE
+            self.state_timer = 0
+
     def get_attack_hitbox(self) -> Optional[pygame.Rect]:
         if not self.attack or not self.attack.is_active:
             return None
@@ -253,6 +321,7 @@ class Fighter:
         self.ranged_attack_started_this_frame = False
         self.landed_this_frame = False
         self.projectile_spawn_pending = False
+        self.dash_started_this_frame = False
 
         if self.is_ko:
             self.state = FighterState.KO
@@ -261,6 +330,13 @@ class Fighter:
             return
 
         self.update_facing(opponent)
+
+        # Stamina only regenerates while neutral — not mid-attack/mid-throw,
+        # not stunned. Holding a block stance without getting hit counts as
+        # neutral (only absorbing an actual hit costs stamina, see
+        # receive_attack/receive_projectile_hit).
+        if self.state not in (FighterState.ATTACK, FighterState.RANGED_ATTACK, FighterState.HITSTUN, FighterState.BLOCKSTUN):
+            self.stamina = min(MAX_STAMINA, self.stamina + STAMINA_REGEN_PER_FRAME)
 
         if self.state in {FighterState.HITSTUN, FighterState.BLOCKSTUN}:
             self.update_stun()
@@ -276,6 +352,17 @@ class Fighter:
 
         if self.state == FighterState.RANGED_ATTACK:
             self.update_ranged_attack()
+            self.apply_physics()
+            return
+
+        if self.dash_cooldown > 0:
+            self.dash_cooldown -= 1
+
+        if command.dash:
+            self.start_dash(command.dash)
+
+        if self.state == FighterState.DASH:
+            self.update_dash(command)
             self.apply_physics()
             return
 
@@ -399,6 +486,7 @@ class Fighter:
             self.state = FighterState.BLOCKSTUN
             self.state_timer = attack.blockstun_frames
             self.vel_x = attacker.facing * attack.knockback_px * 0.25
+            self.stamina = max(0.0, self.stamina - STAMINA_COST_BLOCK)
             message = f"{self.name} bloque {HEIGHT_LABELS[hit_level]} (0 dégât)"
             return HitResult(True, True, 0, message)
 
@@ -407,7 +495,7 @@ class Fighter:
         self.attack = None
         self.ranged_attack = None
         self.state = FighterState.HITSTUN
-        self.state_timer = HITSTUN_FRAMES
+        self.state_timer = attack.hitstun_frames
         self.vel_x = attacker.facing * attack.knockback_px
         if hit_level == "low":
             self.vel_y = min(self.vel_y, -2.2)
@@ -427,6 +515,7 @@ class Fighter:
 
         blocked = self.state == FighterState.BLOCK and self.block_level in ("high", "mid")
         if blocked:
+            self.stamina = max(0.0, self.stamina - STAMINA_COST_BLOCK)
             message = f"{self.name} bloque le projectile (0 dégât)"
             return HitResult(True, True, 0, message)
 

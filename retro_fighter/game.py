@@ -92,6 +92,7 @@ class Game:
         # internally rather than taking it from the Fighter it controls.
         self.player_ai_controller = AIController("medium")
         self.demo_mode = False
+        self.hd_mode = False
 
         self.player = Fighter("PLAYER", x=260, color=COLOR_BLUE, fighter_id="rose_kunoichi", is_human=True)
         self.enemy = Fighter("CPU", x=764, color=COLOR_RED, fighter_id="shinobi", is_human=False)
@@ -133,7 +134,7 @@ class Game:
 
         if self.in_menu:
             running = self.handle_menu(events, running)
-            self.renderer.draw_menu(self.menu_index, self.demo_mode)
+            self.renderer.draw_menu(self.menu_index, self.demo_mode, self.hd_mode)
             pygame.display.flip()
             return running
 
@@ -166,6 +167,8 @@ class Game:
                 self.start_match("hard")
             elif event.key == pygame.K_TAB:
                 self.toggle_demo_mode()
+            elif event.key == pygame.K_g:
+                self.toggle_hd_mode()
         return running
 
     def handle_global_events(self, events: list[pygame.event.Event], running: bool) -> bool:
@@ -193,6 +196,8 @@ class Game:
                 self.start_match(AI_MODES[(current + 1) % len(AI_MODES)])
             elif event.key == pygame.K_TAB:
                 self.toggle_demo_mode()
+            elif event.key == pygame.K_g:
+                self.toggle_hd_mode()
         return running
 
     def start_match(self, ai_mode: str) -> None:
@@ -209,6 +214,12 @@ class Game:
         self.player_ai_controller.set_mode(self.ai_mode)
         if not self.in_menu:
             self.reset_round()
+
+    def toggle_hd_mode(self) -> None:
+        # Pure rendering swap (see Renderer.sprite_sets) — no round reset
+        # needed, unlike demo mode which swaps controllers.
+        self.hd_mode = not self.hd_mode
+        self.renderer.set_hd_mode(self.hd_mode)
 
     def reset_round(self) -> None:
         # If a fight was in progress (e.g. R pressed mid-round), flush its log
@@ -262,7 +273,7 @@ class Game:
             player_command = self.player_ai_controller.read(self.frame, self.player, self.enemy)
         else:
             keys = pygame.key.get_pressed()
-            player_command = self.human_controller.read(events, keys)
+            player_command = self.human_controller.read(events, keys, self.frame)
         ai_command = self.ai_controller.read(self.frame, self.enemy, self.player)
 
         # Captured before update() so apply_hits()/the log can tell whether an
@@ -298,6 +309,9 @@ class Game:
             self.combat_log.log(self.frame, fighter.name, action, distance)
         if fighter.landed_this_frame:
             self.combat_log.log(self.frame, fighter.name, "atterrissage", distance)
+        if fighter.dash_started_this_frame:
+            direction = "droite" if fighter.dash_direction > 0 else "gauche"
+            self.combat_log.log(self.frame, fighter.name, "dash", distance, detail=f"direction={direction}")
 
         if state != prev_state:
             walk_states = (FighterState.WALK, FighterState.CROUCH_WALK)
@@ -359,6 +373,8 @@ class Game:
             self.play_sound(fighter.fighter_id, "projectile_throw")
             draw_event = PROJECTILE_COMMON_SOUNDS[fighter.ranged_attack.definition.projectile_id]["draw"]
             self.play_common(draw_event, volume=0.4)
+        if fighter.dash_started_this_frame:
+            self.play_common("jump_whoosh", volume=0.5)
 
     def spawn_projectiles(self) -> None:
         for fighter in (self.player, self.enemy):
@@ -376,7 +392,8 @@ class Game:
             throw_event = PROJECTILE_COMMON_SOUNDS[definition.projectile_id]["throw"]
             self.play_common(throw_event, volume=0.5)
             distance = abs(fighter.x - opponent.x)
-            self.combat_log.log(self.frame, fighter.name, "tir_distance", distance, detail=definition.display_name)
+            self.combat_log.log(self.frame, fighter.name, "tir_distance", distance,
+                                 detail=f"{definition.display_name} stamina={fighter.stamina:.0f}")
 
     def update_projectiles(self) -> None:
         survivors: list[ActiveProjectile] = []
@@ -426,7 +443,7 @@ class Game:
                                      detail=projectile.definition.display_name)
             if result.blocked:
                 self.combat_log.log(self.frame, target.name, "blocage", distance, success=True,
-                                     detail=projectile.definition.display_name)
+                                     detail=f"{projectile.definition.display_name} stamina={target.stamina:.0f}")
             elif result.landed:
                 self.combat_log.log(self.frame, target.name, "degats_recus", distance, damage=result.damage,
                                      detail=f"{projectile.definition.display_name} hitstun={HITSTUN_FRAMES / FPS:.2f}s")
@@ -506,15 +523,19 @@ class Game:
                 attacker.attack.logged = True
             distance = abs(attacker.x - defender.x)
             action = f"{definition.kind}_{hit_level}"
+            fatigue = attacker.attack.extra_recovery_frames if attacker.attack else 0
+            fatigue_note = f" fatigue+{fatigue}f" if fatigue else ""
             result = defender.receive_attack(attacker, definition, hit_level)
             if result.landed:
                 self.combat_log.log(self.frame, attacker.name, "attaque", distance,
-                                     success=not result.blocked, damage=0 if result.blocked else result.damage, detail=action)
+                                     success=not result.blocked, damage=0 if result.blocked else result.damage,
+                                     detail=f"{action} stamina={attacker.stamina:.0f}{fatigue_note}")
             if result.blocked:
-                self.combat_log.log(self.frame, defender.name, "blocage", distance, success=True, detail=action)
+                self.combat_log.log(self.frame, defender.name, "blocage", distance, success=True,
+                                     detail=f"{action} stamina={defender.stamina:.0f}")
             elif result.landed:
                 self.combat_log.log(self.frame, defender.name, "degats_recus", distance, damage=result.damage,
-                                     detail=f"{action} hitstun={HITSTUN_FRAMES / FPS:.2f}s")
+                                     detail=f"{action} hitstun={definition.hitstun_frames / FPS:.2f}s")
             if result.message:
                 self.add_message(result.message)
             if result.landed:

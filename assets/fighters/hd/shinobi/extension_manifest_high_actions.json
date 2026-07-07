@@ -1,0 +1,57 @@
+{
+  "animations_to_add": {
+    "block_high": {
+      "frames": [
+        "frames/block_high_000.png"
+      ],
+      "sheet": "sheets/block_high.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true
+    },
+    "kick_high": {
+      "frames": [
+        "frames/kick_high_000.png",
+        "frames/kick_high_001.png",
+        "frames/kick_high_002.png"
+      ],
+      "sheet": "sheets/kick_high.png",
+      "frame_count": 3,
+      "fps": 13,
+      "loop": false,
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "punch_high": {
+      "frames": [
+        "frames/punch_high_000.png",
+        "frames/punch_high_001.png",
+        "frames/punch_high_002.png"
+      ],
+      "sheet": "sheets/punch_high.png",
+      "frame_count": 3,
+      "fps": 15,
+      "loop": false,
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "crouch_block": {
+      "frames": [
+        "frames/crouch_block_000.png"
+      ],
+      "sheet": "sheets/crouch_block.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "aliases": [
+        "block_low_when_crouching"
+      ]
+    }
+  }
+}

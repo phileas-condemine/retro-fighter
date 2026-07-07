@@ -22,6 +22,7 @@ class AttackDefinition:
     active_frames: int
     recovery_frames: int
     blockstun_frames: int
+    hitstun_frames: int
     knockback_px: float
     label: str
 
@@ -44,8 +45,9 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         range_px=66,
         startup_frames=4,
         active_frames=4,
-        recovery_frames=8,
+        recovery_frames=11,
         blockstun_frames=9,
+        hitstun_frames=16,
         knockback_px=11,
         label="Direct visage",
     ),
@@ -56,8 +58,9 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         range_px=70,
         startup_frames=5,
         active_frames=4,
-        recovery_frames=8,
+        recovery_frames=11,
         blockstun_frames=9,
+        hitstun_frames=16,
         knockback_px=12,
         label="Direct corps",
     ),
@@ -68,8 +71,9 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         range_px=62,
         startup_frames=5,
         active_frames=4,
-        recovery_frames=9,
+        recovery_frames=12,
         blockstun_frames=8,
+        hitstun_frames=16,
         knockback_px=9,
         label="Coup bas rapide",
     ),
@@ -80,8 +84,9 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         range_px=91,
         startup_frames=9,
         active_frames=5,
-        recovery_frames=15,
+        recovery_frames=21,
         blockstun_frames=14,
+        hitstun_frames=26,
         knockback_px=22,
         label="High kick",
     ),
@@ -92,8 +97,9 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         range_px=96,
         startup_frames=8,
         active_frames=5,
-        recovery_frames=14,
+        recovery_frames=20,
         blockstun_frames=13,
+        hitstun_frames=26,
         knockback_px=21,
         label="Front kick",
     ),
@@ -104,8 +110,9 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         range_px=86,
         startup_frames=8,
         active_frames=5,
-        recovery_frames=14,
+        recovery_frames=20,
         blockstun_frames=12,
+        hitstun_frames=26,
         knockback_px=18,
         label="Balayage",
     ),

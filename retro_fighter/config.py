@@ -27,12 +27,41 @@ DOUBLE_JUMP_AIR_CONTROL_SPEED = 6.5
 BODY_WIDTH = 54
 BODY_HEIGHT = 132
 
+# Dash: double-tap Left/Right for a short, committed burst of horizontal
+# speed (about 3.5x walk speed) — a gap closer/escape tool distinct from
+# regular walking. DASH_INPUT_WINDOW_FRAMES is how quickly the second tap
+# must follow the first to count as a double-tap; DASH_COOLDOWN_FRAMES
+# prevents chaining dashes back to back.
+DASH_SPEED = 15.0
+DASH_DURATION_FRAMES = round(FPS * 0.16)
+DASH_COOLDOWN_FRAMES = round(FPS * 0.5)
+DASH_INPUT_WINDOW_FRAMES = round(FPS * 0.25)
+
 BODY_PUSHBACK = 1.8
 
-# Getting hit always cancels whatever the defender was doing and locks them
-# out of attacking for a fixed 0.5s, regardless of which move landed. This
-# keeps the "first hit wins" trade rule simple and predictable.
+# Getting hit always cancels whatever the defender was doing. Melee attacks
+# each define their own hitstun_frames (attacks.py) so kicks lock the
+# defender out for longer than punches; this global value now only covers
+# projectile hits, which don't have a per-move definition of their own.
 HITSTUN_FRAMES = round(FPS * 0.5)
+
+# Stamina/endurance: spent by attacking and by absorbing a blocked hit,
+# regenerated only while neutral (not mid-attack, not stunned). It doesn't
+# gate actions outright — instead, low stamina proportionally lengthens the
+# fatigued fighter's own attack recovery (see Fighter.start_attack), so an
+# all-out attacker eventually slows down and gives a cornered opponent a
+# real window to escape or punish instead of being comboed indefinitely.
+# Heuristic starting values, meant to be tuned from combat log data like the
+# attack numbers in attacks.py.
+MAX_STAMINA = 100.0
+STAMINA_COST_PUNCH = 6.0
+STAMINA_COST_KICK = 16.0
+STAMINA_COST_BLOCK = 8.0
+STAMINA_COST_RANGED = 12.0
+STAMINA_REGEN_PER_FRAME = 0.35
+# At 0 stamina, an attack's recovery_frames are multiplied by (1 + this);
+# at full stamina, no penalty. Scales linearly with current stamina between.
+FATIGUE_MAX_RECOVERY_PENALTY = 1.0
 
 # Crouching (hold DOWN while grounded) halves the hurtbox height, anchored at
 # the feet, which lets it duck under high melee attacks and shoulder-level

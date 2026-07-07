@@ -20,3 +20,6 @@ class FighterState(str, Enum):
     CROUCH_WALK = "crouch_walk"
     DOUBLE_JUMP = "double_jump_salto"
     RANGED_ATTACK = "ranged_attack"
+    # No dedicated sprite; the renderer plays the "walk" animation faster
+    # while this state is active (see Renderer.animation_key).
+    DASH = "dash"

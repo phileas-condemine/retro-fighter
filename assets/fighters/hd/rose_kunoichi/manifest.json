@@ -1,0 +1,1836 @@
+{
+  "fighter_id": "rose_kunoichi_realistic_v1",
+  "display_name": "Rose Kunoichi Realistic V1",
+  "version": "0.1.0",
+  "frame_width": 256,
+  "frame_height": 256,
+  "anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "facing": "right",
+  "runtime_frame_count": 46,
+  "extras_frame_count": 14,
+  "processing": {
+    "canvas": [
+      256,
+      256
+    ],
+    "fixed_scale_factor": 0.6633291614518148,
+    "reference_frame": "idle_000.png",
+    "target_reference_height_px": 205,
+    "chroma_key": "green background removal",
+    "line_cleanup": "strict crop plus long white/gray separator cleanup",
+    "policy": "same scale factor applied to all selected runtime frames"
+  },
+  "animations": {
+    "idle": {
+      "frames": [
+        "frames/idle_000.png",
+        "frames/idle_001.png",
+        "frames/idle_002.png"
+      ],
+      "sheet": "sheets/idle.png",
+      "frame_count": 3,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "idle"
+    },
+    "walk": {
+      "frames": [
+        "frames/walk_000.png",
+        "frames/walk_001.png",
+        "frames/walk_002.png"
+      ],
+      "sheet": "sheets/walk.png",
+      "frame_count": 3,
+      "fps": 10,
+      "loop": true,
+      "gameplay_state_hint": "walk"
+    },
+    "jump": {
+      "frames": [
+        "frames/jump_000.png",
+        "frames/jump_001.png"
+      ],
+      "sheet": "sheets/jump.png",
+      "frame_count": 2,
+      "fps": 10,
+      "loop": false,
+      "gameplay_state_hint": "jump"
+    },
+    "punch_mid": {
+      "frames": [
+        "frames/punch_mid_000.png",
+        "frames/punch_mid_001.png",
+        "frames/punch_mid_002.png"
+      ],
+      "sheet": "sheets/punch_mid.png",
+      "frame_count": 3,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "punch_mid",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "kick_mid": {
+      "frames": [
+        "frames/kick_mid_000.png",
+        "frames/kick_mid_001.png",
+        "frames/kick_mid_002.png"
+      ],
+      "sheet": "sheets/kick_mid.png",
+      "frame_count": 3,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "kick_mid",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "block_mid": {
+      "frames": [
+        "frames/block_mid_000.png"
+      ],
+      "sheet": "sheets/block_mid.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "block_mid"
+    },
+    "hitstun": {
+      "frames": [
+        "frames/hitstun_000.png",
+        "frames/hitstun_001.png"
+      ],
+      "sheet": "sheets/hitstun.png",
+      "frame_count": 2,
+      "fps": 8,
+      "loop": false,
+      "gameplay_state_hint": "hitstun"
+    },
+    "ko": {
+      "frames": [
+        "frames/ko_000.png",
+        "frames/ko_001.png",
+        "frames/ko_002.png"
+      ],
+      "sheet": "sheets/ko.png",
+      "frame_count": 3,
+      "fps": 7,
+      "loop": false,
+      "gameplay_state_hint": "ko",
+      "terminal_frame": 2
+    },
+    "crouch_idle": {
+      "frames": [
+        "frames/crouch_idle_000.png",
+        "frames/crouch_idle_001.png"
+      ],
+      "sheet": "sheets/crouch_idle.png",
+      "frame_count": 2,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "crouch_idle"
+    },
+    "crouch_walk": {
+      "frames": [
+        "frames/crouch_walk_000.png",
+        "frames/crouch_walk_001.png",
+        "frames/crouch_walk_002.png"
+      ],
+      "sheet": "sheets/crouch_walk.png",
+      "frame_count": 3,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "crouch_walk"
+    },
+    "crouch_punch_low": {
+      "frames": [
+        "frames/crouch_punch_low_000.png",
+        "frames/crouch_punch_low_001.png",
+        "frames/crouch_punch_low_002.png"
+      ],
+      "sheet": "sheets/crouch_punch_low.png",
+      "frame_count": 3,
+      "fps": 14,
+      "loop": false,
+      "gameplay_state_hint": "crouch_punch_low",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "crouch_kick_low": {
+      "frames": [
+        "frames/crouch_kick_low_000.png",
+        "frames/crouch_kick_low_001.png",
+        "frames/crouch_kick_low_002.png"
+      ],
+      "sheet": "sheets/crouch_kick_low.png",
+      "frame_count": 3,
+      "fps": 12,
+      "loop": false,
+      "gameplay_state_hint": "crouch_kick_low",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "ranged_charge": {
+      "frames": [
+        "frames/ranged_charge_000.png",
+        "frames/ranged_charge_001.png"
+      ],
+      "sheet": "sheets/ranged_charge.png",
+      "frame_count": 2,
+      "fps": 10,
+      "loop": false,
+      "gameplay_state_hint": "ranged_charge"
+    },
+    "ranged_throw": {
+      "frames": [
+        "frames/ranged_throw_000.png",
+        "frames/ranged_throw_001.png"
+      ],
+      "sheet": "sheets/ranged_throw.png",
+      "frame_count": 2,
+      "fps": 12,
+      "loop": false,
+      "gameplay_state_hint": "ranged_throw",
+      "projectile_spawn_frame": 1
+    },
+    "double_jump_salto": {
+      "frames": [
+        "frames/double_jump_salto_000.png",
+        "frames/double_jump_salto_001.png",
+        "frames/double_jump_salto_002.png"
+      ],
+      "sheet": "sheets/double_jump_salto.png",
+      "frame_count": 3,
+      "fps": 16,
+      "loop": false,
+      "gameplay_state_hint": "double_jump_salto"
+    },
+    "block_high": {
+      "frames": [
+        "frames/block_high_000.png"
+      ],
+      "sheet": "sheets/block_high.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "block_high"
+    },
+    "kick_high": {
+      "frames": [
+        "frames/kick_high_000.png",
+        "frames/kick_high_001.png",
+        "frames/kick_high_002.png"
+      ],
+      "sheet": "sheets/kick_high.png",
+      "frame_count": 3,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "kick_high",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "punch_high": {
+      "frames": [
+        "frames/punch_high_000.png",
+        "frames/punch_high_001.png",
+        "frames/punch_high_002.png"
+      ],
+      "sheet": "sheets/punch_high.png",
+      "frame_count": 3,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "punch_high",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "crouch_block": {
+      "frames": [
+        "frames/crouch_block_000.png"
+      ],
+      "sheet": "sheets/crouch_block.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "crouch_block"
+    }
+  },
+  "fallbacks_recommended": {
+    "punch_low": "crouch_punch_low",
+    "kick_low": "crouch_kick_low",
+    "block_low": "crouch_block"
+  },
+  "notes": [
+    "The selected runtime set contains 46 frames: the 38 V1 web-safe frames plus 8 high-action/crouch-block frames.",
+    "Extra generated frames are preserved under extras/frames but are not referenced by runtime animations.",
+    "ranged_throw_001 uses the pink energy throw from the corrective sheet. It may include projectile pixels; ideally the projectile should be separated in a later refinement."
+  ],
+  "source_mapping": [
+    {
+      "set": "selected_46",
+      "animation": "idle",
+      "filename": "idle_000.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 1,
+      "note": "idle pose 1",
+      "pre_scale_removed_columns": [
+        310
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        137,
+        297
+      ],
+      "object_scaled_size": [
+        91,
+        197
+      ],
+      "paste_xy": [
+        83,
+        17
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "idle",
+      "filename": "idle_001.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 2,
+      "note": "idle pose 2",
+      "pre_scale_removed_columns": [
+        292,
+        293
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        260,
+        352
+      ],
+      "object_scaled_size": [
+        172,
+        233
+      ],
+      "paste_xy": [
+        42,
+        -19
+      ],
+      "clipped": true,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "idle",
+      "filename": "idle_002.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 3,
+      "note": "idle pose 3",
+      "pre_scale_removed_columns": [
+        294
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        135,
+        295
+      ],
+      "object_scaled_size": [
+        90,
+        196
+      ],
+      "paste_xy": [
+        83,
+        18
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "walk",
+      "filename": "walk_000.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 4,
+      "note": "walk frame 1",
+      "pre_scale_removed_columns": [
+        301
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        219,
+        285
+      ],
+      "object_scaled_size": [
+        145,
+        189
+      ],
+      "paste_xy": [
+        56,
+        25
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "walk",
+      "filename": "walk_001.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 5,
+      "note": "walk frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        185,
+        283
+      ],
+      "object_scaled_size": [
+        123,
+        188
+      ],
+      "paste_xy": [
+        67,
+        26
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "walk",
+      "filename": "walk_002.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 6,
+      "note": "walk frame 3",
+      "pre_scale_removed_columns": [
+        309
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        199,
+        291
+      ],
+      "object_scaled_size": [
+        132,
+        193
+      ],
+      "paste_xy": [
+        62,
+        21
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "jump",
+      "filename": "jump_000.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 8,
+      "note": "jump frame 1",
+      "pre_scale_removed_columns": [
+        293
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        297,
+        318
+      ],
+      "object_scaled_size": [
+        197,
+        211
+      ],
+      "paste_xy": [
+        30,
+        32
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "jump",
+      "filename": "jump_001.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 9,
+      "note": "jump frame 2",
+      "pre_scale_removed_columns": [
+        299,
+        300
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        248,
+        271
+      ],
+      "object_scaled_size": [
+        165,
+        180
+      ],
+      "paste_xy": [
+        46,
+        32
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "punch_mid",
+      "filename": "punch_mid_000.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 1,
+      "note": "medium punch frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        204,
+        281
+      ],
+      "object_scaled_size": [
+        135,
+        186
+      ],
+      "paste_xy": [
+        61,
+        28
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "punch_mid",
+      "filename": "punch_mid_001.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 2,
+      "note": "medium punch frame 2",
+      "pre_scale_removed_columns": [
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        218,
+        285
+      ],
+      "object_scaled_size": [
+        145,
+        189
+      ],
+      "paste_xy": [
+        56,
+        25
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "punch_mid",
+      "filename": "punch_mid_002.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 3,
+      "note": "medium punch frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        283,
+        290
+      ],
+      "object_scaled_size": [
+        188,
+        192
+      ],
+      "paste_xy": [
+        34,
+        22
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "kick_mid",
+      "filename": "kick_mid_000.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 4,
+      "note": "medium kick frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        262,
+        285
+      ],
+      "object_scaled_size": [
+        174,
+        189
+      ],
+      "paste_xy": [
+        41,
+        25
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "kick_mid",
+      "filename": "kick_mid_001.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 5,
+      "note": "medium kick frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        171,
+        297
+      ],
+      "object_scaled_size": [
+        113,
+        197
+      ],
+      "paste_xy": [
+        72,
+        17
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "kick_mid",
+      "filename": "kick_mid_002.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 6,
+      "note": "medium kick frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        214,
+        307
+      ],
+      "object_scaled_size": [
+        142,
+        204
+      ],
+      "paste_xy": [
+        57,
+        10
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "block_mid",
+      "filename": "block_mid_000.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 7,
+      "note": "standing medium block",
+      "pre_scale_removed_columns": [
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        197,
+        296
+      ],
+      "object_scaled_size": [
+        131,
+        196
+      ],
+      "paste_xy": [
+        63,
+        18
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "hitstun",
+      "filename": "hitstun_000.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 8,
+      "note": "hit reaction frame 1",
+      "pre_scale_removed_columns": [
+        312,
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        254,
+        268
+      ],
+      "object_scaled_size": [
+        168,
+        178
+      ],
+      "paste_xy": [
+        44,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "hitstun",
+      "filename": "hitstun_001.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 9,
+      "note": "hit reaction frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        263,
+        249
+      ],
+      "object_scaled_size": [
+        174,
+        165
+      ],
+      "paste_xy": [
+        41,
+        49
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ko",
+      "filename": "ko_000.png",
+      "source_sheet": "sheet_02",
+      "source_panel": 10,
+      "note": "KO frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        311,
+        102
+      ],
+      "object_scaled_size": [
+        206,
+        68
+      ],
+      "paste_xy": [
+        25,
+        146
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ko",
+      "filename": "ko_001.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 10,
+      "note": "KO frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        304,
+        68
+      ],
+      "object_scaled_size": [
+        202,
+        45
+      ],
+      "paste_xy": [
+        27,
+        169
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ko",
+      "filename": "ko_002.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 1,
+      "note": "KO frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        289,
+        64
+      ],
+      "object_scaled_size": [
+        192,
+        42
+      ],
+      "paste_xy": [
+        32,
+        172
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_idle",
+      "filename": "crouch_idle_000.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 10,
+      "note": "crouch idle frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        193,
+        168
+      ],
+      "object_scaled_size": [
+        128,
+        111
+      ],
+      "paste_xy": [
+        64,
+        103
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_idle",
+      "filename": "crouch_idle_001.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 1,
+      "note": "crouch idle frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        200,
+        197
+      ],
+      "object_scaled_size": [
+        133,
+        131
+      ],
+      "paste_xy": [
+        62,
+        83
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_walk",
+      "filename": "crouch_walk_000.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 2,
+      "note": "crouch walk frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        229,
+        186
+      ],
+      "object_scaled_size": [
+        152,
+        123
+      ],
+      "paste_xy": [
+        52,
+        91
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_walk",
+      "filename": "crouch_walk_001.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 3,
+      "note": "crouch walk frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        217,
+        182
+      ],
+      "object_scaled_size": [
+        144,
+        121
+      ],
+      "paste_xy": [
+        56,
+        93
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_walk",
+      "filename": "crouch_walk_002.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 4,
+      "note": "crouch walk frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        226,
+        165
+      ],
+      "object_scaled_size": [
+        150,
+        109
+      ],
+      "paste_xy": [
+        53,
+        105
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_punch_low",
+      "filename": "crouch_punch_low_000.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 5,
+      "note": "crouch low punch frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        266,
+        165
+      ],
+      "object_scaled_size": [
+        176,
+        109
+      ],
+      "paste_xy": [
+        40,
+        105
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_punch_low",
+      "filename": "crouch_punch_low_001.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 6,
+      "note": "crouch low punch frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        260,
+        186
+      ],
+      "object_scaled_size": [
+        172,
+        123
+      ],
+      "paste_xy": [
+        42,
+        91
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_punch_low",
+      "filename": "crouch_punch_low_002.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 7,
+      "note": "crouch low punch frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        278,
+        181
+      ],
+      "object_scaled_size": [
+        184,
+        120
+      ],
+      "paste_xy": [
+        36,
+        94
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_kick_low",
+      "filename": "crouch_kick_low_000.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 8,
+      "note": "crouch low kick frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        279,
+        160
+      ],
+      "object_scaled_size": [
+        185,
+        106
+      ],
+      "paste_xy": [
+        36,
+        108
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_kick_low",
+      "filename": "crouch_kick_low_001.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 9,
+      "note": "crouch low kick frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        291,
+        172
+      ],
+      "object_scaled_size": [
+        193,
+        114
+      ],
+      "paste_xy": [
+        32,
+        100
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_kick_low",
+      "filename": "crouch_kick_low_002.png",
+      "source_sheet": "sheet_03",
+      "source_panel": 10,
+      "note": "crouch low kick frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        282,
+        168
+      ],
+      "object_scaled_size": [
+        187,
+        111
+      ],
+      "paste_xy": [
+        35,
+        103
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ranged_charge",
+      "filename": "ranged_charge_000.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 2,
+      "note": "pink energy charge frame 1",
+      "pre_scale_removed_columns": [
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        221,
+        268
+      ],
+      "object_scaled_size": [
+        147,
+        178
+      ],
+      "paste_xy": [
+        55,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ranged_charge",
+      "filename": "ranged_charge_001.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 3,
+      "note": "pink energy charge frame 2",
+      "pre_scale_removed_columns": [
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        272,
+        260
+      ],
+      "object_scaled_size": [
+        180,
+        172
+      ],
+      "paste_xy": [
+        38,
+        42
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ranged_throw",
+      "filename": "ranged_throw_000.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 1,
+      "note": "ranged throw startup/original pose",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        267,
+        268
+      ],
+      "object_scaled_size": [
+        177,
+        178
+      ],
+      "paste_xy": [
+        40,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "ranged_throw",
+      "filename": "ranged_throw_001.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 10,
+      "note": "pink energy throw frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        302,
+        269
+      ],
+      "object_scaled_size": [
+        200,
+        178
+      ],
+      "paste_xy": [
+        -28,
+        36
+      ],
+      "clipped": true,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "double_jump_salto",
+      "filename": "double_jump_salto_000.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 4,
+      "note": "double jump/salto frame 1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        172,
+        285
+      ],
+      "object_scaled_size": [
+        114,
+        189
+      ],
+      "paste_xy": [
+        71,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "double_jump_salto",
+      "filename": "double_jump_salto_001.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 5,
+      "note": "double jump/salto frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        188,
+        177
+      ],
+      "object_scaled_size": [
+        125,
+        117
+      ],
+      "paste_xy": [
+        66,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "double_jump_salto",
+      "filename": "double_jump_salto_002.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 6,
+      "note": "double jump/salto frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        164,
+        320
+      ],
+      "object_scaled_size": [
+        109,
+        212
+      ],
+      "paste_xy": [
+        74,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "block_high",
+      "filename": "block_high_000.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 8,
+      "note": "standing high block",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        271,
+        349
+      ],
+      "object_scaled_size": [
+        180,
+        232
+      ],
+      "paste_xy": [
+        38,
+        -18
+      ],
+      "clipped": true,
+      "post_scale_removed_columns": [
+        217
+      ],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "kick_high",
+      "filename": "kick_high_000.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 4,
+      "note": "high kick frame 1",
+      "pre_scale_removed_columns": [
+        300
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        174,
+        287
+      ],
+      "object_scaled_size": [
+        115,
+        190
+      ],
+      "paste_xy": [
+        71,
+        24
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "kick_high",
+      "filename": "kick_high_001.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 5,
+      "note": "high kick frame 2",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        271,
+        271
+      ],
+      "object_scaled_size": [
+        180,
+        180
+      ],
+      "paste_xy": [
+        38,
+        34
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "kick_high",
+      "filename": "kick_high_002.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 6,
+      "note": "high kick frame 3",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        273,
+        267
+      ],
+      "object_scaled_size": [
+        181,
+        177
+      ],
+      "paste_xy": [
+        38,
+        37
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "punch_high",
+      "filename": "punch_high_000.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 7,
+      "note": "high punch frame 1",
+      "pre_scale_removed_columns": [
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        207,
+        285
+      ],
+      "object_scaled_size": [
+        137,
+        189
+      ],
+      "paste_xy": [
+        60,
+        25
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "punch_high",
+      "filename": "punch_high_001.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 8,
+      "note": "high punch frame 2",
+      "pre_scale_removed_columns": [
+        313
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        222,
+        275
+      ],
+      "object_scaled_size": [
+        147,
+        182
+      ],
+      "paste_xy": [
+        55,
+        32
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "punch_high",
+      "filename": "punch_high_002.png",
+      "source_sheet": "sheet_06",
+      "source_panel": 9,
+      "note": "high punch frame 3",
+      "pre_scale_removed_columns": [
+        300
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        309,
+        276
+      ],
+      "object_scaled_size": [
+        205,
+        183
+      ],
+      "paste_xy": [
+        26,
+        31
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "selected_46",
+      "animation": "crouch_block",
+      "filename": "crouch_block_000.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 9,
+      "note": "crouching block",
+      "pre_scale_removed_columns": [
+        307
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        183,
+        170
+      ],
+      "object_scaled_size": [
+        121,
+        113
+      ],
+      "paste_xy": [
+        68,
+        101
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    }
+  ],
+  "extras_mapping": [
+    {
+      "set": "extras",
+      "animation": "walk",
+      "filename": "walk_003.png",
+      "source_sheet": "sheet_01",
+      "source_panel": 7,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [
+        292
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        292,
+        355
+      ],
+      "object_scaled_size": [
+        194,
+        235
+      ],
+      "paste_xy": [
+        31,
+        -21
+      ],
+      "clipped": true,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "ranged_throw_001_original",
+      "filename": "ranged_throw_001_original.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 2,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        274,
+        266
+      ],
+      "object_scaled_size": [
+        182,
+        176
+      ],
+      "paste_xy": [
+        37,
+        38
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "ranged_throw_002_original",
+      "filename": "ranged_throw_002_original.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 3,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        279,
+        266
+      ],
+      "object_scaled_size": [
+        185,
+        176
+      ],
+      "paste_xy": [
+        36,
+        38
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "land",
+      "filename": "land_000.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 7,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        213,
+        175
+      ],
+      "object_scaled_size": [
+        141,
+        116
+      ],
+      "paste_xy": [
+        58,
+        98
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "land",
+      "filename": "land_001.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 8,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        209,
+        182
+      ],
+      "object_scaled_size": [
+        139,
+        121
+      ],
+      "paste_xy": [
+        59,
+        93
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "hurt",
+      "filename": "hurt_000.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 9,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        246,
+        263
+      ],
+      "object_scaled_size": [
+        163,
+        174
+      ],
+      "paste_xy": [
+        47,
+        40
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "hurt",
+      "filename": "hurt_001.png",
+      "source_sheet": "sheet_04",
+      "source_panel": 10,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        222,
+        230
+      ],
+      "object_scaled_size": [
+        147,
+        153
+      ],
+      "paste_xy": [
+        55,
+        61
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "sweep_kick",
+      "filename": "sweep_kick_000.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 1,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        274,
+        181
+      ],
+      "object_scaled_size": [
+        182,
+        120
+      ],
+      "paste_xy": [
+        37,
+        94
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "sweep_kick",
+      "filename": "sweep_kick_001.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 2,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        279,
+        137
+      ],
+      "object_scaled_size": [
+        185,
+        91
+      ],
+      "paste_xy": [
+        36,
+        123
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "rising_kick",
+      "filename": "rising_kick_000.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 3,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [
+        310
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        256,
+        283
+      ],
+      "object_scaled_size": [
+        170,
+        188
+      ],
+      "paste_xy": [
+        43,
+        26
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "rising_kick",
+      "filename": "rising_kick_001.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 4,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [
+        307
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        154,
+        310
+      ],
+      "object_scaled_size": [
+        102,
+        206
+      ],
+      "paste_xy": [
+        77,
+        8
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "ranged_shuriken",
+      "filename": "ranged_shuriken_000.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 5,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        302,
+        265
+      ],
+      "object_scaled_size": [
+        200,
+        176
+      ],
+      "paste_xy": [
+        28,
+        38
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "ranged_shuriken",
+      "filename": "ranged_shuriken_001.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 6,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        272,
+        217
+      ],
+      "object_scaled_size": [
+        180,
+        144
+      ],
+      "paste_xy": [
+        38,
+        70
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "set": "extras",
+      "animation": "dash",
+      "filename": "dash_000.png",
+      "source_sheet": "sheet_05",
+      "source_panel": 7,
+      "note": "extra/generated but not selected in runtime V1",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        255,
+        213
+      ],
+      "object_scaled_size": [
+        169,
+        141
+      ],
+      "paste_xy": [
+        44,
+        73
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    }
+  ]
+}

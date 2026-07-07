@@ -1,0 +1,1182 @@
+{
+  "fighter_id": "shinobi_realistic_v1_fixed_scale_lineclean",
+  "display_name": "Realistic Shinobi V1 Fixed Scale Line-Clean",
+  "version": "0.3.0",
+  "frame_width": 256,
+  "frame_height": 256,
+  "anchor": {
+    "x": 128,
+    "y": 214
+  },
+  "facing": "right",
+  "processing": {
+    "chroma_key": "green background removal",
+    "crop_policy": "strict inward crop inside each generated panel to remove grid separators",
+    "line_cleanup": "long near-white vertical/horizontal separator lines removed before and after scaling",
+    "reference_frame": "idle_000.png",
+    "target_standing_height_px": 205,
+    "fixed_scale_factor": 0.5605499735589635,
+    "policy": "same scale factor applied to every selected frame; no per-frame fit-to-box scaling"
+  },
+  "animations": {
+    "idle": {
+      "frames": [
+        "frames/idle_000.png",
+        "frames/idle_001.png",
+        "frames/idle_002.png"
+      ],
+      "sheet": "sheets/idle.png",
+      "frame_count": 3,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "idle"
+    },
+    "walk": {
+      "frames": [
+        "frames/walk_000.png",
+        "frames/walk_001.png",
+        "frames/walk_002.png"
+      ],
+      "sheet": "sheets/walk.png",
+      "frame_count": 3,
+      "fps": 10,
+      "loop": true,
+      "gameplay_state_hint": "walk"
+    },
+    "jump": {
+      "frames": [
+        "frames/jump_000.png",
+        "frames/jump_001.png"
+      ],
+      "sheet": "sheets/jump.png",
+      "frame_count": 2,
+      "fps": 10,
+      "loop": false,
+      "gameplay_state_hint": "jump",
+      "airborne_frames": [
+        0,
+        1
+      ]
+    },
+    "punch_mid": {
+      "frames": [
+        "frames/punch_mid_000.png",
+        "frames/punch_mid_001.png",
+        "frames/punch_mid_002.png"
+      ],
+      "sheet": "sheets/punch_mid.png",
+      "frame_count": 3,
+      "fps": 15,
+      "loop": false,
+      "gameplay_state_hint": "punch_mid",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "kick_mid": {
+      "frames": [
+        "frames/kick_mid_000.png",
+        "frames/kick_mid_001.png",
+        "frames/kick_mid_002.png"
+      ],
+      "sheet": "sheets/kick_mid.png",
+      "frame_count": 3,
+      "fps": 13,
+      "loop": false,
+      "gameplay_state_hint": "kick_mid",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "block_mid": {
+      "frames": [
+        "frames/block_mid_000.png"
+      ],
+      "sheet": "sheets/block_mid.png",
+      "frame_count": 1,
+      "fps": 1,
+      "loop": true,
+      "gameplay_state_hint": "block_mid"
+    },
+    "hitstun": {
+      "frames": [
+        "frames/hitstun_000.png",
+        "frames/hitstun_001.png"
+      ],
+      "sheet": "sheets/hitstun.png",
+      "frame_count": 2,
+      "fps": 8,
+      "loop": false,
+      "gameplay_state_hint": "hitstun"
+    },
+    "ko": {
+      "frames": [
+        "frames/ko_000.png",
+        "frames/ko_001.png",
+        "frames/ko_002.png"
+      ],
+      "sheet": "sheets/ko.png",
+      "frame_count": 3,
+      "fps": 7,
+      "loop": false,
+      "gameplay_state_hint": "ko",
+      "terminal_frame": 2
+    },
+    "crouch_idle": {
+      "frames": [
+        "frames/crouch_idle_000.png",
+        "frames/crouch_idle_001.png"
+      ],
+      "sheet": "sheets/crouch_idle.png",
+      "frame_count": 2,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "crouch_idle"
+    },
+    "crouch_walk": {
+      "frames": [
+        "frames/crouch_walk_000.png",
+        "frames/crouch_walk_001.png",
+        "frames/crouch_walk_002.png"
+      ],
+      "sheet": "sheets/crouch_walk.png",
+      "frame_count": 3,
+      "fps": 8,
+      "loop": true,
+      "gameplay_state_hint": "crouch_walk"
+    },
+    "crouch_punch_low": {
+      "frames": [
+        "frames/crouch_punch_low_000.png",
+        "frames/crouch_punch_low_001.png",
+        "frames/crouch_punch_low_002.png"
+      ],
+      "sheet": "sheets/crouch_punch_low.png",
+      "frame_count": 3,
+      "fps": 14,
+      "loop": false,
+      "gameplay_state_hint": "crouch_punch_low",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "crouch_kick_low": {
+      "frames": [
+        "frames/crouch_kick_low_000.png",
+        "frames/crouch_kick_low_001.png",
+        "frames/crouch_kick_low_002.png"
+      ],
+      "sheet": "sheets/crouch_kick_low.png",
+      "frame_count": 3,
+      "fps": 12,
+      "loop": false,
+      "gameplay_state_hint": "crouch_kick_low",
+      "startup_frames": 1,
+      "active_frames": [
+        1
+      ],
+      "recovery_frames": 1
+    },
+    "ranged_charge": {
+      "frames": [
+        "frames/ranged_charge_000.png",
+        "frames/ranged_charge_001.png"
+      ],
+      "sheet": "sheets/ranged_charge.png",
+      "frame_count": 2,
+      "fps": 10,
+      "loop": false,
+      "gameplay_state_hint": "ranged_charge"
+    },
+    "ranged_throw": {
+      "frames": [
+        "frames/ranged_throw_000.png",
+        "frames/ranged_throw_001.png"
+      ],
+      "sheet": "sheets/ranged_throw.png",
+      "frame_count": 2,
+      "fps": 12,
+      "loop": false,
+      "gameplay_state_hint": "ranged_throw",
+      "projectile_spawn_frame": 1
+    },
+    "double_jump_salto": {
+      "frames": [
+        "frames/double_jump_salto_000.png",
+        "frames/double_jump_salto_001.png",
+        "frames/double_jump_salto_002.png"
+      ],
+      "sheet": "sheets/double_jump_salto.png",
+      "frame_count": 3,
+      "fps": 16,
+      "loop": false,
+      "gameplay_state_hint": "double_jump_salto"
+    }
+  },
+  "fallbacks_recommended": {
+    "punch_high": "punch_mid",
+    "punch_low": "punch_mid",
+    "kick_high": "kick_mid",
+    "kick_low": "kick_mid",
+    "block_high": "block_mid",
+    "block_low": "block_mid"
+  },
+  "source_mapping": [
+    {
+      "animation": "idle",
+      "filename": "idle_000.png",
+      "source_panel": 1,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "neutral standing pose; reference scale frame",
+      "pre_scale_removed_columns": [
+        301
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        181,
+        342
+      ],
+      "object_scaled_size": [
+        101,
+        192
+      ],
+      "paste_xy": [
+        78,
+        22
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "idle",
+      "filename": "idle_001.png",
+      "source_panel": 36,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "combat guard variation",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        219,
+        284
+      ],
+      "object_scaled_size": [
+        123,
+        159
+      ],
+      "paste_xy": [
+        67,
+        55
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "idle",
+      "filename": "idle_002.png",
+      "source_panel": 50,
+      "source_sheet": "shinobi_green_sheet_05",
+      "note": "relaxed standing fallback",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        191,
+        337
+      ],
+      "object_scaled_size": [
+        107,
+        189
+      ],
+      "paste_xy": [
+        75,
+        25
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "walk",
+      "filename": "walk_000.png",
+      "source_panel": 2,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "walking step",
+      "pre_scale_removed_columns": [
+        281,
+        282
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        310,
+        385
+      ],
+      "object_scaled_size": [
+        174,
+        216
+      ],
+      "paste_xy": [
+        41,
+        -2
+      ],
+      "clipped": true,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "walk",
+      "filename": "walk_001.png",
+      "source_panel": 42,
+      "source_sheet": "shinobi_green_sheet_05",
+      "note": "forward run step",
+      "pre_scale_removed_columns": [
+        311,
+        312
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        258,
+        250
+      ],
+      "object_scaled_size": [
+        145,
+        140
+      ],
+      "paste_xy": [
+        56,
+        74
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "walk",
+      "filename": "walk_002.png",
+      "source_panel": 35,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "low forward movement, usable as fast walk",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        301,
+        191
+      ],
+      "object_scaled_size": [
+        169,
+        107
+      ],
+      "paste_xy": [
+        44,
+        107
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "jump",
+      "filename": "jump_000.png",
+      "source_panel": 15,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "jump takeoff / airborne frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        250,
+        303
+      ],
+      "object_scaled_size": [
+        140,
+        170
+      ],
+      "paste_xy": [
+        58,
+        30
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "jump",
+      "filename": "jump_001.png",
+      "source_panel": 31,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "airborne frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        238,
+        318
+      ],
+      "object_scaled_size": [
+        133,
+        178
+      ],
+      "paste_xy": [
+        62,
+        30
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "punch_mid",
+      "filename": "punch_mid_000.png",
+      "source_panel": 4,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "mid punch extension",
+      "pre_scale_removed_columns": [
+        290,
+        291
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        313,
+        385
+      ],
+      "object_scaled_size": [
+        175,
+        216
+      ],
+      "paste_xy": [
+        41,
+        -2
+      ],
+      "clipped": true,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "punch_mid",
+      "filename": "punch_mid_001.png",
+      "source_panel": 11,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "mid punch active frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        265,
+        300
+      ],
+      "object_scaled_size": [
+        149,
+        168
+      ],
+      "paste_xy": [
+        54,
+        46
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "punch_mid",
+      "filename": "punch_mid_002.png",
+      "source_panel": 12,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "mid punch variation/recovery",
+      "pre_scale_removed_columns": [
+        309,
+        310
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        274,
+        300
+      ],
+      "object_scaled_size": [
+        154,
+        168
+      ],
+      "paste_xy": [
+        51,
+        46
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "kick_mid",
+      "filename": "kick_mid_000.png",
+      "source_panel": 5,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "mid kick extension",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        305,
+        295
+      ],
+      "object_scaled_size": [
+        171,
+        165
+      ],
+      "paste_xy": [
+        43,
+        49
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "kick_mid",
+      "filename": "kick_mid_001.png",
+      "source_panel": 14,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "mid kick active frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        281,
+        317
+      ],
+      "object_scaled_size": [
+        158,
+        178
+      ],
+      "paste_xy": [
+        49,
+        36
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "kick_mid",
+      "filename": "kick_mid_002.png",
+      "source_panel": 44,
+      "source_sheet": "shinobi_green_sheet_05",
+      "note": "jumping/long mid kick fallback",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        303,
+        214
+      ],
+      "object_scaled_size": [
+        170,
+        120
+      ],
+      "paste_xy": [
+        43,
+        94
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "block_mid",
+      "filename": "block_mid_000.png",
+      "source_panel": 17,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "standing medium guard",
+      "pre_scale_removed_columns": [
+        309,
+        310
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        246,
+        309
+      ],
+      "object_scaled_size": [
+        138,
+        173
+      ],
+      "paste_xy": [
+        59,
+        41
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "hitstun",
+      "filename": "hitstun_000.png",
+      "source_panel": 18,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "hit reaction",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        298,
+        310
+      ],
+      "object_scaled_size": [
+        167,
+        174
+      ],
+      "paste_xy": [
+        45,
+        40
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "hitstun",
+      "filename": "hitstun_001.png",
+      "source_panel": 19,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "falling hit reaction",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        266,
+        190
+      ],
+      "object_scaled_size": [
+        149,
+        107
+      ],
+      "paste_xy": [
+        54,
+        107
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ko",
+      "filename": "ko_000.png",
+      "source_panel": 18,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "KO start / heavy hit",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        298,
+        310
+      ],
+      "object_scaled_size": [
+        167,
+        174
+      ],
+      "paste_xy": [
+        45,
+        40
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ko",
+      "filename": "ko_001.png",
+      "source_panel": 19,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "KO fall",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        266,
+        190
+      ],
+      "object_scaled_size": [
+        149,
+        107
+      ],
+      "paste_xy": [
+        54,
+        107
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ko",
+      "filename": "ko_002.png",
+      "source_panel": 20,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "KO grounded",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        297,
+        81
+      ],
+      "object_scaled_size": [
+        166,
+        45
+      ],
+      "paste_xy": [
+        45,
+        169
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_idle",
+      "filename": "crouch_idle_000.png",
+      "source_panel": 21,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "crouch idle",
+      "pre_scale_removed_columns": [
+        308
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        223,
+        251
+      ],
+      "object_scaled_size": [
+        125,
+        141
+      ],
+      "paste_xy": [
+        66,
+        73
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_idle",
+      "filename": "crouch_idle_001.png",
+      "source_panel": 49,
+      "source_sheet": "shinobi_green_sheet_05",
+      "note": "crouch idle variation",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        200,
+        194
+      ],
+      "object_scaled_size": [
+        112,
+        109
+      ],
+      "paste_xy": [
+        72,
+        105
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_walk",
+      "filename": "crouch_walk_000.png",
+      "source_panel": 22,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "crouch forward movement",
+      "pre_scale_removed_columns": [
+        301,
+        302
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        257,
+        193
+      ],
+      "object_scaled_size": [
+        144,
+        108
+      ],
+      "paste_xy": [
+        56,
+        106
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_walk",
+      "filename": "crouch_walk_001.png",
+      "source_panel": 34,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "low movement frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        282,
+        164
+      ],
+      "object_scaled_size": [
+        158,
+        92
+      ],
+      "paste_xy": [
+        49,
+        122
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_walk",
+      "filename": "crouch_walk_002.png",
+      "source_panel": 45,
+      "source_sheet": "shinobi_green_sheet_05",
+      "note": "low movement frame",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        258,
+        215
+      ],
+      "object_scaled_size": [
+        145,
+        121
+      ],
+      "paste_xy": [
+        56,
+        93
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_punch_low",
+      "filename": "crouch_punch_low_000.png",
+      "source_panel": 13,
+      "source_sheet": "shinobi_green_sheet_02",
+      "note": "low punch active",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        305,
+        177
+      ],
+      "object_scaled_size": [
+        171,
+        99
+      ],
+      "paste_xy": [
+        43,
+        115
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_punch_low",
+      "filename": "crouch_punch_low_001.png",
+      "source_panel": 23,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "low punch active variation",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        278,
+        195
+      ],
+      "object_scaled_size": [
+        156,
+        109
+      ],
+      "paste_xy": [
+        50,
+        105
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_punch_low",
+      "filename": "crouch_punch_low_002.png",
+      "source_panel": 26,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "low guarded strike transition",
+      "pre_scale_removed_columns": [
+        308
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        275,
+        239
+      ],
+      "object_scaled_size": [
+        154,
+        134
+      ],
+      "paste_xy": [
+        51,
+        80
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_kick_low",
+      "filename": "crouch_kick_low_000.png",
+      "source_panel": 8,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "low sweep kick",
+      "pre_scale_removed_columns": [
+        285
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        312,
+        338
+      ],
+      "object_scaled_size": [
+        175,
+        189
+      ],
+      "paste_xy": [
+        41,
+        25
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_kick_low",
+      "filename": "crouch_kick_low_001.png",
+      "source_panel": 25,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "low kick / seated kick",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        304,
+        167
+      ],
+      "object_scaled_size": [
+        170,
+        94
+      ],
+      "paste_xy": [
+        43,
+        120
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "crouch_kick_low",
+      "filename": "crouch_kick_low_002.png",
+      "source_panel": 27,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "low kick variation",
+      "pre_scale_removed_columns": [
+        301,
+        302
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        287,
+        180
+      ],
+      "object_scaled_size": [
+        161,
+        101
+      ],
+      "paste_xy": [
+        48,
+        113
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ranged_charge",
+      "filename": "ranged_charge_000.png",
+      "source_panel": 9,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "ranged pre-throw stance",
+      "pre_scale_removed_columns": [
+        290,
+        291
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        313,
+        377
+      ],
+      "object_scaled_size": [
+        175,
+        211
+      ],
+      "paste_xy": [
+        41,
+        3
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ranged_charge",
+      "filename": "ranged_charge_001.png",
+      "source_panel": 41,
+      "source_sheet": "shinobi_green_sheet_05",
+      "note": "charge effect candidate; can be replaced by shuriken-specific charge",
+      "pre_scale_removed_columns": [
+        311
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        226,
+        304
+      ],
+      "object_scaled_size": [
+        127,
+        170
+      ],
+      "paste_xy": [
+        65,
+        44
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ranged_throw",
+      "filename": "ranged_throw_000.png",
+      "source_panel": 10,
+      "source_sheet": "shinobi_green_sheet_01",
+      "note": "shuriken throw",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        303,
+        285
+      ],
+      "object_scaled_size": [
+        170,
+        160
+      ],
+      "paste_xy": [
+        43,
+        54
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "ranged_throw",
+      "filename": "ranged_throw_001.png",
+      "source_panel": 38,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "shuriken throw active",
+      "pre_scale_removed_columns": [
+        311
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        271,
+        283
+      ],
+      "object_scaled_size": [
+        152,
+        159
+      ],
+      "paste_xy": [
+        52,
+        55
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "double_jump_salto",
+      "filename": "double_jump_salto_000.png",
+      "source_panel": 29,
+      "source_sheet": "shinobi_green_sheet_03",
+      "note": "salto / airborne transition",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        209,
+        211
+      ],
+      "object_scaled_size": [
+        117,
+        118
+      ],
+      "paste_xy": [
+        70,
+        38
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "double_jump_salto",
+      "filename": "double_jump_salto_001.png",
+      "source_panel": 32,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "salto airborne",
+      "pre_scale_removed_columns": [
+        310
+      ],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        219,
+        327
+      ],
+      "object_scaled_size": [
+        123,
+        183
+      ],
+      "paste_xy": [
+        67,
+        38
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    },
+    {
+      "animation": "double_jump_salto",
+      "filename": "double_jump_salto_002.png",
+      "source_panel": 40,
+      "source_sheet": "shinobi_green_sheet_04",
+      "note": "inverted flip pose",
+      "pre_scale_removed_columns": [],
+      "pre_scale_removed_rows": [],
+      "object_original_size": [
+        303,
+        255
+      ],
+      "object_scaled_size": [
+        170,
+        143
+      ],
+      "paste_xy": [
+        43,
+        38
+      ],
+      "clipped": false,
+      "post_scale_removed_columns": [],
+      "post_scale_removed_rows": []
+    }
+  ]
+}

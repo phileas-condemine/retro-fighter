@@ -16,13 +16,14 @@ La version actuelle vise à valider les mécaniques fondamentales : déplacement
 - Deux barres de vie.
 - Un timer de round.
 - Menu de sélection de difficulté IA.
-- Combattants représentés par des sprites (packs `rose_kunoichi` et `shinobi`, voir `assets/fighters/`).
+- Combattants représentés par des sprites (packs `rose_kunoichi` et `shinobi`, voir `assets/fighters/`), avec une variante graphique HD alternative (bêta), voir 5.6.
 - Attaques à trois hauteurs.
 - Blocages à trois hauteurs.
 - Saut, avec double saut (salto) permettant de passer par-dessus l'adversaire.
 - Accroupissement (hurtbox réduite, esquive coups hauts et projectiles à hauteur d'épaules).
 - Attaque à distance par personnage (shuriken / boule d'énergie), voir `retro_fighter/projectiles.py`.
 - Déplacement latéral.
+- Dash (double appui gauche/droite), voir 4.9.
 - Debug hitboxes/hurtboxes.
 
 ### Non inclus dans cette version
@@ -89,12 +90,13 @@ Une attaque possède :
 
 - `startup_frames` : délai avant impact possible ;
 - `active_frames` : fenêtre pendant laquelle elle peut toucher ;
-- `recovery_frames` : délai après l'attaque ;
+- `recovery_frames` : délai après l'attaque (avant fatigue — voir 4.10) ;
 - `damage` ;
 - `range_px` ;
-- `blockstun_frames`.
+- `blockstun_frames` : interruption du défenseur si bloqué ;
+- `hitstun_frames` : interruption du défenseur si touché (pas bloqué).
 
-Le hitstun n'est pas propre à chaque attaque : toute attaque non bloquée qui touche inflige la même durée fixe de hitstun (`HITSTUN_FRAMES`, 0,5 seconde à 60 FPS).
+`hitstun_frames` est propre à chaque coup (poing : 16 frames ≈ 0,27s ; pied : 26 frames ≈ 0,43s) — voir 4.10 pour pourquoi ce n'est plus une durée fixe globale. Seules les attaques à distance utilisent encore une durée fixe (`HITSTUN_FRAMES` dans `config.py`, 0,5s), n'ayant pas cette distinction poing/pied.
 
 ### 4.3 Hitbox et hurtbox
 
@@ -131,6 +133,8 @@ Maintenir `↓` seul (au sol, sans attaque ni blocage) passe en `crouch` ; ajout
 
 La hurtbox est réduite à `CROUCH_HEIGHT_MULTIPLIER` (50 %) de sa hauteur normale, les pieds restant ancrés au sol (seul le haut descend). Cette seule réduction géométrique suffit à esquiver les attaques hautes et les projectiles à hauteur d'épaules, sans règle de collision spéciale.
 
+Cette réduction reste active pendant un coup de poing/pied bas lancé depuis l'accroupi (`ActiveAttack.started_crouching`, voir 4.2) : `Fighter.hurtbox` vérifie aussi ce cas, pas seulement `state in (CROUCH, CROUCH_WALK)`. Avant ce correctif, le passage à `state=ATTACK` pendant l'attaque faisait perdre la réduction de hurtbox alors que le personnage reste visuellement accroupi (animation `crouch_punch_low`/`crouch_kick_low`) — un projectile à hauteur d'épaules qui aurait dû être esquivé touchait quand même pendant toute la durée du coup. Un coup bas lancé **depuis debout** (`↓` pressé le même appui que l'attaque, sans avoir été accroupi la frame d'avant) n'a pas ce bénéfice : c'est une frappe basse rapide, pas un accroupissement, la hurtbox reste pleine hauteur.
+
 ### 4.7 Double saut et salto
 
 Une fois en l'air après le premier saut, appuyer à nouveau sur `Espace` déclenche un second saut (`double_jump`), avec une pose de salto pendant une durée fixe avant de revenir à la pose de saut normale. Cette hauteur/durée supplémentaire permet de passer par-dessus l'adversaire (inversion des côtés) ou d'esquiver un projectile à hauteur d'épaules si le combattant est monté assez haut (`PROJECTILE_AVOID_Y_DELTA`).
@@ -149,6 +153,37 @@ Résolution des collisions projectile/adversaire :
 2. En `double_jump` suffisamment haut : esquive.
 3. Blocage haut ou milieu : bloqué, 0 dégât.
 4. Sinon : touche, hitstun standard (`HITSTUN_FRAMES`).
+
+### 4.9 Dash
+
+Un double appui sur `←`/`→` (deuxième pression dans la fenêtre `DASH_INPUT_WINDOW_FRAMES`, 0,25 s) déclenche un état `dash` dédié : vitesse fixe `DASH_SPEED` (≈3,5x `WALK_SPEED`) pendant `DASH_DURATION_FRAMES` (≈0,16 s), dans la direction appuyée, indépendamment de l'orientation du personnage. Le dash n'est disponible qu'au sol, depuis `idle`/`walk`, et un cooldown `DASH_COOLDOWN_FRAMES` (0,5 s) empêche de l'enchaîner en boucle. Comme les autres actions engagées (attaque, saut), il se déroule jusqu'au bout sans annulation anticipée, mais reste interrompu par une touche subie comme n'importe quel autre état. Aucun sprite dédié : le rendu réutilise l'animation `walk` (voir `Renderer.animation_key`) pendant que le corps se déplace vite. Réservé au joueur humain (`HumanController`) ; l'IA ne l'utilise pas.
+
+### 4.10 Endurance (stamina) et fatigue
+
+**Problème corrigé.** Avant ce système, `HITSTUN_FRAMES` était une constante globale (0,5s = 30 frames) appliquée à toute attaque qui touchait, poing ou pied. Or un cycle complet de pied (`startup_frames + active_frames + recovery_frames`) ne durait qu'environ 27-29 frames — *plus court* que le hitstun qu'il infligeait. Résultat : dès qu'un combattant acculé dans un coin (sans place pour reculer) se faisait toucher une fois, l'attaquant avait toujours fini de récupérer avant que le défenseur ne sorte du hitstun, et pouvait relancer un coup indéfiniment — un enchaînement imparable, quel que soit le niveau du joueur. Le passage à un `hitstun_frames` propre à chaque attaque (4.2) plus courant que son propre cycle attaque+récupération règle déjà la majorité du problème ; l'endurance ajoute une seconde ligne de défense qui s'aggrave avec l'agressivité soutenue.
+
+**Mécanique.** Chaque combattant a `Fighter.stamina` (flottant, 0 à `MAX_STAMINA`=100) :
+
+- coûte `STAMINA_COST_PUNCH` (6) pour un poing, `STAMINA_COST_KICK` (16) pour un pied, `STAMINA_COST_RANGED` (12) pour une attaque à distance — prélevé au lancement du coup (`Fighter.start_attack`/`start_ranged_attack`) ;
+- coûte `STAMINA_COST_BLOCK` (8) au défenseur à chaque coup ou projectile effectivement bloqué (`Fighter.receive_attack`/`receive_projectile_hit`) ;
+- se régénère de `STAMINA_REGEN_PER_FRAME` (0,35/frame) uniquement quand l'état n'est ni `ATTACK`, ni `RANGED_ATTACK`, ni `HITSTUN`, ni `BLOCKSTUN` — un blocage maintenu sans subir de coup compte comme neutre et régénère ;
+- toujours bornée à `[0, MAX_STAMINA]`.
+
+**Effet (fatigue).** La stamina ne bloque aucune action directement. À chaque lancement d'attaque, `Fighter.start_attack` calcule une pénalité de récupération proportionnelle à la fatigue déjà accumulée *avant* ce coup :
+
+```
+extra_recovery = round(recovery_frames * FATIGUE_MAX_RECOVERY_PENALTY * (1 - stamina/MAX_STAMINA))
+```
+
+À pleine stamina, `extra_recovery=0` (aucun changement). À stamina nulle, la récupération est doublée (`FATIGUE_MAX_RECOVERY_PENALTY=1.0`, un coefficient heuristique à recalibrer via les logs de combat comme les valeurs de `attacks.py`). Cette pénalité est figée sur l'`ActiveAttack` au moment du lancement (`extra_recovery_frames`) et s'ajoute à `total_frames` pour déterminer la fin réelle du coup (`ActiveAttack.is_finished`) — le `startup`/`active` (donc le timing du hit) ne change pas, seule la traîne de récupération s'allonge.
+
+Un attaquant qui enchaîne les pieds sans relâche épuise vite sa stamina (16/coup) et voit sa propre récupération grimper à chaque coup suivant, ouvrant une fenêtre de plus en plus large pour le défenseur — y compris acculé dans un coin. Les poings, moins coûteux (6/coup), gardent leur identité de coup rapide et « sûr », au prix de moins de dégâts/portée (4.2).
+
+Le défenseur qui bloque beaucoup s'épuise aussi (8/blocage) : sa propre offense sera plus lente une fois la stamina basse, même s'il n'a pas attaqué — la fatigue s'applique au prochain coup lancé, quelle que soit la cause de la dépense.
+
+**Interface.** Une jauge de stamina (bleue) est affichée sous chaque barre de vie (`Renderer.draw_health_bar`). Le journal de combat (`combat_log.py`) inclut la stamina courante de l'attaquant/du défenseur et la pénalité de fatigue (`fatigue+Nf`) dans le détail des lignes `attaque`/`blocage`/`tir_distance`, pour permettre le même type d'analyse a posteriori que le rééquilibrage des poings.
+
+L'IA n'a aucune conscience de la stamina dans ses décisions (`ai.py` inchangé) : elle y est simplement soumise comme le joueur, au niveau mécanique.
 
 ## 5. IA
 
@@ -192,6 +227,12 @@ Touche `Tab` (menu ou en match) : bascule `Game.demo_mode`. Quand actif, le comb
 
 En mode démo, les noms affichés (`Fighter.name`) passent de `PLAYER`/`CPU` à `CPU 1`/`CPU 2` (mis à jour dans `Game.reset_round()`), ce qui se répercute automatiquement dans les barres de vie, le journal de combat et le message de victoire.
 
+### 5.6 Mode graphique HD (bêta)
+
+Touche `G` (menu ou en match) : bascule `Game.hd_mode`, propagé à `Renderer.set_hd_mode()`. Contrairement au mode démo, c'est un pur changement d'affichage (`Renderer.sprite_sets["hd" if hd_mode else "ld"][fighter.fighter_id]`) : aucune remise à zéro du round n'est nécessaire, le `fighter_id` logique (utilisé pour le son et les projectiles) ne change pas, seul le pack de sprites lu change.
+
+Les deux variantes sont préchargées au démarrage (`Renderer.__init__`), donc basculer avec `G` est instantané. Le pack HD (`assets/fighters/hd/`, généré par VLM à partir de planches de référence) est un *proof of concept* avec 46 images par personnage sur les ~100 prévues à terme : `punch_low`, `kick_low` et `block_low` n'existent pas encore côté HD (les versions accroupies `crouch_punch_low`/`crouch_kick_low` si). `FighterSpriteSet.get_frame()` retombe sur `idle` pour toute clé manquante — la logique de dégâts/hitbox/timing de l'attaque reste inchangée, seule la pose affichée est temporairement l'idle. Le pack shinobi HD est assemblé à partir de deux sources : un manifest de base (`manifest.json`) et un manifest d'extension (`extension_manifest_high_actions.json`, actions hautes) fusionnés par le même mécanisme que les packs LD.
+
 ## 6. Architecture logicielle
 
 ### `game.py`
@@ -212,11 +253,12 @@ Responsabilités :
 Responsabilités :
 
 - état du combattant ;
-- mouvement ;
+- mouvement, dash ;
 - saut, double saut/salto ;
 - accroupissement (hurtbox réduite) ;
 - attaque, attaque à distance ;
-- hitstun/blockstun ;
+- hitstun (propre à chaque coup)/blockstun ;
+- endurance (stamina) : coût par coup/blocage, régénération neutre, pénalité de fatigue sur la récupération (4.10) ;
 - calcul hitbox/hurtbox ;
 - réception des coups (mêlée et projectiles).
 
@@ -257,9 +299,11 @@ Responsabilités :
 
 Responsabilités :
 
-- chargement des packs de sprites (`assets/fighters/`) et fusion des manifests d'extension ;
+- chargement des packs de sprites (`assets/fighters/<ld|hd>/<id>/`) et fusion des manifests d'extension ;
 - chargement des sprites de projectiles (`assets/projectiles/`) ;
-- lecture des animations (fps, boucle) et mise en cache du flip horizontal.
+- lecture des animations (fps, boucle) et mise en cache du flip horizontal ;
+- repli automatique sur l'animation `idle` pour toute clé absente du manifest actif (utilisé par le pack HD, encore incomplet — voir 5.6) ;
+- lissage inter-images : `AnimationClip.frame_at()` retourne un fondu enchaîné (alpha-dissolve) entre l'image courante et la suivante au lieu d'un cut sec, proportionnel à la progression vers l'image suivante (y compris au bouclage fin→début d'une animation en loop). Ce n'est pas une interpolation de mouvement (les poses ne se déplacent pas, elles se surimpriment en fondu), mais ça adoucit le rendu des animations à peu d'images clés (packs HD notamment). Les images fondues sont des surfaces temporaires : non mises en cache par id() (fuite/collision garantie sinon), retournées telles quelles à chaque appel.
 
 ### `audio.py`
 

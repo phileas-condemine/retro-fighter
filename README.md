@@ -25,15 +25,17 @@ Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/P
 - Adversaire contrôlé par IA.
 - 4 modes IA : sparring, facile, moyen, difficile.
 - Déplacement latéral.
+- Dash : double appui rapide sur gauche/droite pour un déplacement bref et très rapide.
 - Saut.
 - Coup de poing et coup de pied.
 - Trois hauteurs d'attaque : haut, milieu, bas.
 - Blocage maintenu avec trois hauteurs : haut, milieu, bas.
 - Différence poing/pied :
-  - poing : plus rapide, moins de portée, moins de dégâts ;
-  - pied : plus lent, plus de portée, plus de dégâts.
-- Hitstun : un personnage touché est interrompu et ne peut plus attaquer pendant 0,5 seconde (le premier coup qui touche prend l'avantage).
+  - poing : plus rapide, moins de portée, moins de dégâts, récupération courte ;
+  - pied : plus lent, plus de portée, plus de dégâts, récupération nettement plus longue (voir [Modifier l'équilibrage](#modifier-léquilibrage)).
+- Hitstun : un personnage touché est interrompu et ne peut plus agir, pour une durée propre à chaque coup (poing plus court, pied plus long — voir [Modifier l'équilibrage](#modifier-léquilibrage)).
 - Blockstun : un personnage qui bloque correctement subit un court blocage, sans dégât.
+- Endurance (stamina) : jauge sous la barre de vie, dépensée en attaquant/bloquant, qui ralentit la récupération d'un combattant fatigué (voir [Endurance (stamina)](#endurance-stamina)).
 - Accroupissement (`↓` seul au sol) : hurtbox à mi-hauteur, esquive les coups hauts et les projectiles à hauteur d'épaules.
 - Double saut avec salto : passe par-dessus l'adversaire (ou un projectile assez haut) et inverse les côtés.
 - Attaque à distance par personnage : shuriken (shinobi) et boule d'énergie rose (rose_kunoichi).
@@ -43,6 +45,7 @@ Build web généré par [Pygbag](https://github.com/pygame-web/pygbag) (Python/P
 - Menu de sélection du niveau d'IA.
 - 5 arènes en fond, tirée au hasard à chaque nouveau round (voir [Arènes](#arènes)).
 - Mode démo IA vs IA (`Tab`), même niveau de difficulté des deux côtés (voir [Modes IA](#modes-ia)).
+- Mode graphique HD (bêta, `G`) : sprites générés par VLM en alternative aux sprites LD dessinés à la main (voir [Personnages](#personnages)).
 - Journal de combat détaillé, un fichier horodaté par combat (voir [Journaux de combat](#journaux-de-combat)).
 
 ## Installation
@@ -138,6 +141,7 @@ Disposition pensée pour AZERTY et QWERTY : poing/pied/blocage/distance occupent
 | Action | Touche (AZERTY) | Touche (QWERTY) |
 |---|---|---|
 | Déplacement gauche/droite | Flèches gauche/droite | Flèches gauche/droite |
+| Dash | Flèche gauche/droite en double appui rapide | Flèche gauche/droite en double appui rapide |
 | Viser haut | Flèche haut maintenue | Flèche haut maintenue |
 | Viser bas | Flèche bas maintenue | Flèche bas maintenue |
 | Viser milieu | aucune flèche haut/bas | aucune flèche haut/bas |
@@ -151,6 +155,7 @@ Disposition pensée pour AZERTY et QWERTY : poing/pied/blocage/distance occupent
 | Reset round | R | R |
 | Afficher/cacher hitboxes | H | H |
 | Mode démo (IA vs IA) | Tab | Tab |
+| Mode graphique HD/LD (bêta) | G | G |
 | Quitter | Échap | Échap |
 
 ### Hauteur des attaques et blocs
@@ -170,20 +175,35 @@ Disposition pensée pour AZERTY et QWERTY : poing/pied/blocage/distance occupent
 
 En l'air, une fois le premier saut lancé, `Espace` déclenche un second saut avec une animation de salto, tant qu'il n'a pas déjà été utilisé depuis l'atterrissage.
 
+## Endurance (stamina)
+
+Avant ce système, un combattant acculé dans un coin (sans place pour reculer) qui se faisait toucher une fois pouvait se faire enchaîner indéfiniment par des coups de pied répétés : le hitstun (durée d'interruption après un coup reçu) était une constante globale de 0,5s, plus longue que le cycle complet d'un coup de pied — l'attaquant avait donc toujours fini de récupérer avant que le défenseur puisse agir. Deux changements corrigent ça :
+
+1. Le hitstun est maintenant propre à chaque coup (poing : 16 frames ≈ 0,27s ; pied : 26 frames ≈ 0,43s), et toujours plus court que le cycle complet du coup qui l'inflige — un vrai créneau d'action existe désormais entre deux coups, même dos au mur.
+2. Une jauge d'endurance (stamina, 0-100, affichée en bleu sous la barre de vie) : chaque poing coûte 6, chaque pied 16, chaque blocage subi 8, chaque attaque à distance 12. Elle ne se régénère que lorsqu'on n'attaque pas et qu'on ne subit pas de coup (rester neutre, y compris en garde, suffit). Plus elle est basse, plus la récupération du prochain coup lancé s'allonge (jusqu'à doubler à 0 de stamina) : un attaquant qui enchaîne les pieds sans relâche finit par ralentir de lui-même, ce qui laisse une vraie fenêtre pour s'échapper ou contre-attaquer, même acculé.
+
+Ce sont des valeurs heuristiques de départ (`retro_fighter/config.py` : `STAMINA_COST_PUNCH`, `STAMINA_COST_KICK`, `STAMINA_COST_BLOCK`, `STAMINA_COST_RANGED`, `STAMINA_REGEN_PER_FRAME`, `FATIGUE_MAX_RECOVERY_PENALTY`), à recalibrer avec le même type d'analyse de logs de combat que le rééquilibrage des poings (voir [Journaux de combat](#journaux-de-combat)) — les nouveaux journaux incluent la stamina courante et la pénalité de fatigue appliquée à chaque tentative d'attaque/blocage.
+
 ## Personnages
 
-Deux packs de 60 frames chacun, sous `assets/fighters/` :
+Deux personnages, chacun disponible en deux variantes graphiques sous `assets/fighters/<variante>/<personnage>/` :
 
-| Côté | Personnage | Dossier |
-|---|---|---|
-| Joueur (gauche par défaut) | Rose Kunoichi | `assets/fighters/rose_kunoichi/` |
-| CPU (droite par défaut) | Shinobi | `assets/fighters/shinobi/` |
+| Côté | Personnage | Dossier LD | Dossier HD |
+|---|---|---|---|
+| Joueur (gauche par défaut) | Rose Kunoichi | `assets/fighters/ld/rose_kunoichi/` | `assets/fighters/hd/rose_kunoichi/` |
+| CPU (droite par défaut) | Shinobi | `assets/fighters/ld/shinobi/` | `assets/fighters/hd/shinobi/` |
 
 Chaque pack fournit un `manifest.json` (animations, FPS, boucle, ancre) consommé par `retro_fighter/sprites.py`. Les frames sont dessinées orientées vers la droite ; le personnage de droite (ou tout personnage qui change de côté, par exemple via le double saut) est simplement retourné à l'affichage (`pygame.transform.flip`) selon `fighter.facing`, sans copie miroir séparée sur disque.
 
-Chaque pack a aussi un ou plusieurs fichiers `extension_manifest*.json` (accroupissement, salto, charge/lancer à distance, attaques basses depuis l'accroupi) fusionnés automatiquement au chargement par `FighterSpriteSet` (voir `assets/extension_pack_docs/*/docs/MANIFEST_MERGE.md`).
+Chaque pack a aussi un ou plusieurs fichiers `extension_manifest*.json` (accroupissement, salto, charge/lancer à distance, attaques basses depuis l'accroupi, actions hautes pour le pack HD du shinobi) fusionnés automatiquement au chargement par `FighterSpriteSet`.
 
 Un coup de poing ou de pied bas déclenché depuis l'accroupi (`↓` maintenu) garde une pose accroupie (`crouch_punch_low`/`crouch_kick_low`) plutôt que de se relever puis se rebaisser visuellement ; les dégâts/timing restent ceux de l'attaque basse standard (`attacks.py`), seule la pose change.
+
+### Mode graphique HD (bêta)
+
+Touche `G` (menu ou en match) bascule entre les sprites **LD** (dessinés à la main, jeu complet d'animations) et **HD** (générés par VLM à partir de planches de référence, `assets/fighters/hd/`). Le mode HD est un *proof of concept* : les deux personnages n'ont pas encore les 100 images prévues, seulement 46 chacun. Animations manquantes en HD à ce stade : `punch_low`, `kick_low`, `block_low` (coup de poing/pied bas debout, blocage bas debout — les versions accroupies `crouch_punch_low`/`crouch_kick_low` existent, elles). `FighterSpriteSet` (dans `retro_fighter/sprites.py`) retombe automatiquement sur l'animation `idle` pour toute clé manquante dans le manifest actif, exactement comme il le ferait pour un pack LD incomplet ; les dégâts/hitbox/timing de l'attaque restent corrects, seule la pose affichée est temporairement l'idle tant que ces frames ne sont pas produites. Les deux jeux de sprites sont préchargés au démarrage, donc basculer avec `G` est instantané, y compris en plein combat.
+
+Pour adoucir le peu d'images clés par animation (surtout visible en HD), `AnimationClip.frame_at()` fait un fondu enchaîné entre l'image courante et la suivante plutôt qu'un cut sec — ce n'est pas une interpolation de mouvement, seulement un fondu, mais ça évite l'effet diaporama. Ce lissage s'applique à toutes les animations (LD et HD, combattants et projectiles), pas seulement au mode HD.
 
 ### Attaques à distance
 
@@ -252,18 +272,19 @@ En mode démo, `PLAYER`/`CPU` deviennent `CPU 1`/`CPU 2` dans les barres de vie,
 Chaque ligne est un évènement chronologique avec : temps écoulé depuis le début du round, personnage, action, distance à l'adversaire à cet instant, indicateur de succès/échec, dégâts. Évènements couverts :
 
 - déplacements (début/fin, avec direction) et arrêts ;
-- sauts, doubles sauts (salto), atterrissages ;
+- sauts, doubles sauts (salto), atterrissages, dash (avec direction) ;
 - accroupissements (début/fin) ;
-- attaques (poing/pied, hauteur) : touché, bloqué, **esquivé par accroupissement ou saut** (distinct d'un coup simplement hors de portée, qui n'est pas loggé comme esquive), ou interrompu parce que l'attaquant a lui-même été touché entre-temps ;
-- attaques à distance : tir, puis issue (touché/bloqué/esquivé/raté hors écran) ;
-- dégâts reçus, avec la durée d'incapacité (hitstun) qui en résulte ;
+- attaques (poing/pied, hauteur) : touché, bloqué, **esquivé par accroupissement ou saut** (distinct d'un coup simplement hors de portée, qui n'est pas loggé comme esquive), ou interrompu parce que l'attaquant a lui-même été touché entre-temps — avec la stamina courante de l'attaquant et la pénalité de fatigue appliquée (`fatigue+Nf`), le cas échéant ;
+- attaques à distance : tir (avec stamina), puis issue (touché/bloqué/esquivé/raté hors écran) ;
+- blocages : stamina du défenseur après le coût du blocage ;
+- dégâts reçus, avec la durée d'incapacité (hitstun) qui en résulte, propre au coup qui a touché (voir [Endurance (stamina)](#endurance-stamina)) ;
 - résultat final du combat.
 
 Exemple d'extrait :
 
 ```text
-[t=   0.90s] CPU 1    attaque        distance=  81.6px succes=OK     degats=  6  (punch_low)
-[t=   0.90s] CPU 2    degats_recus   distance=  81.6px succes=-      degats=  6  (punch_low hitstun=0.50s)
+[t=   0.90s] CPU 1    attaque        distance=  81.6px succes=OK     degats=  6  (punch_low stamina=83 fatigue+1f)
+[t=   0.90s] CPU 2    degats_recus   distance=  81.6px succes=-      degats=  6  (punch_low hitstun=0.27s)
 [t=   4.27s] CPU 2    tir_distance   distance= 100.2px succes=ECHEC  degats=  0  (Shuriken esquive (accroupi))
 [t=   4.27s] CPU 1    esquive        distance= 100.2px succes=-      degats=  0  (Shuriken (accroupi))
 ```
@@ -294,8 +315,12 @@ retro_fighter_project/
     states.py
   assets/
     fighters/
-      rose_kunoichi/
-      shinobi/
+      ld/
+        rose_kunoichi/
+        shinobi/
+      hd/
+        rose_kunoichi/
+        shinobi/
     audio/
       fighters/
         rose_kunoichi/
@@ -318,7 +343,9 @@ Exemple :
     range_px=91,
     startup_frames=9,
     active_frames=5,
-    recovery_frames=15,
+    recovery_frames=21,
+    blockstun_frames=14,
+    hitstun_frames=26,
     ...
 )
 ```
@@ -329,10 +356,9 @@ Les paramètres importants :
 - `range_px` : portée en pixels.
 - `startup_frames` : délai avant que le coup puisse toucher.
 - `active_frames` : durée pendant laquelle la hitbox est active.
-- `recovery_frames` : délai après le coup avant de pouvoir agir.
-- `blockstun_frames` : durée d'interruption après blocage.
-
-Le hitstun (durée pendant laquelle un personnage touché ne peut plus agir) n'est pas réglable par coup : il est fixe, `HITSTUN_FRAMES` dans `retro_fighter/config.py` (0,5 seconde à 60 FPS).
+- `recovery_frames` : délai après le coup avant de pouvoir agir (avant fatigue, voir [Endurance](#endurance-stamina) — un combattant fatigué récupère plus lentement).
+- `blockstun_frames` : durée d'interruption du défenseur après un blocage.
+- `hitstun_frames` : durée d'interruption du défenseur après un coup qui touche (pas bloqué). Propre à chaque coup depuis le rééquilibrage anti-corner : les pieds punissent plus longtemps que les poings (26 vs 16 frames), mais leur `recovery_frames` est aussi bien plus long, donc l'attaquant n'enchaîne jamais assez vite pour empêcher toute réaction du défenseur, même acculé dans un coin. Les coups à distance utilisent toujours le hitstun global `HITSTUN_FRAMES` (`config.py`), n'ayant pas cette distinction poing/pied.
 
 À 60 FPS, 6 frames représentent environ 0,1 seconde.
 
