@@ -40,8 +40,8 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
     ("punch", "high"): AttackDefinition(
         kind="punch",
         level="high",
-        damage=7,
-        range_px=54,
+        damage=8,
+        range_px=66,
         startup_frames=4,
         active_frames=4,
         recovery_frames=8,
@@ -52,8 +52,8 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
     ("punch", "mid"): AttackDefinition(
         kind="punch",
         level="mid",
-        damage=8,
-        range_px=58,
+        damage=9,
+        range_px=70,
         startup_frames=5,
         active_frames=4,
         recovery_frames=8,
@@ -64,8 +64,8 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
     ("punch", "low"): AttackDefinition(
         kind="punch",
         level="low",
-        damage=6,
-        range_px=50,
+        damage=7,
+        range_px=62,
         startup_frames=5,
         active_frames=4,
         recovery_frames=9,

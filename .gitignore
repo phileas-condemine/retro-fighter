@@ -19,3 +19,6 @@ build/
 
 # Per-fight combat logs (retro_fighter/combat_log.py), local play data, not source.
 logs/
+
+# Claude Code session tooling state, not part of the project.
+.claude/
