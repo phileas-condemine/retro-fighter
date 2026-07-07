@@ -54,6 +54,8 @@ git clone https://github.com/phileas-condemine/retro-fighter.git
 cd retro-fighter
 ```
 
+Choisis **une seule** des deux options ci-dessous (elles ne se combinent pas : si tu actives `.venv` toi-même avec l'option A, n'utilise pas `poetry run` par-dessus).
+
 ### Option A — venv + pip (la plus simple)
 
 Crée un environnement virtuel :
@@ -82,29 +84,28 @@ Sur macOS/Linux :
 source .venv/bin/activate
 ```
 
-Installe les dépendances :
+Une fois activé, le prompt affiche un préfixe (`(.venv)` ou similaire). Installe les dépendances :
 
 ```bash
-pip install -r requirements.txt
+python -m pip install -r requirements.txt
 ```
+
+(`python -m pip` plutôt que `pip` tout court : sur certaines installations Windows/Git Bash, `pip` n'est pas directement sur le PATH — `python -m pip` fonctionne toujours puisqu'il passe par l'interpréteur déjà trouvé.)
+
+Une fois le venv activé et les dépendances installées, lance directement `python run_game.py` (voir [Lancer le jeu](#lancer-le-jeu)) — pas besoin de Poetry.
 
 ### Option B — Poetry
 
 Le projet fournit aussi un `pyproject.toml`/`poetry.lock` (mode `package-mode = false` : ce n'est pas un package installable, juste une gestion de dépendances/venv) :
 
 ```bash
-pip install poetry   # si Poetry n'est pas déjà installé
-poetry install
+python -m pip install poetry   # si Poetry n'est pas déjà installé
+python -m poetry install
 ```
 
-Sous Windows, si l'exécutable `poetry` est bloqué par une politique de sécurité (Application Control Policy), passe par le module :
+`python -m poetry` plutôt que `poetry` tout court pour la même raison que `pip` ci-dessus (exécutable pas toujours sur le PATH, notamment en Git Bash sous Windows) ; ça fonctionne aussi bien sous PowerShell/cmd (remplacer `python` par `py` si besoin) que sous Git Bash/macOS/Linux.
 
-```powershell
-py -m pip install poetry
-py -m poetry install
-```
-
-Toutes les commandes ci-dessous (`python run_game.py`, etc.) s'utilisent alors préfixées par `poetry run`, par exemple `poetry run python run_game.py`, ou depuis un shell activé avec `poetry shell` (`poetry env activate` puis la commande affichée, sur les versions récentes de Poetry).
+Avec Poetry, ne pas activer `.venv` toi-même : préfixe chaque commande par `python -m poetry run`, par exemple `python -m poetry run python run_game.py`.
 
 ## Lancer le jeu
 
