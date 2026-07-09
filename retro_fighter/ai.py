@@ -23,18 +23,24 @@ class AIDifficultyConfig:
     cooldown_min: int
     cooldown_max: int
     ranged_chance: float
+    grab_chance: float
 
 
 DIFFICULTY = {
-    "sparring": AIDifficultyConfig(999, 0.0, 0.0, 0.0, 0.0, 95, 1.0, 90, 140, 0.0),
-    "easy": AIDifficultyConfig(28, 0.30, 0.22, 0.38, 0.04, 88, 0.48, 42, 86, 0.05),
-    "medium": AIDifficultyConfig(14, 0.52, 0.55, 0.68, 0.08, 92, 0.22, 24, 55, 0.12),
-    "hard": AIDifficultyConfig(6, 0.76, 0.78, 0.88, 0.11, 97, 0.08, 12, 32, 0.18),
+    "sparring": AIDifficultyConfig(999, 0.0, 0.0, 0.0, 0.0, 95, 1.0, 90, 140, 0.0, 0.0),
+    "easy": AIDifficultyConfig(28, 0.30, 0.22, 0.38, 0.04, 88, 0.48, 42, 86, 0.05, 0.05),
+    "medium": AIDifficultyConfig(14, 0.52, 0.55, 0.68, 0.08, 92, 0.22, 24, 55, 0.12, 0.16),
+    "hard": AIDifficultyConfig(6, 0.76, 0.78, 0.88, 0.11, 97, 0.08, 12, 32, 0.18, 0.30),
 }
 
 RANGED_COOLDOWN_MIN = 90
 RANGED_COOLDOWN_MAX = 150
 RANGED_MIN_DISTANCE = 180
+# Center-to-center distance, not range_px: like in_punch_range/in_kick_range
+# below, the real "close enough" threshold sits well above the hitbox's own
+# range_px (50) once both fighters' body widths are accounted for. Tuned
+# against actual play distance, not derived from range_px directly.
+GRAB_RANGE = 74
 
 
 class AIController:
@@ -98,6 +104,13 @@ class AIController:
             block_level = incoming_level if self.rng.random() < cfg.correct_block_chance else self.random_level(exclude=incoming_level)
             return Command(move_axis=0, aim_level=block_level, block=True)
 
+        # Grabs are unblockable, so a turtling opponent is exactly what they're
+        # for — go for the throw instead of a normal (blockable) attack.
+        if (opponent.state == FighterState.BLOCK and me.on_ground and distance < GRAB_RANGE
+                and self.attack_cooldown == 0 and self.rng.random() < cfg.grab_chance):
+            self.attack_cooldown = self.rng.randint(cfg.cooldown_min, cfg.cooldown_max)
+            return Command(attack="grab")
+
         # Punish when the opponent is recovering close enough.
         if opponent.state == FighterState.ATTACK and opponent.attack and opponent.attack.definition.recovery_frames > 0:
             if opponent.attack.frame > opponent.attack.definition.startup_frames + opponent.attack.definition.active_frames:
@@ -123,8 +136,18 @@ class AIController:
 
         in_punch_range = distance < 86
         in_kick_range = distance < 126
+        in_grab_range = distance < GRAB_RANGE
         if self.attack_cooldown == 0 and in_kick_range and self.rng.random() < cfg.attack_chance:
-            command = self.choose_attack(distance, cfg, punish=False)
+            if in_grab_range and self.rng.random() < cfg.grab_chance:
+                # Mixup: also reach for the grab as a normal close-range
+                # option, not only as a dedicated anti-block punish (see the
+                # opponent.state == BLOCK check above) — otherwise it'd only
+                # ever come out during the brief window an opponent happens
+                # to be actively blocking, which barely ever lines up.
+                self.attack_cooldown = self.rng.randint(cfg.cooldown_min, cfg.cooldown_max)
+                command = Command(attack="grab")
+            else:
+                command = self.choose_attack(distance, cfg, punish=False)
 
         return command
 

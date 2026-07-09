@@ -201,6 +201,11 @@ class Renderer:
     def animation_key(self, fighter: Fighter, sprite_set: FighterSpriteSet) -> str:
         if fighter.state == FighterState.ATTACK and fighter.attack:
             attack = fighter.attack
+            # No dedicated grab animation in any pack — it reuses the
+            # standing mid punch, per the design ask ("same graphics as a
+            # punch, but it puts them on the ground").
+            if attack.definition.kind == "grab":
+                return "punch_mid"
             # A low attack started from a crouch keeps the crouched pose
             # instead of popping up to the standing low-attack animation and
             # back down.
@@ -216,6 +221,10 @@ class Renderer:
             # one, so the walk cycle read at normal speed over a fast-moving
             # body (the existing fallback) keeps reading as a dash/slide.
             return "dash" if "dash" in sprite_set.animations else "walk"
+        if fighter.state == FighterState.KNOCKDOWN:
+            # No dedicated knockdown pose either — reuses the KO animation,
+            # per the design ask ("goes into KO position").
+            return "ko"
         # CROUCH/CROUCH_WALK/DOUBLE_JUMP/idle/walk/jump/hitstun/ko all resolve
         # directly since their enum value already matches the animation key.
         return fighter.state.value
@@ -257,6 +266,8 @@ class Renderer:
             state_text = fighter.attack.definition.label
         elif fighter.state == FighterState.RANGED_ATTACK and fighter.ranged_attack:
             state_text = fighter.ranged_attack.definition.display_name
+        elif fighter.state == FighterState.KNOCKDOWN:
+            state_text = "à terre"
         label = self.small_font.render(state_text, True, fighter.color)
         self.screen.blit(label, label.get_rect(center=(frame_rect.centerx, frame_rect.top - 6)))
 
@@ -326,7 +337,7 @@ class Renderer:
         if game.demo_mode:
             controls = "Mode démo : IA vs IA | Tab repasser en Joueur vs IA | R reset | P pause | H hitboxes"
         else:
-            controls = "Q/A poing | S pied | D blocage | Bas accroupi | F distance | Espace saut/salto | C changer perso | H hitboxes"
+            controls = "Q/A poing | S pied | E saisie | D blocage | Bas accroupi | F distance | Espace saut/salto | C changer perso | H hitboxes"
         control_surf = self.small_font.render(controls, True, COLOR_MUTED)
         control_rect = control_surf.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 24))
         self.draw_backdrop(control_rect.inflate(28, 14))
@@ -361,9 +372,11 @@ class Renderer:
         pygame.draw.rect(self.screen, color, fill, border_radius=4)
 
         # Stamina bar: thinner, directly under health. Spent by attacking
-        # and by absorbing a blocked hit; low stamina doesn't show here as a
-        # separate warning color, its effect (slower recovery) is on the
-        # fighter that owns it, not something the opponent needs flagged.
+        # and by absorbing a blocked hit; below the fatigue threshold it
+        # turns yellow/red to warn that this fighter's own attacks will now
+        # recover (endlag) more slowly the lower it gets — see the
+        # "essoufflé : récupération +Xs" message logged when that penalty
+        # actually bites (game.py apply_hits).
         stamina_y = y + height + 6
         stamina_height = 10
         stamina_ratio = max(0.0, fighter.stamina / MAX_STAMINA)
@@ -375,7 +388,8 @@ class Renderer:
             stamina_fill = pygame.Rect(x + width - stamina_fill_w, stamina_y, stamina_fill_w, stamina_height)
         else:
             stamina_fill = pygame.Rect(x, stamina_y, stamina_fill_w, stamina_height)
-        pygame.draw.rect(self.screen, COLOR_BLUE, stamina_fill, border_radius=3)
+        stamina_color = COLOR_BLUE if stamina_ratio > 0.45 else COLOR_YELLOW if stamina_ratio > 0.20 else COLOR_RED
+        pygame.draw.rect(self.screen, stamina_color, stamina_fill, border_radius=3)
 
         name = self.font.render(f"{fighter.name}  {fighter.health}/{MAX_HEALTH}", True, COLOR_WHITE)
         name_y = stamina_y + stamina_height + 8

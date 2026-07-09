@@ -62,6 +62,8 @@ class HumanController:
                 attack = "punch"
             elif event.key == self.controls.kick:
                 attack = "kick"
+            elif event.key == self.controls.grab:
+                attack = "grab"
             elif event.key == self.controls.jump:
                 jump = True
             elif event.key == self.controls.ranged:

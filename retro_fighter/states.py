@@ -23,3 +23,8 @@ class FighterState(str, Enum):
     # No dedicated sprite; the renderer plays the "walk" animation faster
     # while this state is active (see Renderer.animation_key).
     DASH = "dash"
+    # A landed grab: no sprite of its own either, the renderer reuses the
+    # "ko" pose/animation (Renderer.animation_key) since a knocked-down
+    # fighter looks the same either way; unlike KO the round doesn't end,
+    # state_timer just counts down (Fighter.update_stun) back to IDLE.
+    KNOCKDOWN = "knockdown"

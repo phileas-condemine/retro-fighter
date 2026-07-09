@@ -66,23 +66,36 @@ BODY_PUSHBACK = 1.8
 # projectile hits, which don't have a per-move definition of their own.
 HITSTUN_FRAMES = round(FPS * 0.5)
 
-# Stamina/endurance: spent by attacking and by absorbing a blocked hit,
-# regenerated only while neutral (not mid-attack, not stunned). It doesn't
-# gate actions outright — instead, low stamina proportionally lengthens the
-# fatigued fighter's own attack recovery (see Fighter.start_attack), so an
-# all-out attacker eventually slows down and gives a cornered opponent a
-# real window to escape or punish instead of being comboed indefinitely.
-# Heuristic starting values, meant to be tuned from combat log data like the
-# attack numbers in attacks.py.
+# Stamina/endurance: spent by attacking, jumping, and absorbing a blocked
+# hit. Regen/drain each frame depends on what the fighter is doing right now
+# (see Fighter.update): idle or crouching (fully stationary) recovers
+# fastest, walking recovers slowly, and everything else -- jumping, dashing,
+# holding block, attacking/recovering, being stunned -- burns stamina
+# instead of restoring it. It doesn't gate actions outright -- instead, low
+# stamina proportionally lengthens the fatigued fighter's own attack
+# recovery and softens their damage (see Fighter.start_attack), so an
+# all-out attacker eventually slows down and hits softer, giving a cornered
+# opponent a real window to escape or punish instead of being comboed
+# indefinitely. Heuristic starting values, meant to be tuned from combat log
+# data like the attack numbers in attacks.py.
 MAX_STAMINA = 100.0
 STAMINA_COST_PUNCH = 6.0
 STAMINA_COST_KICK = 16.0
 STAMINA_COST_BLOCK = 8.0
 STAMINA_COST_RANGED = 12.0
-STAMINA_REGEN_PER_FRAME = 0.35
+STAMINA_COST_JUMP = 8.0
+STAMINA_COST_GRAB = 18.0
+STAMINA_REGEN_IDLE_PER_FRAME = 0.45
+STAMINA_REGEN_WALK_PER_FRAME = 0.15
+STAMINA_DRAIN_ACTIVE_PER_FRAME = 0.2
 # At 0 stamina, an attack's recovery_frames are multiplied by (1 + this);
 # at full stamina, no penalty. Scales linearly with current stamina between.
 FATIGUE_MAX_RECOVERY_PENALTY = 1.0
+# At 0 stamina, a melee attack's damage is multiplied by (1 - this); at full
+# stamina, no penalty. Scales linearly with current stamina between, and is
+# frozen at the moment the attack starts (Fighter.start_attack) just like
+# the recovery penalty above.
+FATIGUE_MAX_DAMAGE_PENALTY = 0.4
 
 # Crouching (hold DOWN while grounded) halves the hurtbox height, anchored at
 # the feet, which lets it duck under high melee attacks and shoulder-level
@@ -140,6 +153,7 @@ class Controls:
     block: int
     jump: int
     ranged: int
+    grab: int
 
 
 AI_MODES = ("sparring", "easy", "medium", "hard")

@@ -82,6 +82,7 @@ class Game:
             block=pygame.K_d,
             jump=pygame.K_SPACE,
             ranged=pygame.K_f,
+            grab=pygame.K_e,
         )
         self.human_controller = HumanController(controls)
         self.ai_controller = AIController("medium")
@@ -392,8 +393,20 @@ class Game:
             self.play_sound(fighter.fighter_id, "landing", volume=0.6)
             self.play_common("landing", volume=0.5)
         if fighter.attack_started_this_frame and fighter.attack:
-            self.play_sound(fighter.fighter_id, fighter.attack.definition.kind)
+            # Grabs reuse the punch animation/voice line — there's no
+            # dedicated "grab" asset in the sound pack (or sprite pack).
+            voice_event = "punch" if fighter.attack.definition.kind == "grab" else fighter.attack.definition.kind
+            self.play_sound(fighter.fighter_id, voice_event)
             self.play_common("attack_whoosh", volume=0.35)
+            # Fatigue penalty is frozen the instant the attack starts and
+            # applies whether or not it ever connects, so tell the player
+            # right away instead of only when/if it lands.
+            if fighter.attack.extra_recovery_frames:
+                dmg_penalty_pct = round((1 - fighter.attack.damage_multiplier) * 100)
+                recovery_s = fighter.attack.extra_recovery_frames / FPS
+                self.add_message(
+                    f"{fighter.name} essoufflé : dégâts -{dmg_penalty_pct}%, récupération +{recovery_s:.2f}s"
+                )
         if fighter.ranged_attack_started_this_frame and fighter.ranged_attack:
             self.play_sound(fighter.fighter_id, "projectile_throw")
             draw_event = PROJECTILE_COMMON_SOUNDS[fighter.ranged_attack.definition.projectile_id]["draw"]
@@ -549,7 +562,8 @@ class Game:
             distance = abs(attacker.x - defender.x)
             action = f"{definition.kind}_{hit_level}"
             fatigue = attacker.attack.extra_recovery_frames if attacker.attack else 0
-            fatigue_note = f" fatigue+{fatigue}f" if fatigue else ""
+            dmg_penalty_pct = round((1 - attacker.attack.damage_multiplier) * 100) if attacker.attack else 0
+            fatigue_note = f" fatigue+{fatigue}f,-{dmg_penalty_pct}%dmg" if fatigue or dmg_penalty_pct else ""
             result = defender.receive_attack(attacker, definition, hit_level)
             if result.landed:
                 self.combat_log.log(self.frame, attacker.name, "attaque", distance,
@@ -559,8 +573,9 @@ class Game:
                 self.combat_log.log(self.frame, defender.name, "blocage", distance, success=True,
                                      detail=f"{action} stamina={defender.stamina:.0f}")
             elif result.landed:
+                downtime = definition.knockdown_frames if definition.kind == "grab" else definition.hitstun_frames
                 self.combat_log.log(self.frame, defender.name, "degats_recus", distance, damage=result.damage,
-                                     detail=f"{action} hitstun={definition.hitstun_frames / FPS:.2f}s")
+                                     detail=f"{action} {'knockdown' if definition.kind == 'grab' else 'hitstun'}={downtime / FPS:.2f}s")
             if result.message:
                 self.add_message(result.message)
             if result.landed:

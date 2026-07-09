@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from typing import Dict, Tuple
 
 HeightLevel = str  # "high", "mid", "low"
-AttackKind = str  # "punch", "kick"
+AttackKind = str  # "punch", "kick", "grab"
 
 
 @dataclass(frozen=True)
@@ -25,6 +25,10 @@ class AttackDefinition:
     hitstun_frames: int
     knockback_px: float
     label: str
+    # Grabs only: how long the defender spends knocked down (Fighter.
+    # receive_attack/FighterState.KNOCKDOWN) instead of ordinary hitstun.
+    # Zero and unused for punch/kick.
+    knockdown_frames: int = 0
 
     @property
     def total_frames(self) -> int:
@@ -115,6 +119,26 @@ ATTACKS: Dict[Tuple[AttackKind, HeightLevel], AttackDefinition] = {
         hitstun_frames=26,
         knockback_px=18,
         label="Balayage",
+    ),
+    # Grab/throw: a single move, always "mid" (Fighter.start_attack forces
+    # the level and requires being grounded — no crouching/airborne grab).
+    # Unblockable (Fighter.receive_attack skips the block check entirely for
+    # this kind) — that's its whole role, a hard answer to turtling behind
+    # block — paid for with short range, slow startup and heavy recovery, so
+    # a whiffed grab is a real punish window rather than a free mixup.
+    ("grab", "mid"): AttackDefinition(
+        kind="grab",
+        level="mid",
+        damage=10,
+        range_px=50,
+        startup_frames=11,
+        active_frames=3,
+        recovery_frames=26,
+        blockstun_frames=0,
+        hitstun_frames=0,
+        knockback_px=0,
+        label="Saisie",
+        knockdown_frames=66,  # ~1.1s at 60fps
     ),
 }
 

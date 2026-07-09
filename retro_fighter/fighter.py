@@ -18,6 +18,7 @@ from .config import (
     DASH_SPEED,
     DOUBLE_JUMP_AIR_CONTROL_SPEED,
     DOUBLE_JUMP_POSE_FRAMES,
+    FATIGUE_MAX_DAMAGE_PENALTY,
     FATIGUE_MAX_RECOVERY_PENALTY,
     GRAVITY,
     GROUND_Y,
@@ -28,10 +29,14 @@ from .config import (
     MAX_STAMINA,
     RIGHT_BOUND,
     STAMINA_COST_BLOCK,
+    STAMINA_COST_GRAB,
+    STAMINA_COST_JUMP,
     STAMINA_COST_KICK,
     STAMINA_COST_PUNCH,
     STAMINA_COST_RANGED,
-    STAMINA_REGEN_PER_FRAME,
+    STAMINA_DRAIN_ACTIVE_PER_FRAME,
+    STAMINA_REGEN_IDLE_PER_FRAME,
+    STAMINA_REGEN_WALK_PER_FRAME,
     WALK_SPEED,
 )
 from .input_manager import Command
@@ -52,8 +57,10 @@ class ActiveAttack:
     logged: bool = False
     # Fatigue penalty (see Fighter.start_attack), frozen at the moment the
     # attack starts: extra recovery frames tacked onto the definition's own,
-    # proportional to how tired the attacker already was.
+    # and a damage multiplier (<=1.0), both proportional to how tired the
+    # attacker already was.
     extra_recovery_frames: int = 0
+    damage_multiplier: float = 1.0
 
     @property
     def is_active(self) -> bool:
@@ -213,29 +220,44 @@ class Fighter:
             return
         if self.state == FighterState.BLOCK and not self.on_ground:
             return
+        if kind == "grab":
+            # Grounded only, and always the single "mid" entry — no
+            # crouching/airborne grab, no height mixup on this move.
+            if not self.on_ground:
+                return
+            level = "mid"
         definition = ATTACKS[(kind, level)]
         # Airborne attacks always aim for the head, no matter the vertical input.
         effective_level = level if self.on_ground else "high"
         started_crouching = self.state in (FighterState.CROUCH, FighterState.CROUCH_WALK)
         # Fatigue: how tired the attacker already is (before this attack's own
-        # cost below) proportionally lengthens its recovery tail. At full
-        # stamina this is 0; at 0 stamina, recovery_frames is doubled
-        # (FATIGUE_MAX_RECOVERY_PENALTY=1.0) — an exhausted attacker slows
-        # down and gives whoever they're pressuring, even cornered, a real
-        # window to escape or counter.
+        # cost below) proportionally lengthens its recovery tail and softens
+        # its damage. At full stamina neither penalty applies; at 0 stamina,
+        # recovery_frames is doubled (FATIGUE_MAX_RECOVERY_PENALTY=1.0) and
+        # damage is cut by FATIGUE_MAX_DAMAGE_PENALTY — an exhausted attacker
+        # slows down and hits softer, giving whoever they're pressuring, even
+        # cornered, a real window to escape or counter.
         stamina_fraction = self.stamina / MAX_STAMINA
         extra_recovery = round(definition.recovery_frames * FATIGUE_MAX_RECOVERY_PENALTY * (1.0 - stamina_fraction))
+        damage_multiplier = 1.0 - FATIGUE_MAX_DAMAGE_PENALTY * (1.0 - stamina_fraction)
         self.attack = ActiveAttack(
             definition=definition,
             effective_level=effective_level,
             started_crouching=started_crouching,
             extra_recovery_frames=extra_recovery,
+            damage_multiplier=damage_multiplier,
         )
         self.state = FighterState.ATTACK
         self.state_timer = 0
         self.last_attack_label = definition.label
         self.attack_started_this_frame = True
-        self.stamina = max(0.0, self.stamina - (STAMINA_COST_KICK if kind == "kick" else STAMINA_COST_PUNCH))
+        if kind == "kick":
+            attack_cost = STAMINA_COST_KICK
+        elif kind == "grab":
+            attack_cost = STAMINA_COST_GRAB
+        else:
+            attack_cost = STAMINA_COST_PUNCH
+        self.stamina = max(0.0, self.stamina - attack_cost)
         # Small forward commitment: it makes kicks feel weightier.
         if kind == "kick" and self.on_ground:
             self.x += 2.0 * self.facing
@@ -266,6 +288,7 @@ class Fighter:
             self.state_timer = 0
             self.jumps_used = 1
             self.jump_started_this_frame = True
+            self.stamina = max(0.0, self.stamina - STAMINA_COST_JUMP)
         elif not self.on_ground and self.state == FighterState.JUMP and self.jumps_used < 2:
             # Double jump: a salto pose for a fixed duration, then falls back
             # to the regular jump pose. Enough extra height and airtime to
@@ -276,6 +299,7 @@ class Fighter:
             self.double_jump_frame = 0
             self.jumps_used = 2
             self.jump_started_this_frame = True
+            self.stamina = max(0.0, self.stamina - STAMINA_COST_JUMP)
 
     def start_dash(self, direction: int) -> None:
         if self.dash_cooldown > 0:
@@ -345,14 +369,20 @@ class Fighter:
 
         self.update_facing(opponent)
 
-        # Stamina only regenerates while neutral — not mid-attack/mid-throw,
-        # not stunned. Holding a block stance without getting hit counts as
-        # neutral (only absorbing an actual hit costs stamina, see
-        # receive_attack/receive_projectile_hit).
-        if self.state not in (FighterState.ATTACK, FighterState.RANGED_ATTACK, FighterState.HITSTUN, FighterState.BLOCKSTUN):
-            self.stamina = min(MAX_STAMINA, self.stamina + STAMINA_REGEN_PER_FRAME)
+        # Stamina regen/drain depends on what's happening this frame: standing
+        # still or crouching recovers fastest, walking recovers slowly, and
+        # everything else — jumping, dashing, holding block, attacking or
+        # recovering from one, being stunned — actively burns stamina instead
+        # (on top of any one-off cost the action already paid when it
+        # started, e.g. STAMINA_COST_PUNCH/STAMINA_COST_JUMP above).
+        if self.state in (FighterState.IDLE, FighterState.CROUCH):
+            self.stamina = min(MAX_STAMINA, self.stamina + STAMINA_REGEN_IDLE_PER_FRAME)
+        elif self.state in (FighterState.WALK, FighterState.CROUCH_WALK):
+            self.stamina = min(MAX_STAMINA, self.stamina + STAMINA_REGEN_WALK_PER_FRAME)
+        else:
+            self.stamina = max(0.0, self.stamina - STAMINA_DRAIN_ACTIVE_PER_FRAME)
 
-        if self.state in {FighterState.HITSTUN, FighterState.BLOCKSTUN}:
+        if self.state in {FighterState.HITSTUN, FighterState.BLOCKSTUN, FighterState.KNOCKDOWN}:
             self.update_stun()
             self.apply_physics()
             return
@@ -492,8 +522,29 @@ class Fighter:
             self.jumps_used = 0
 
     def receive_attack(self, attacker: "Fighter", attack: AttackDefinition, hit_level: HeightLevel) -> HitResult:
-        if self.is_ko:
+        if self.is_ko or self.state == FighterState.KNOCKDOWN:
             return HitResult(False, False, 0, "")
+
+        if attack.kind == "grab":
+            # Unblockable by design (that's the whole point of a grab) and
+            # resolved separately from the punch/kick hit/block branch below:
+            # instead of ordinary hitstun, the defender goes down for
+            # knockdown_frames (Fighter.update_stun counts it down like any
+            # other stun, back to IDLE).
+            damage_multiplier = attacker.attack.damage_multiplier if attacker.attack else 1.0
+            damage = min(self.health, round(attack.damage * damage_multiplier))
+            self.health -= damage
+            self.attack = None
+            self.ranged_attack = None
+            self.state = FighterState.KNOCKDOWN
+            self.state_timer = attack.knockdown_frames
+            self.vel_x = 0.0
+            message = f"{attacker.name}: {attack.label} -> {self.name} au sol ({damage} dégâts)"
+            if self.health <= 0:
+                self.health = 0
+                self.state = FighterState.KO
+                message += f" | {self.name} KO"
+            return HitResult(True, False, damage, message)
 
         blocked = self.state == FighterState.BLOCK and self.block_level == hit_level
         if blocked:
@@ -504,7 +555,8 @@ class Fighter:
             message = f"{self.name} bloque {HEIGHT_LABELS[hit_level]} (0 dégât)"
             return HitResult(True, True, 0, message)
 
-        damage = min(self.health, attack.damage)
+        damage_multiplier = attacker.attack.damage_multiplier if attacker.attack else 1.0
+        damage = min(self.health, round(attack.damage * damage_multiplier))
         self.health -= damage
         self.attack = None
         self.ranged_attack = None
@@ -524,7 +576,7 @@ class Fighter:
         return HitResult(True, False, damage, message)
 
     def receive_projectile_hit(self, attacker: "Fighter", damage: int) -> HitResult:
-        if self.is_ko:
+        if self.is_ko or self.state == FighterState.KNOCKDOWN:
             return HitResult(False, False, 0, "")
 
         blocked = self.state == FighterState.BLOCK and self.block_level in ("high", "mid")
