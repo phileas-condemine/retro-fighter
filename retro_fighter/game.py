@@ -92,7 +92,7 @@ class Game:
         # internally rather than taking it from the Fighter it controls.
         self.player_ai_controller = AIController("medium")
         self.demo_mode = False
-        self.hd_mode = False
+        self.graphics_variant = "ld"  # "ld" -> "hd" -> "v2", cycled by the G key
 
         self.player = Fighter("PLAYER", x=260, color=COLOR_BLUE, fighter_id="rose_kunoichi", is_human=True)
         self.enemy = Fighter("CPU", x=764, color=COLOR_RED, fighter_id="shinobi", is_human=False)
@@ -134,7 +134,7 @@ class Game:
 
         if self.in_menu:
             running = self.handle_menu(events, running)
-            self.renderer.draw_menu(self.menu_index, self.demo_mode, self.hd_mode)
+            self.renderer.draw_menu(self.menu_index, self.demo_mode, self.graphics_variant)
             pygame.display.flip()
             return running
 
@@ -168,7 +168,9 @@ class Game:
             elif event.key == pygame.K_TAB:
                 self.toggle_demo_mode()
             elif event.key == pygame.K_g:
-                self.toggle_hd_mode()
+                self.cycle_graphics_variant()
+            elif event.key == pygame.K_c:
+                self.swap_fighter()
         return running
 
     def handle_global_events(self, events: list[pygame.event.Event], running: bool) -> bool:
@@ -197,7 +199,9 @@ class Game:
             elif event.key == pygame.K_TAB:
                 self.toggle_demo_mode()
             elif event.key == pygame.K_g:
-                self.toggle_hd_mode()
+                self.cycle_graphics_variant()
+            elif event.key == pygame.K_c:
+                self.swap_fighter()
         return running
 
     def start_match(self, ai_mode: str) -> None:
@@ -215,11 +219,32 @@ class Game:
         if not self.in_menu:
             self.reset_round()
 
-    def toggle_hd_mode(self) -> None:
+    def cycle_graphics_variant(self) -> None:
         # Pure rendering swap (see Renderer.sprite_sets) — no round reset
-        # needed, unlike demo mode which swaps controllers.
-        self.hd_mode = not self.hd_mode
-        self.renderer.set_hd_mode(self.hd_mode)
+        # needed, unlike demo mode which swaps controllers. "v2" only has
+        # real art for some fighters so far (rose_kunoichi); Renderer.
+        # draw_fighter falls back to hd/ld per-fighter for the rest.
+        order = ["ld", "hd", "v2"]
+        self.graphics_variant = order[(order.index(self.graphics_variant) + 1) % len(order)]
+        self.renderer.set_graphics_variant(self.graphics_variant)
+
+    def swap_fighter(self) -> None:
+        # Swaps which character PLAYER/CPU are playing (e.g. PLAYER takes
+        # Shinobi instead of Rose). Sprites, audio aliases, and projectile
+        # choice are all looked up live off Fighter.fighter_id (see
+        # assets/fighters/CONTRACT.md) with no fighter-specific branching
+        # anywhere in the engine, so swapping just the id -- not colors,
+        # names, or which Fighter instance is self.player -- is enough to
+        # fully re-skin both sides.
+        self.player.fighter_id, self.enemy.fighter_id = self.enemy.fighter_id, self.player.fighter_id
+        # Same guard as toggle_demo_mode: reset_round() would otherwise
+        # start+immediately finalize a real combat-log entry for a round
+        # that was never actually played, spamming a stray log file every
+        # time C is pressed on the pre-match menu. start_match() already
+        # calls reset_round() unconditionally once a match begins, so the
+        # swap still takes effect either way.
+        if not self.in_menu:
+            self.reset_round()
 
     def reset_round(self) -> None:
         # If a fight was in progress (e.g. R pressed mid-round), flush its log

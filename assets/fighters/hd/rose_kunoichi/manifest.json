@@ -28,10 +28,17 @@
       "frames": [
         "frames/idle_000.png",
         "frames/idle_001.png",
-        "frames/idle_002.png"
+        "frames/idle_002.png",
+        "frames/idle_003.png",
+        "frames/idle_004.png",
+        "frames/idle_005.png",
+        "frames/idle_006.png",
+        "frames/idle_007.png",
+        "frames/idle_008.png",
+        "frames/idle_009.png"
       ],
       "sheet": "sheets/idle.png",
-      "frame_count": 3,
+      "frame_count": 10,
       "fps": 8,
       "loop": true,
       "gameplay_state_hint": "idle"
@@ -40,11 +47,68 @@
       "frames": [
         "frames/walk_000.png",
         "frames/walk_001.png",
-        "frames/walk_002.png"
+        "frames/walk_002.png",
+        "frames/walk_003.png",
+        "frames/walk_004.png",
+        "frames/walk_005.png",
+        "frames/walk_006.png",
+        "frames/walk_007.png",
+        "frames/walk_008.png",
+        "frames/walk_009.png",
+        "frames/walk_010.png",
+        "frames/walk_011.png",
+        "frames/walk_012.png",
+        "frames/walk_013.png",
+        "frames/walk_014.png",
+        "frames/walk_015.png",
+        "frames/walk_016.png",
+        "frames/walk_017.png",
+        "frames/walk_018.png",
+        "frames/walk_019.png",
+        "frames/walk_020.png",
+        "frames/walk_021.png",
+        "frames/walk_022.png",
+        "frames/walk_023.png",
+        "frames/walk_024.png",
+        "frames/walk_025.png",
+        "frames/walk_026.png",
+        "frames/walk_027.png",
+        "frames/walk_028.png",
+        "frames/walk_029.png",
+        "frames/walk_030.png",
+        "frames/walk_031.png",
+        "frames/walk_032.png",
+        "frames/walk_033.png",
+        "frames/walk_034.png",
+        "frames/walk_035.png",
+        "frames/walk_036.png",
+        "frames/walk_037.png",
+        "frames/walk_038.png",
+        "frames/walk_039.png",
+        "frames/walk_040.png",
+        "frames/walk_041.png",
+        "frames/walk_042.png",
+        "frames/walk_043.png",
+        "frames/walk_044.png",
+        "frames/walk_045.png",
+        "frames/walk_046.png",
+        "frames/walk_047.png",
+        "frames/walk_048.png",
+        "frames/walk_049.png",
+        "frames/walk_050.png",
+        "frames/walk_051.png",
+        "frames/walk_052.png",
+        "frames/walk_053.png",
+        "frames/walk_054.png",
+        "frames/walk_055.png",
+        "frames/walk_056.png",
+        "frames/walk_057.png",
+        "frames/walk_058.png",
+        "frames/walk_059.png"
       ],
       "sheet": "sheets/walk.png",
-      "frame_count": 3,
-      "fps": 10,
+      "frame_count": 60,
+      "fps": 60,
       "loop": true,
       "gameplay_state_hint": "walk"
     },
@@ -63,35 +127,54 @@
       "frames": [
         "frames/punch_mid_000.png",
         "frames/punch_mid_001.png",
-        "frames/punch_mid_002.png"
+        "frames/punch_mid_002.png",
+        "frames/punch_mid_003.png",
+        "frames/punch_mid_004.png",
+        "frames/punch_mid_005.png",
+        "frames/punch_mid_006.png",
+        "frames/punch_mid_007.png",
+        "frames/punch_mid_008.png",
+        "frames/punch_mid_009.png"
       ],
       "sheet": "sheets/punch_mid.png",
-      "frame_count": 3,
-      "fps": 15,
+      "frame_count": 10,
+      "fps": 40,
       "loop": false,
       "gameplay_state_hint": "punch_mid",
-      "startup_frames": 1,
+      "startup_frames": 5,
       "active_frames": [
-        1
+        5,
+        6
       ],
-      "recovery_frames": 1
+      "recovery_frames": 3
     },
     "kick_mid": {
       "frames": [
         "frames/kick_mid_000.png",
         "frames/kick_mid_001.png",
-        "frames/kick_mid_002.png"
+        "frames/kick_mid_002.png",
+        "frames/kick_mid_003.png",
+        "frames/kick_mid_004.png",
+        "frames/kick_mid_005.png",
+        "frames/kick_mid_006.png",
+        "frames/kick_mid_007.png",
+        "frames/kick_mid_008.png",
+        "frames/kick_mid_009.png"
       ],
       "sheet": "sheets/kick_mid.png",
-      "frame_count": 3,
-      "fps": 13,
+      "frame_count": 10,
+      "fps": 18,
       "loop": false,
       "gameplay_state_hint": "kick_mid",
-      "startup_frames": 1,
+      "startup_frames": 2,
       "active_frames": [
-        1
+        2,
+        3,
+        4,
+        5,
+        6
       ],
-      "recovery_frames": 1
+      "recovery_frames": 3
     },
     "block_mid": {
       "frames": [
@@ -211,10 +294,13 @@
       "frames": [
         "frames/double_jump_salto_000.png",
         "frames/double_jump_salto_001.png",
-        "frames/double_jump_salto_002.png"
+        "frames/double_jump_salto_002.png",
+        "frames/double_jump_salto_003.png",
+        "frames/double_jump_salto_004.png",
+        "frames/double_jump_salto_005.png"
       ],
       "sheet": "sheets/double_jump_salto.png",
-      "frame_count": 3,
+      "frame_count": 6,
       "fps": 16,
       "loop": false,
       "gameplay_state_hint": "double_jump_salto"
@@ -250,34 +336,54 @@
       "frames": [
         "frames/punch_high_000.png",
         "frames/punch_high_001.png",
-        "frames/punch_high_002.png"
+        "frames/punch_high_002.png",
+        "frames/punch_high_003.png",
+        "frames/punch_high_004.png",
+        "frames/punch_high_005.png",
+        "frames/punch_high_006.png",
+        "frames/punch_high_007.png",
+        "frames/punch_high_008.png",
+        "frames/punch_high_009.png"
       ],
       "sheet": "sheets/punch_high.png",
-      "frame_count": 3,
-      "fps": 15,
+      "frame_count": 10,
+      "fps": 40,
       "loop": false,
       "gameplay_state_hint": "punch_high",
-      "startup_frames": 1,
+      "startup_frames": 5,
       "active_frames": [
-        1
+        5,
+        6
       ],
-      "recovery_frames": 1
+      "recovery_frames": 3
     },
-    "crouch_block": {
+    "block_low": {
       "frames": [
-        "frames/crouch_block_000.png"
+        "frames/block_low_000.png"
       ],
       "sheet": "sheets/crouch_block.png",
       "frame_count": 1,
       "fps": 1,
       "loop": true,
-      "gameplay_state_hint": "crouch_block"
+      "gameplay_state_hint": "block_low"
+    },
+    "dash": {
+      "frames": [
+        "frames/dash_000.png",
+        "frames/dash_001.png",
+        "frames/dash_002.png",
+        "frames/dash_003.png"
+      ],
+      "sheet": "sheets/dash.png",
+      "frame_count": 4,
+      "fps": 24,
+      "loop": false,
+      "gameplay_state_hint": "dash"
     }
   },
   "fallbacks_recommended": {
     "punch_low": "crouch_punch_low",
-    "kick_low": "crouch_kick_low",
-    "block_low": "crouch_block"
+    "kick_low": "crouch_kick_low"
   },
   "notes": [
     "The selected runtime set contains 46 frames: the 38 V1 web-safe frames plus 8 high-action/crouch-block frames.",
@@ -288,163 +394,22 @@
     {
       "set": "selected_46",
       "animation": "idle",
-      "filename": "idle_000.png",
-      "source_sheet": "sheet_01",
-      "source_panel": 1,
-      "note": "idle pose 1",
-      "pre_scale_removed_columns": [
-        310
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        137,
-        297
-      ],
+      "filename": "idle_000.png through idle_009.png",
+      "source_sheet": "chatgpt_idle_board_v2",
+      "note": "10-frame idle loop generated by ChatGPT image gen from a 5x2 green-screen reference board (using idle_000-002 v1 as style reference), then chroma-keyed and re-composited onto the standard 256x256 canvas at the pack's shared scale/anchor (height 197px, feet at y=213, centered at x=128).",
       "object_scaled_size": [
-        91,
+        "~97-103",
         197
       ],
-      "paste_xy": [
-        83,
-        17
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "idle",
-      "filename": "idle_001.png",
-      "source_sheet": "sheet_01",
-      "source_panel": 2,
-      "note": "idle pose 2",
-      "pre_scale_removed_columns": [
-        292,
-        293
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        260,
-        352
-      ],
-      "object_scaled_size": [
-        172,
-        233
-      ],
-      "paste_xy": [
-        42,
-        -19
-      ],
-      "clipped": true,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "idle",
-      "filename": "idle_002.png",
-      "source_sheet": "sheet_01",
-      "source_panel": 3,
-      "note": "idle pose 3",
-      "pre_scale_removed_columns": [
-        294
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        135,
-        295
-      ],
-      "object_scaled_size": [
-        90,
-        196
-      ],
-      "paste_xy": [
-        83,
-        18
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "clipped": false
     },
     {
       "set": "selected_46",
       "animation": "walk",
-      "filename": "walk_000.png",
-      "source_sheet": "sheet_01",
-      "source_panel": 4,
-      "note": "walk frame 1",
-      "pre_scale_removed_columns": [
-        301
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        219,
-        285
-      ],
-      "object_scaled_size": [
-        145,
-        189
-      ],
-      "paste_xy": [
-        56,
-        25
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "walk",
-      "filename": "walk_001.png",
-      "source_sheet": "sheet_01",
-      "source_panel": 5,
-      "note": "walk frame 2",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        185,
-        283
-      ],
-      "object_scaled_size": [
-        123,
-        188
-      ],
-      "paste_xy": [
-        67,
-        26
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "walk",
-      "filename": "walk_002.png",
-      "source_sheet": "sheet_01",
-      "source_panel": 6,
-      "note": "walk frame 3",
-      "pre_scale_removed_columns": [
-        309
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        199,
-        291
-      ],
-      "object_scaled_size": [
-        132,
-        193
-      ],
-      "paste_xy": [
-        62,
-        21
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "filename": "walk_000.png through walk_059.png",
+      "source_sheet": "chatgpt_walk60_board_1_through_6",
+      "note": "60-frame boxing shuffle-step walk cycle (1s at 60fps), replacing a prior 20-frame version that visibly 'tap-danced' (leg spread barely changed while the foot snapped abruptly between flat-on-ground and flexed-on-heel). Generated by ChatGPT as 6 sequential 10-panel boards, each board's first panel continuing exactly from the previous board's actual last panel (attached as a reference image extracted from that board's processed output, not a screenshot crop), covering the true mechanical sub-phases of a fixed-lead-foot shuffle: board1 front-foot heel-lift/toe-off, board2 front-foot airborne forward swing, board3 front-foot descent/landing/weight-transfer, board4 back-foot heel-lift/toe-off (mirrors board1), board5 back-foot airborne swing catching up (mirrors board2), board6 back-foot descent/landing/settle back to the board1-starting neutral guard pose (closing the loop). Front foot and back foot never swap. Board2's first attempt produced a static double-stance with no airborne leg and was discarded/regenerated using a bent-knee lifted-leg silhouette recovered from the pre-session git history walk_001.png as a corrective reference (leg silhouette only, ignoring that old reference's arms/back-leg/overall motion); the same reference was reused proactively for board5's mirrored motion, succeeding on the first try. Chroma-keyed and re-composited onto the standard 256x256 canvas using a per-board fixed scale factor chained via boundary bbox-height ratios (each board's scale = previous board's scale times the ratio of the previous board's last-frame height to this board's first-frame height), since even with continuity-reference chaining real scale drift occurs board-to-board. Board 6 additionally had real internal scale drift within its own 10 frames (its own source images split into two clusters, ~401px and ~346px bbox height, rather than a smooth pose-based variation) likely caused by also anchoring its ending to the absolute external walk_000 reference; corrected by linearly interpolating the target composited height itself (not the scale factor) from the board5/6 seam value to the walk_000 loop-closure value across board 6's 10 frames, then solving each frame's scale from its own raw bbox height. Feet stay at anchor y=214, centered at x=128.",
+      "clipped": false
     },
     {
       "set": "selected_46",
@@ -504,181 +469,26 @@
     {
       "set": "selected_46",
       "animation": "punch_mid",
-      "filename": "punch_mid_000.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 1,
-      "note": "medium punch frame 1",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        204,
-        281
-      ],
-      "object_scaled_size": [
-        135,
-        186
-      ],
-      "paste_xy": [
-        61,
-        28
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "punch_mid",
-      "filename": "punch_mid_001.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 2,
-      "note": "medium punch frame 2",
-      "pre_scale_removed_columns": [
-        313
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        218,
-        285
-      ],
-      "object_scaled_size": [
-        145,
-        189
-      ],
-      "paste_xy": [
-        56,
-        25
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "punch_mid",
-      "filename": "punch_mid_002.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 3,
-      "note": "medium punch frame 3",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        283,
-        290
-      ],
-      "object_scaled_size": [
-        188,
-        192
-      ],
-      "paste_xy": [
-        34,
-        22
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "filename": "punch_mid_000.png through punch_mid_009.png",
+      "source_sheet": "chatgpt_punch_mid_board_v1",
+      "note": "10-frame mid punch (straight to the chest/stomach) generated by ChatGPT from a 5x2 green-screen reference board (referencing the pack's own kick_mid for target hit height and the new punch_high for contrast), replacing a prior 3-frame punch_mid. The target height itself (chest/stomach) was already correct; this only adds the intermediate frames and re-derives a clean cutout. Chroma-keyed and re-composited onto the standard 256x256 canvas using a single fixed scale factor (derived from the standing guard frame, punch_mid_000) applied to every frame; feet stay at anchor y=214, centered at x=128.",
+      "clipped": false
     },
     {
       "set": "selected_46",
       "animation": "kick_mid",
-      "filename": "kick_mid_000.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 4,
-      "note": "medium kick frame 1",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        262,
-        285
-      ],
-      "object_scaled_size": [
-        174,
-        189
-      ],
-      "paste_xy": [
-        41,
-        25
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "kick_mid",
-      "filename": "kick_mid_001.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 5,
-      "note": "medium kick frame 2",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        171,
-        297
-      ],
-      "object_scaled_size": [
-        113,
-        197
-      ],
-      "paste_xy": [
-        72,
-        17
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "kick_mid",
-      "filename": "kick_mid_002.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 6,
-      "note": "medium kick frame 3",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        214,
-        307
-      ],
-      "object_scaled_size": [
-        142,
-        204
-      ],
-      "paste_xy": [
-        57,
-        10
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "filename": "kick_mid_000.png through kick_mid_009.png",
+      "source_sheet": "chatgpt_kick_mid_board_v1",
+      "note": "10-frame front/roundhouse kick generated by ChatGPT from a 5x2 green-screen reference board (referencing the pack's own punch_mid for target hit height), replacing a prior 3-frame kick_mid that incorrectly extended the leg to head height instead of torso/stomach height. Chroma-keyed and re-composited onto the standard 256x256 canvas using a single fixed scale factor (derived from the standing guard frame, kick_mid_000) applied to every frame so the character doesn't visually zoom as the kicking leg extends/the torso leans back; feet-on-ground frames keep their foot at anchor y=214, centered at x=128.",
+      "clipped": false
     },
     {
       "set": "selected_46",
       "animation": "block_mid",
       "filename": "block_mid_000.png",
-      "source_sheet": "sheet_02",
-      "source_panel": 7,
-      "note": "standing medium block",
-      "pre_scale_removed_columns": [
-        313
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        197,
-        296
-      ],
-      "object_scaled_size": [
-        131,
-        196
-      ],
-      "paste_xy": [
-        63,
-        18
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "source_sheet": "chatgpt_block_fix_board_v1",
+      "note": "standing medium block, corrected after playtest feedback that the original pose's raised fist near the face/forehead was visually ambiguous with block_high. Generated by ChatGPT alongside the block_low fix (same 2x1 board), directed to cross/raise both forearms at chest/collarbone height with a visible height gap below block_high's face-height guard. Chroma-keyed and re-composited onto the standard 256x256 canvas using a fixed scale matched to the previous block_mid_000's composited height (196px, same standing scale, only the arm pose changed); feet stay at anchor y=214, centered at x=128.",
+      "clipped": false
     },
     {
       "set": "selected_46",
@@ -1190,77 +1000,10 @@
     {
       "set": "selected_46",
       "animation": "double_jump_salto",
-      "filename": "double_jump_salto_000.png",
-      "source_sheet": "sheet_04",
-      "source_panel": 4,
-      "note": "double jump/salto frame 1",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        172,
-        285
-      ],
-      "object_scaled_size": [
-        114,
-        189
-      ],
-      "paste_xy": [
-        71,
-        36
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "double_jump_salto",
-      "filename": "double_jump_salto_001.png",
-      "source_sheet": "sheet_04",
-      "source_panel": 5,
-      "note": "double jump/salto frame 2",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        188,
-        177
-      ],
-      "object_scaled_size": [
-        125,
-        117
-      ],
-      "paste_xy": [
-        66,
-        36
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "double_jump_salto",
-      "filename": "double_jump_salto_002.png",
-      "source_sheet": "sheet_04",
-      "source_panel": 6,
-      "note": "double jump/salto frame 3",
-      "pre_scale_removed_columns": [],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        164,
-        320
-      ],
-      "object_scaled_size": [
-        109,
-        212
-      ],
-      "paste_xy": [
-        74,
-        36
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "filename": "double_jump_salto_000.png through double_jump_salto_005.png",
+      "source_sheet": "chatgpt_salto_board_v2",
+      "note": "6-frame continuous forward somersault (launch / quarter rotation / full inversion / three-quarter rotation / opening up / landing-ready), replacing a prior 3-frame version whose first and last frames looked nearly identical (read as a bounce, not a flip) -- also brings the pack in line with DOUBLE_JUMP_POSE_FRAMES's comment in config.py, which already expected 6 frames @ 16fps. Generated by ChatGPT from a 3x2 green-screen reference board (referencing the pack's own prior salto frames and jump_000 for style/scale, with an explicit instruction to keep one consistent rotation direction and make each panel visibly distinct). Chroma-keyed and re-composited onto the standard 256x256 canvas using a single fixed scale factor (derived from frame 0's tucked-launch pose matched to the old frame 0's composited height of 189px, for visual continuity with the preceding single jump), centered at x=128 and top-anchored at y=36 -- matching the original 3-frame version's own convention of a fixed top position rather than a feet-at-anchor.y position, since mid-flip poses have no ground contact and a fixed top reads more stably than a varying bottom during the tuck/extend of a flip.",
+      "clipped": false
     },
     {
       "set": "selected_46",
@@ -1369,110 +1112,26 @@
     {
       "set": "selected_46",
       "animation": "punch_high",
-      "filename": "punch_high_000.png",
-      "source_sheet": "sheet_06",
-      "source_panel": 7,
-      "note": "high punch frame 1",
-      "pre_scale_removed_columns": [
-        313
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        207,
-        285
-      ],
-      "object_scaled_size": [
-        137,
-        189
-      ],
-      "paste_xy": [
-        60,
-        25
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "filename": "punch_high_000.png through punch_high_009.png",
+      "source_sheet": "chatgpt_punch_high_board_v1",
+      "note": "10-frame high punch (jab to the face) generated by ChatGPT from a 5x2 green-screen reference board (referencing the pack's own kick_high for the target head-height hit line), replacing a prior 3-frame punch_high that incorrectly landed at the same chest height as punch_mid. Chroma-keyed and re-composited onto the standard 256x256 canvas using a single fixed scale factor (derived from the standing guard frame, punch_high_000) applied to every frame; feet stay at anchor y=214, centered at x=128.",
+      "clipped": false
     },
     {
       "set": "selected_46",
-      "animation": "punch_high",
-      "filename": "punch_high_001.png",
-      "source_sheet": "sheet_06",
-      "source_panel": 8,
-      "note": "high punch frame 2",
-      "pre_scale_removed_columns": [
-        313
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        222,
-        275
-      ],
-      "object_scaled_size": [
-        147,
-        182
-      ],
-      "paste_xy": [
-        55,
-        32
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "animation": "dash",
+      "filename": "dash_000.png through dash_003.png",
+      "source_sheet": "chatgpt_dash_board_v1",
+      "note": "4-frame explosive forward dash burst (launch / full low horizontal extension / recovery drive / settle back to standing guard), generated by ChatGPT from a 4x1 green-screen reference board (referencing the pack's own idle/walk/block_mid/kick_mid for costume and proportions). This animation did not exist before in HD/LD; dash previously fell back to the walk cycle (see assets/fighters/CONTRACT.md). Chroma-keyed and re-composited onto the standard 256x256 canvas using a single fixed scale factor derived from panel 4 (the standing settle pose) matched to the pack's standard standing height (197px, from idle_000); panels 1-3 keep that same scale applied to their own bbox, so their shorter raw height reads as a real low forward lean rather than a scale error. Feet stay at anchor y=214, centered at x=128. fps=24 with loop=false so the 4 frames play once over ~0.167s, matching DASH_DURATION_FRAMES/FPS in config.py.",
+      "clipped": false
     },
     {
       "set": "selected_46",
-      "animation": "punch_high",
-      "filename": "punch_high_002.png",
-      "source_sheet": "sheet_06",
-      "source_panel": 9,
-      "note": "high punch frame 3",
-      "pre_scale_removed_columns": [
-        300
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        309,
-        276
-      ],
-      "object_scaled_size": [
-        205,
-        183
-      ],
-      "paste_xy": [
-        26,
-        31
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
-    },
-    {
-      "set": "selected_46",
-      "animation": "crouch_block",
-      "filename": "crouch_block_000.png",
-      "source_sheet": "sheet_05",
-      "source_panel": 9,
-      "note": "crouching block",
-      "pre_scale_removed_columns": [
-        307
-      ],
-      "pre_scale_removed_rows": [],
-      "object_original_size": [
-        183,
-        170
-      ],
-      "object_scaled_size": [
-        121,
-        113
-      ],
-      "paste_xy": [
-        68,
-        101
-      ],
-      "clipped": false,
-      "post_scale_removed_columns": [],
-      "post_scale_removed_rows": []
+      "animation": "block_low",
+      "filename": "block_low_000.png",
+      "source_sheet": "chatgpt_block_fix_board_v1",
+      "note": "Crouching low-guard, replacing the prior single 'crouch_block' frame which showed her kneeling on one knee with a fist near her face -- a resting/defeated pose, not an active low guard, and which was also never actually rendered in-game because the key 'crouch_block' didn't match what Renderer.animation_key() looks up while crouched and blocking (f'block_{{fighter.block_level}}' -> 'block_low'; see CONTRACT.md). A first replacement (2-frame idle loop) fixed the kneeling issue (both feet planted, matching crouch_idle) but playtest feedback found the arms still read as hanging down near the knees rather than actively blocking; regenerated a second time with both forearms angled up and forward to form a shield in front of the torso/hips, and simplified back to a single frame (matching block_mid/block_high's convention) since the second corrective pass only produced one pose. Chroma-keyed and re-composited onto the standard 256x256 canvas using a fixed scale matched to crouch_idle_000's composited height (111px, same crouch-depth category); feet stay at anchor y=214, centered at x=128. Note: the raw chroma-keyed source had a stray opaque border pixel within ~4px of the edge that skewed an initial bbox measurement (minX/minY landed exactly on the margin boundary) -- resolved by widening the bbox-scan margin to 10px, see the pitfall documented in HOW_TO_GENERATE_IMAGES.md.",
+      "clipped": false
     }
   ],
   "extras_mapping": [

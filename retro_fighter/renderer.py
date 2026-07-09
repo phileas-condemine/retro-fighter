@@ -20,6 +20,9 @@ from .config import (
     COLOR_TEXT,
     COLOR_WHITE,
     COLOR_YELLOW,
+    DASH_TRAIL_ALPHA_DECAY,
+    DASH_TRAIL_INITIAL_ALPHA,
+    DASH_TRAIL_MAX_COPIES,
     FPS,
     GROUND_Y,
     MAX_HEALTH,
@@ -29,7 +32,7 @@ from .config import (
 )
 from .fighter import Fighter
 from .projectiles import ActiveProjectile
-from .sprites import FighterSpriteSet, ProjectileSprite
+from .sprites import FIGHTERS_DIR, FighterSpriteSet, ProjectileSprite
 from .stages import StageBackgrounds
 from .states import FighterState
 
@@ -41,11 +44,15 @@ class Renderer:
         self.big_font = pygame.font.Font(None, 52)
         self.title_font = pygame.font.Font(None, 72)
         self.small_font = pygame.font.Font(None, 19)
-        # Two full sprite sets are preloaded so toggling HD mode (see
-        # set_hd_mode) is instant, with no load stutter mid-match. The "hd"
-        # packs are an early VLM-generated proof of concept with fewer
-        # animations than "ld" (see FighterSpriteSet's docstring); missing
-        # keys fall back to idle automatically.
+        # Full sprite sets are preloaded per variant so switching graphics
+        # (see set_graphics_variant) is instant, with no load stutter
+        # mid-match. The "hd" packs are an early VLM-generated proof of
+        # concept with fewer animations than "ld" (see FighterSpriteSet's
+        # docstring); missing keys fall back to idle automatically. "v2"
+        # (Blender-rigged, see blender/README.md) is newer still and so far
+        # only exists for some fighters -- built conditionally per fighter_id
+        # so a character without a v2 pack yet (e.g. shinobi) doesn't crash
+        # Renderer construction; draw_fighter falls back to "hd"/"ld" for those.
         self.sprite_sets = {
             "ld": {
                 "rose_kunoichi": FighterSpriteSet("rose_kunoichi", "ld"),
@@ -55,8 +62,17 @@ class Renderer:
                 "rose_kunoichi": FighterSpriteSet("rose_kunoichi", "hd"),
                 "shinobi": FighterSpriteSet("shinobi", "hd"),
             },
+            "v2": {
+                fighter_id: FighterSpriteSet(fighter_id, "v2")
+                for fighter_id in ("rose_kunoichi", "shinobi")
+                if (FIGHTERS_DIR / "v2" / fighter_id / "manifest.json").exists()
+            },
         }
-        self.hd_mode = False
+        # Which sprite_sets key draw_fighter reads from -- "ld", "hd", or
+        # "v2". The in-game G key cycles through all three (see
+        # Game.cycle_graphics_variant); set_graphics_variant is also the hook
+        # a headless script/test uses to force one directly.
+        self.graphics_variant = "ld"
         self.projectile_sprites = {
             "shuriken": ProjectileSprite("shuriken"),
             "rose_energy_ball": ProjectileSprite("rose_energy_ball"),
@@ -66,6 +82,12 @@ class Renderer:
         # Tracks (animation_key, elapsed_frames) per fighter, keyed by identity,
         # so a new animation always restarts at frame 0.
         self._anim_progress: dict[int, tuple[str, int]] = {}
+        # Dash kinetic-blur trail: a list of (ghost_surface, topleft_pos) per
+        # fighter, keyed by identity. Each ghost is a private alpha-faded
+        # copy of a past frame (never the pack's shared/cached surface, so
+        # mutating its alpha can't bleed into other draws) -- see
+        # _update_dash_trail.
+        self._dash_trail: dict[int, list[tuple[pygame.Surface, tuple[int, int]]]] = {}
 
     def set_stage_index(self, stage_index: int) -> None:
         self.stage_index = self.stage_backgrounds.normalize_index(stage_index)
@@ -73,8 +95,11 @@ class Renderer:
     def stage_name(self) -> str:
         return self.stage_backgrounds.get_name(self.stage_index)
 
-    def set_hd_mode(self, hd_mode: bool) -> None:
-        self.hd_mode = hd_mode
+    def set_graphics_variant(self, variant: str) -> None:
+        """Select which sprite_sets key draw_fighter reads from ("ld", "hd",
+        or "v2") -- used by both the in-game G-key cycle (Game.
+        cycle_graphics_variant) and headless validation/testing scripts."""
+        self.graphics_variant = variant
 
     def draw_backdrop(self, rect: pygame.Rect, alpha: int = 185, color: tuple[int, int, int] = COLOR_BG, radius: int = 10) -> None:
         """Semi-transparent panel behind text, so it stays readable over the
@@ -102,7 +127,7 @@ class Renderer:
             winner = game.player.name if game.enemy.is_ko else game.enemy.name if game.player.is_ko else "Égalité"
             self.draw_center_banner(f"{winner} gagne", "R pour recommencer | 1-4 pour changer l'IA")
 
-    def draw_menu(self, selected_index: int, demo_mode: bool = False, hd_mode: bool = False) -> None:
+    def draw_menu(self, selected_index: int, demo_mode: bool = False, graphics_variant: str = "ld") -> None:
         self.draw_background()
         title = self.title_font.render("RETRO FIGHTER", True, COLOR_TEXT)
         title_rect = title.get_rect(center=(WINDOW_WIDTH // 2, 96))
@@ -111,10 +136,10 @@ class Renderer:
         subtitle_rect = subtitle.get_rect(center=(WINDOW_WIDTH // 2, 148))
 
         mode_label = "Démo : IA vs IA" if demo_mode else "Joueur vs IA"
-        graphics_label = "HD (bêta)" if hd_mode else "LD"
+        graphics_label = {"ld": "LD", "hd": "HD (bêta)", "v2": "V2 (bêta)"}.get(graphics_variant, graphics_variant)
         demo_surf = self.font.render(
             f"Mode : {mode_label} (Tab)   |   Graphismes : {graphics_label} (G)",
-            True, COLOR_YELLOW if (demo_mode or hd_mode) else COLOR_MUTED,
+            True, COLOR_YELLOW if (demo_mode or graphics_variant != "ld") else COLOR_MUTED,
         )
         demo_rect = demo_surf.get_rect(center=(WINDOW_WIDTH // 2, 178))
 
@@ -144,7 +169,7 @@ class Renderer:
         controls = [
             "Contrôles : Gauche/Droite déplacement (double-tap = dash) | Haut/Bas hauteur | Q/A poing | S pied | D blocage | Espace saut",
             "Bas seul au sol : accroupi | F : attaque à distance | Espace en l'air : salto (double saut)",
-            "En match : 1-4 changer IA | Tab mode démo | G graphismes HD/LD | R reset | H hitboxes | P pause | Échap quitter",
+            "En match : 1-4 changer IA | Tab mode démo | G graphismes HD/LD | C changer perso | R reset | H hitboxes | P pause | Échap quitter",
             "Appuie sur Entrée ou sur 1-4 pour lancer.",
         ]
         control_surfaces = [self.small_font.render(line, True, COLOR_MUTED) for line in controls]
@@ -173,7 +198,7 @@ class Renderer:
         for x in range(-80, WINDOW_WIDTH + 80, 80):
             pygame.draw.line(self.screen, (48, 53, 69), (x, WINDOW_HEIGHT), (x + 120, GROUND_Y), 1)
 
-    def animation_key(self, fighter: Fighter) -> str:
+    def animation_key(self, fighter: Fighter, sprite_set: FighterSpriteSet) -> str:
         if fighter.state == FighterState.ATTACK and fighter.attack:
             attack = fighter.attack
             # A low attack started from a crouch keeps the crouched pose
@@ -187,9 +212,10 @@ class Renderer:
         if fighter.state in (FighterState.BLOCK, FighterState.BLOCKSTUN):
             return f"block_{fighter.block_level}"
         if fighter.state == FighterState.DASH:
-            # No dedicated dash sprite; the walk cycle read at normal speed
-            # over a fast-moving body already reads as a dash/slide.
-            return "walk"
+            # Only packs with a real dash pose (v2) get it; LD/HD never had
+            # one, so the walk cycle read at normal speed over a fast-moving
+            # body (the existing fallback) keeps reading as a dash/slide.
+            return "dash" if "dash" in sprite_set.animations else "walk"
         # CROUCH/CROUCH_WALK/DOUBLE_JUMP/idle/walk/jump/hitstun/ko all resolve
         # directly since their enum value already matches the animation key.
         return fighter.state.value
@@ -201,16 +227,28 @@ class Renderer:
         shadow.center = (rect.centerx, GROUND_Y + 7)
         pygame.draw.ellipse(self.screen, COLOR_SHADOW, shadow)
 
-        anim_key = self.animation_key(fighter)
+        # Fall back down the quality chain (v2 -> hd -> ld) for a fighter
+        # that doesn't have the requested variant yet (e.g. graphics_variant
+        # == "v2" but this fighter has no v2 pack, like shinobi currently).
+        for variant in (self.graphics_variant, "hd", "ld"):
+            variant_sets = self.sprite_sets[variant]
+            if fighter.fighter_id in variant_sets:
+                break
+        sprite_set = variant_sets[fighter.fighter_id]
+        anim_key = self.animation_key(fighter, sprite_set)
         tracked_key, elapsed = self._anim_progress.get(id(fighter), (None, 0))
         elapsed = 0 if tracked_key != anim_key else elapsed + 1
         self._anim_progress[id(fighter)] = (anim_key, elapsed)
 
-        sprite_set = self.sprite_sets["hd" if self.hd_mode else "ld"][fighter.fighter_id]
         frame = sprite_set.get_frame(anim_key, elapsed, FPS, flip=fighter.facing == -1)
         frame_rect = frame.get_rect()
         frame_rect.x = round(fighter.x - sprite_set.anchor[0])
         frame_rect.y = round(fighter.y - sprite_set.anchor[1])
+
+        self._update_dash_trail(fighter, frame, frame_rect)
+        for ghost, pos in self._dash_trail.get(id(fighter), ()):
+            self.screen.blit(ghost, pos)
+
         self.screen.blit(frame, frame_rect)
 
         # Name/state label above character
@@ -221,6 +259,36 @@ class Renderer:
             state_text = fighter.ranged_attack.definition.display_name
         label = self.small_font.render(state_text, True, fighter.color)
         self.screen.blit(label, label.get_rect(center=(frame_rect.centerx, frame_rect.top - 6)))
+
+    def _update_dash_trail(self, fighter: Fighter, frame: pygame.Surface, frame_rect: pygame.Rect) -> None:
+        """Kinetic-blur trail: while dashing (grounded or airborne), leave a
+        handful of alpha-fading afterimages of the sprite behind. Ghosts keep
+        fading and get dropped once fully transparent even after the dash
+        itself ends, so the trail tapers off instead of cutting out."""
+        ghosts = self._dash_trail.get(id(fighter), [])
+        faded: list[tuple[pygame.Surface, tuple[int, int]]] = []
+        for ghost, pos in ghosts:
+            alpha = ghost.get_alpha() - DASH_TRAIL_ALPHA_DECAY
+            if alpha > 0:
+                ghost.set_alpha(alpha)
+                faded.append((ghost, pos))
+
+        if fighter.state == FighterState.DASH:
+            # A private copy, never the pack's shared/cached surface --
+            # set_alpha() on a cached frame would mutate it for every other
+            # draw that reuses the same cached id() (see sprites.py's
+            # _flipped_cache and the crossfade note it mirrors).
+            new_ghost = frame.copy()
+            new_ghost.set_alpha(DASH_TRAIL_INITIAL_ALPHA)
+            faded.append((new_ghost, frame_rect.topleft))
+
+        if len(faded) > DASH_TRAIL_MAX_COPIES:
+            faded = faded[-DASH_TRAIL_MAX_COPIES:]
+
+        if faded:
+            self._dash_trail[id(fighter)] = faded
+        elif id(fighter) in self._dash_trail:
+            del self._dash_trail[id(fighter)]
 
     def draw_projectile(self, projectile: ActiveProjectile) -> None:
         sprite = self.projectile_sprites[projectile.definition.projectile_id]
@@ -248,8 +316,8 @@ class Renderer:
         self.screen.blit(timer_surf, timer_surf.get_rect(center=(WINDOW_WIDTH // 2, 50)))
 
         demo_suffix = " | DÉMO (IA vs IA)" if game.demo_mode else ""
-        hd_suffix = " | HD" if game.hd_mode else ""
-        mode_text = f"IA : {game.ai_mode.upper()}{demo_suffix}{hd_suffix} | {self.stage_name()}"
+        variant_suffix = f" | {game.graphics_variant.upper()}" if game.graphics_variant != "ld" else ""
+        mode_text = f"IA : {game.ai_mode.upper()}{demo_suffix}{variant_suffix} | {self.stage_name()}"
         mode_surf = self.font.render(mode_text, True, COLOR_YELLOW)
         mode_rect = mode_surf.get_rect(center=(WINDOW_WIDTH // 2, 90))
         self.draw_backdrop(mode_rect.inflate(28, 14))
@@ -258,7 +326,7 @@ class Renderer:
         if game.demo_mode:
             controls = "Mode démo : IA vs IA | Tab repasser en Joueur vs IA | R reset | P pause | H hitboxes"
         else:
-            controls = "Q/A poing | S pied | D blocage | Bas accroupi | F distance | Espace saut/salto | H hitboxes"
+            controls = "Q/A poing | S pied | D blocage | Bas accroupi | F distance | Espace saut/salto | C changer perso | H hitboxes"
         control_surf = self.small_font.render(controls, True, COLOR_MUTED)
         control_rect = control_surf.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT - 24))
         self.draw_backdrop(control_rect.inflate(28, 14))

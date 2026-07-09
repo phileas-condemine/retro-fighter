@@ -22,3 +22,13 @@ logs/
 
 # Claude Code session tooling state, not part of the project.
 .claude/
+
+# Blender v2 pipeline test fixtures (placeholder parts + their rendered
+# output) — fully regenerable via blender/make_placeholder_parts.py +
+# blender/run_pipeline.py, see blender/README.md.
+blender/test_fixtures/
+
+# Playwright MCP's own scratch output (screenshots, accessibility snapshots,
+# console logs, downloaded zips) from driving a browser — not project
+# source, see HOW_TO_GENERATE_IMAGES.md.
+.playwright-mcp/

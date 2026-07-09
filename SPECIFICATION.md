@@ -227,11 +227,37 @@ Touche `Tab` (menu ou en match) : bascule `Game.demo_mode`. Quand actif, le comb
 
 En mode démo, les noms affichés (`Fighter.name`) passent de `PLAYER`/`CPU` à `CPU 1`/`CPU 2` (mis à jour dans `Game.reset_round()`), ce qui se répercute automatiquement dans les barres de vie, le journal de combat et le message de victoire.
 
-### 5.6 Mode graphique HD (bêta)
+### 5.6 Mode graphique LD / HD (bêta) / V2 (bêta)
 
-Touche `G` (menu ou en match) : bascule `Game.hd_mode`, propagé à `Renderer.set_hd_mode()`. Contrairement au mode démo, c'est un pur changement d'affichage (`Renderer.sprite_sets["hd" if hd_mode else "ld"][fighter.fighter_id]`) : aucune remise à zéro du round n'est nécessaire, le `fighter_id` logique (utilisé pour le son et les projectiles) ne change pas, seul le pack de sprites lu change.
+Touche `G` (menu ou en match) : fait avancer `Game.graphics_variant` dans le
+cycle `"ld" -> "hd" -> "v2" -> "ld"` (`Game.cycle_graphics_variant()`),
+propagé à `Renderer.set_graphics_variant()`. Contrairement au mode démo,
+c'est un pur changement d'affichage (`Renderer.sprite_sets[graphics_variant]
+[fighter.fighter_id]`) : aucune remise à zéro du round n'est nécessaire, le
+`fighter_id` logique (utilisé pour le son et les projectiles) ne change pas,
+seul le pack de sprites lu change.
 
-Les deux variantes sont préchargées au démarrage (`Renderer.__init__`), donc basculer avec `G` est instantané. Le pack HD (`assets/fighters/hd/`, généré par VLM à partir de planches de référence) est un *proof of concept* avec 46 images par personnage sur les ~100 prévues à terme : `punch_low`, `kick_low` et `block_low` n'existent pas encore côté HD (les versions accroupies `crouch_punch_low`/`crouch_kick_low` si). `FighterSpriteSet.get_frame()` retombe sur `idle` pour toute clé manquante — la logique de dégâts/hitbox/timing de l'attaque reste inchangée, seule la pose affichée est temporairement l'idle. Le pack shinobi HD est assemblé à partir de deux sources : un manifest de base (`manifest.json`) et un manifest d'extension (`extension_manifest_high_actions.json`, actions hautes) fusionnés par le même mécanisme que les packs LD.
+Les trois variantes sont préchargées au démarrage (`Renderer.__init__`),
+donc basculer avec `G` est instantané. Le pack HD (`assets/fighters/hd/`,
+généré par VLM à partir de planches de référence) est un *proof of concept*
+avec 46 images par personnage sur les ~100 prévues à terme : `punch_low`,
+`kick_low` et `block_low` n'existent pas encore côté HD (les versions
+accroupies `crouch_punch_low`/`crouch_kick_low` si). `FighterSpriteSet.
+get_frame()` retombe sur `idle` pour toute clé manquante — la logique de
+dégâts/hitbox/timing de l'attaque reste inchangée, seule la pose affichée
+est temporairement l'idle. Le pack shinobi HD est assemblé à partir de deux
+sources : un manifest de base (`manifest.json`) et un manifest d'extension
+(`extension_manifest_high_actions.json`, actions hautes) fusionnés par le
+même mécanisme que les packs LD.
+
+Le pack V2 (`assets/fighters/v2/`, pipeline Blender-rigged — voir
+`blender/README.md`) n'existe pour l'instant que pour `rose_kunoichi` (pack
+complet, parité totale avec les 20+1 clés du moteur). `Renderer.sprite_sets["v2"]`
+ne construit un `FighterSpriteSet` que pour les `fighter_id` ayant
+effectivement un `manifest.json` v2 sur disque ; `draw_fighter()` retombe en
+cascade sur HD puis LD pour tout personnage sans pack v2 (aujourd'hui
+`shinobi`), donc appuyer sur `G` jusqu'à V2 n'affecte visuellement que
+Rose — l'adversaire reste en HD/LD sans planter.
 
 ## 6. Architecture logicielle
 

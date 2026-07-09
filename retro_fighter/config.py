@@ -17,7 +17,11 @@ MAX_HEALTH = 100
 ROUND_TIME_SECONDS = 99
 
 GRAVITY = 0.75
-JUMP_SPEED = -14.2
+# Shared by both the first jump and the double-jump/salto (Fighter.start_jump
+# sets vel_y = JUMP_SPEED for each), so raising this makes both arcs higher
+# at once. Peak height is JUMP_SPEED^2 / (2*GRAVITY) -- -15.5 clears about
+# 160px vs -14.2's 134px, a noticeably higher hop without floating.
+JUMP_SPEED = -15.5
 WALK_SPEED = 4.2
 AIR_CONTROL_SPEED = 2.0
 # The salto covers ground much faster than a regular jump's air control, so
@@ -28,14 +32,31 @@ BODY_WIDTH = 54
 BODY_HEIGHT = 132
 
 # Dash: double-tap Left/Right for a short, committed burst of horizontal
-# speed (about 3.5x walk speed) — a gap closer/escape tool distinct from
+# speed (about 4x walk speed) — a gap closer/escape tool distinct from
 # regular walking. DASH_INPUT_WINDOW_FRAMES is how quickly the second tap
 # must follow the first to count as a double-tap; DASH_COOLDOWN_FRAMES
-# prevents chaining dashes back to back.
-DASH_SPEED = 15.0
-DASH_DURATION_FRAMES = round(FPS * 0.16)
+# prevents chaining dashes back to back. Total travel distance is roughly
+# DASH_SPEED * DASH_DURATION_FRAMES (~187px, up from ~150px) -- covers more
+# ground per dash both grounded and airborne, since Fighter.start_dash
+# reuses the same speed/duration for the air-dash burst.
+DASH_SPEED = 17.0
+DASH_DURATION_FRAMES = round(FPS * 0.18)
 DASH_COOLDOWN_FRAMES = round(FPS * 0.5)
 DASH_INPUT_WINDOW_FRAMES = round(FPS * 0.25)
+# Also usable mid-air (from JUMP or DOUBLE_JUMP/salto) as a horizontal burst
+# layered on top of the current jump arc -- see Fighter.start_dash.
+
+# Kinetic-blur trail: a handful of alpha-fading afterimage copies of the
+# sprite, captured every frame while dashing (grounded or airborne), drawn
+# behind the live frame. DASH_TRAIL_MAX_COPIES caps how many are alive at
+# once (older ones are dropped once decayed past 0 alpha, or once the count
+# exceeds this); DASH_TRAIL_ALPHA_DECAY is how much surface alpha each ghost
+# loses per frame, so an individual ghost fades out over
+# DASH_TRAIL_INITIAL_ALPHA / DASH_TRAIL_ALPHA_DECAY frames regardless of
+# whether the dash itself is still going.
+DASH_TRAIL_MAX_COPIES = 4
+DASH_TRAIL_INITIAL_ALPHA = 130
+DASH_TRAIL_ALPHA_DECAY = 32
 
 BODY_PUSHBACK = 1.8
 

@@ -278,10 +278,18 @@ class Fighter:
             self.jump_started_this_frame = True
 
     def start_dash(self, direction: int) -> None:
-        if self.dash_cooldown > 0 or not self.on_ground:
+        if self.dash_cooldown > 0:
             return
-        if self.state not in (FighterState.IDLE, FighterState.WALK):
-            return
+        if self.on_ground:
+            if self.state not in (FighterState.IDLE, FighterState.WALK):
+                return
+        else:
+            # Air dash: a horizontal burst mid-jump or mid-salto. It only
+            # overrides vel_x -- vel_y (and gravity, via apply_physics) keeps
+            # running underneath it, so it reads as a burst layered on top of
+            # the current arc rather than a mid-air stop.
+            if self.state not in (FighterState.JUMP, FighterState.DOUBLE_JUMP):
+                return
         self.state = FighterState.DASH
         self.state_timer = 0
         self.dash_timer = DASH_DURATION_FRAMES
@@ -294,7 +302,13 @@ class Fighter:
         self.vel_x = float(self.dash_direction) * DASH_SPEED
         if self.dash_timer <= 0:
             self.dash_cooldown = DASH_COOLDOWN_FRAMES
-            self.state = FighterState.WALK if command.move_axis != 0 else FighterState.IDLE
+            if self.on_ground:
+                self.state = FighterState.WALK if command.move_axis != 0 else FighterState.IDLE
+            else:
+                # Still airborne when the burst ends (started the dash mid-jump
+                # or landed just after it did not happen) -- fall back to the
+                # regular jump/fall pose instead of a grounded one.
+                self.state = FighterState.JUMP
             self.state_timer = 0
 
     def get_attack_hitbox(self) -> Optional[pygame.Rect]:
